@@ -1,0 +1,22 @@
+Autopo License Ver. 1.0
+
+Definitions
+
+Autopo means the Autopo software and includes: 
+1) all its components developed and licensed by Sober Lemur S.r.l.;
+2) any revisions, updates and/or upgrades thereto; 
+3) any associated media and documentation.
+
+
+Autopo is licensed for internal use only by Sober Lemur S.r.l. Any use, distribution, or modification outside of Sober Lemur S.r.l. without explicit written consent is strictly prohibited.
+
+It is expressly forbidden to:
+
+	*	Reverse engineer the source code of the Software or to decompile the Software, except to the extent permitted by mandatory law;
+	*	Distribute the Sober Lemur Software in any form that allows it to be reused by any application other than the End Application.
+	*	Directly or indirectly expose any functionality of Autopo to other programs, libraries and plug-ins. 
+	*	Sublicense Autopo or otherwise make it available to third parties, including by rental, Software-as-a-Service models or otherwise
+	*	Use Autopo in any manner that is illegal or not authorized by this License
+	
+
+This software is provided "as is," without any warranties, express or implied, including but not limited to fitness for a particular purpose or merchantability. Sober Lemur S.r.l. shall not be liable for any damages arising from its use.
