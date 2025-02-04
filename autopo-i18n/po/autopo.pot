@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com)
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: info@soberlemur.com\n"
+"POT-Creation-Date: 2025-02-04 09:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Inconsistent trailing spaces between original and translation"
+msgstr ""
+
+msgid "Inconsistent trailing linefeed between original and translation"
+msgstr ""
+
+msgid "Inconsistent full stop ending between original and translation"
+msgstr ""
+
+#, java-format, java-printf-format
+msgid ""
+"Inconsistent number of placeholders (%s, %d, %c, %x, %b, %f, {0}...) between "
+"original and translation"
+msgstr ""
+
+msgid "Suspicious lowercase of the first letter"
+msgstr ""
+
+msgid ""
+"Inconsistent capitalization of the first letter between the original and "
+"translation"
+msgstr ""
+
+msgid "Inconsistent leading spaces between original and translation"
+msgstr ""
+
+msgid "Suspicious quotes inconsistency between original and translation"
+msgstr ""
