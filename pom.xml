@@ -50,7 +50,7 @@
         <monocle.version>21</monocle.version>
         <awaitility.version>4.2.2</awaitility.version>
         <archunit.version>1.3.0</archunit.version>
-        <beanutils.version>1.9.4</beanutils.version>
+        <beanutils.version>1.10.0</beanutils.version>
         <commons.config.version>2.11.0</commons.config.version>
     </properties>
 
