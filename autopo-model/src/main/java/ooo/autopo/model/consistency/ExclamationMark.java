@@ -2,7 +2,7 @@ package ooo.autopo.model.consistency;
 
 /*
  * This file is part of the Autopo project
- * Created 01/02/25
+ * Created 05/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,23 +14,20 @@ package ooo.autopo.model.consistency;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import java.util.Locale;
 import java.util.Set;
 
 import static ooo.autopo.i18n.I18nContext.i18n;
-import static org.apache.commons.lang3.CharUtils.LF;
 
 /**
- * @author Andrea VacondioF
+ * @author Andrea Vacondio
  */
-class TrailingLinefeed implements ConsistencyValidator {
-
-    private static final Set<String> EXCLUDE = Set.of(Locale.JAPANESE.getLanguage(), Locale.CHINESE.getLanguage(), "th", "lo", "my", "bo", "km", "dz");
+public class ExclamationMark implements ConsistencyValidator {
+    private static final Set<String> EXCLUDE = Set.of("hy", "bo", "dz");
 
     @Override
     public String validate(String original, String translated, String targetLanguage) {
-        if (LF == original.charAt(original.length() - 1) ^ LF == translated.charAt(translated.length() - 1)) {
-            return i18n().tr("Inconsistent trailing linefeed between original and translation");
+        if ('!' == original.charAt(original.length() - 1) ^ '!' == translated.charAt(translated.length() - 1)) {
+            return i18n().tr("Inconsistent exclamation mark between original and translation");
         }
         return VALID;
     }

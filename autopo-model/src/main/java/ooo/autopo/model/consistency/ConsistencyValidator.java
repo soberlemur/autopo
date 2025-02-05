@@ -28,6 +28,17 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public interface ConsistencyValidator extends BiConsumer<PoEntry, Locale> {
 
+    BiConsumer<PoEntry, Locale> VALIDATORS = new FullStop().andThen(new GermanLeadingCase())
+                                                           .andThen(new TrailingWhitespace())
+                                                           .andThen(new PlaceholdersCount())
+                                                           .andThen(new LeadingWhitespace())
+                                                           .andThen(new KoreanFullStop())
+                                                           .andThen(new LeadingCase())
+                                                           .andThen(new Quotes())
+                                                           .andThen(new TrailingLinefeed())
+                                                           .andThen(new QuestionMark())
+                                                           .andThen(new SpanishQuestionMark())
+                                                           .andThen(new ExclamationMark());
     String VALID = null;
 
     /**

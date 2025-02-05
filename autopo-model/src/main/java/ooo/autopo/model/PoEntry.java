@@ -22,7 +22,10 @@ import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ooo.autopo.model.consistency.ConsistencyValidator;
 import org.sejda.commons.util.RequireUtils;
+
+import java.util.Locale;
 
 import static javafx.util.Subscription.combine;
 
@@ -37,7 +40,7 @@ public class PoEntry {
     private final SimpleStringProperty comment;
     private ObservableList<String> warnings = FXCollections.observableArrayList();
 
-    public PoEntry(String key, String value, String comment) {
+    public PoEntry(String key, String value, String comment, Locale targetLocale) {
         RequireUtils.requireNotBlank(key, "Key cannot be blank");
         this.key = new SimpleStringProperty(key);
         this.value = new SimpleStringProperty(value);
@@ -53,6 +56,7 @@ public class PoEntry {
             }
         };
         modified.addListener(oneTime);
+        modified.subscribe(o -> updateWarnings(targetLocale));
     }
 
     public ObservableValue<String> key() {
@@ -69,6 +73,11 @@ public class PoEntry {
 
     public ObservableBooleanValue modifiedProperty() {
         return modified;
+    }
+
+    private void updateWarnings(Locale targetLocale) {
+        warnings.clear();
+        ConsistencyValidator.VALIDATORS.accept(this, targetLocale);
     }
 
     public void clearWarnings() {
