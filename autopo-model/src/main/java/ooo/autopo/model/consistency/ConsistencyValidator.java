@@ -61,7 +61,7 @@ public interface ConsistencyValidator extends BiConsumer<PoEntry, Locale> {
         //we validate only if there is a translated value and if we shouldn't skip for the given target locale
         var language = locale.getLanguage();
         if (isNotBlank(entry.value().getValue()) && shouldValidate(language)) {
-            ofNullable(validate(entry.key().getValue(), entry.value().getValue(), language)).ifPresent(entry::addWarning);
+            ofNullable(validate(entry.key().msgId(), entry.value().getValue(), language)).ifPresent(entry::addWarning);
         }
     }
 

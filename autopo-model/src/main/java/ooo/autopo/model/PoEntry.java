@@ -14,7 +14,8 @@ package ooo.autopo.model;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import javafx.beans.property.ReadOnlyStringProperty;
+import com.soberlemur.potentilla.Message;
+import com.soberlemur.potentilla.MessageKey;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -22,10 +23,13 @@ import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Subscription;
 import ooo.autopo.model.consistency.ConsistencyValidator;
 import org.sejda.commons.util.RequireUtils;
 
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 
 import static javafx.util.Subscription.combine;
 
@@ -34,18 +38,21 @@ import static javafx.util.Subscription.combine;
  */
 public class PoEntry {
 
-    private SimpleBooleanProperty modified = new SimpleBooleanProperty();
-    private final ReadOnlyStringProperty key;
+    private final SimpleBooleanProperty modified = new SimpleBooleanProperty();
+    private final MessageKey key;
+    private final Message message;
     private final SimpleStringProperty value;
-    private final SimpleStringProperty comment;
-    private ObservableList<String> warnings = FXCollections.observableArrayList();
+    private final ObservableList<String> comments = FXCollections.observableArrayList();
+    private final ObservableList<String> warnings = FXCollections.observableArrayList();
+    private Subscription warningsUpdatersubscription;
 
-    public PoEntry(String key, String value, String comment, Locale targetLocale) {
-        RequireUtils.requireNotBlank(key, "Key cannot be blank");
-        this.key = new SimpleStringProperty(key);
-        this.value = new SimpleStringProperty(value);
-        this.comment = new SimpleStringProperty(comment);
-        var compositeSubscription = combine(this.value.subscribe((o, n) -> modified.set(true)), this.comment.subscribe((o, n) -> modified.set(true)));
+    public PoEntry(Message message) {
+        RequireUtils.requireNotNullArg(message, "Message cannot be null");
+        this.key = new MessageKey(message);
+        this.message = message;
+        this.value = new SimpleStringProperty(message.getMsgstr());
+        this.comments.addAll(message.getComments());
+        var compositeSubscription = combine(this.value.subscribe((o, n) -> modified.set(true)), this.comments.subscribe(() -> modified.set(true)));
         var oneTime = new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -56,10 +63,11 @@ public class PoEntry {
             }
         };
         modified.addListener(oneTime);
-        modified.subscribe(o -> updateWarnings(targetLocale));
+        this.value.subscribe((o, n) -> message.setMsgstr(n));
+        //TODO listener for comments updating the message comments
     }
 
-    public ObservableValue<String> key() {
+    public MessageKey key() {
         return key;
     }
 
@@ -67,21 +75,26 @@ public class PoEntry {
         return value;
     }
 
-    public SimpleStringProperty comment() {
-        return comment;
+    public ObservableList<String> comments() {
+        return comments;
     }
 
     public ObservableBooleanValue modifiedProperty() {
         return modified;
     }
 
-    private void updateWarnings(Locale targetLocale) {
-        warnings.clear();
-        ConsistencyValidator.VALIDATORS.accept(this, targetLocale);
-    }
-
-    public void clearWarnings() {
-        warnings.clear();
+    /**
+     * Notifies this entry that the target locale for this entry has changed. Consistency validators change depending on the target locale and this method takes
+     * care of it.
+     */
+    public void onLocaleUpdate(Locale targetLocale) {
+        if (Objects.nonNull(targetLocale)) {
+            Optional.ofNullable(warningsUpdatersubscription).ifPresent(Subscription::unsubscribe);
+            this.warningsUpdatersubscription = this.value.subscribe(v -> {
+                warnings.clear();
+                ConsistencyValidator.VALIDATORS.accept(this, targetLocale);
+            });
+        }
     }
 
     public boolean addWarning(String warning) {

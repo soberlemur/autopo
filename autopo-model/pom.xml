@@ -36,7 +36,10 @@
             <artifactId>autopo-i18n</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.pdfsam</groupId>
             <artifactId>eventstudio</artifactId>
@@ -50,8 +53,8 @@
             <artifactId>ikonli-unicons-pack</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-configuration2</artifactId>
+            <groupId>com.soberlemur</groupId>
+            <artifactId>potentilla</artifactId>
         </dependency>
     </dependencies>
 </project>

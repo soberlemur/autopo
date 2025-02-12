@@ -32,6 +32,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-i18n</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.pdfsam</groupId>
             <artifactId>eventstudio</artifactId>
         </dependency>
@@ -44,12 +54,8 @@
             <artifactId>jakarta.inject-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-configuration2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
+            <groupId>com.soberlemur</groupId>
+            <artifactId>potentilla</artifactId>
         </dependency>
     </dependencies>
 </project>

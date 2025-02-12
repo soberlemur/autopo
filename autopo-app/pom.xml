@@ -42,7 +42,21 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-i18n</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-impl</artifactId>
@@ -55,12 +69,24 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>slf4j-tinylog</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.pdfsam</groupId>
             <artifactId>pdfsam-injector</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.pdfsam</groupId>
+            <artifactId>eventstudio</artifactId>
+        </dependency>
+        <dependency>
             <groupId>jakarta.inject</groupId>
             <artifactId>jakarta.inject-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
         </dependency>
     </dependencies>
 </project>
