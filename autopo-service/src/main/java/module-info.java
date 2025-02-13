@@ -11,18 +11,19 @@
  * without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
-module ooo.autopo.model {
-    exports ooo.autopo.model;
-    exports ooo.autopo.model.lifecycle;
-    exports ooo.autopo.model.ui;
+module ooo.autopo.service {
+    exports ooo.autopo.service.io;
+    exports ooo.autopo.service.ai;
 
-    requires transitive com.soberlemur.potentilla;
+    requires com.soberlemur.potentilla;
     requires ooo.autopo.i18n;
-    requires org.sejda.commons;
     requires org.pdfsam.eventstudio;
+    requires transitive ooo.autopo.model;
     requires org.apache.commons.lang3;
     requires javafx.graphics;
-    requires org.kordamp.ikonli.fluentui;
-    requires org.kordamp.ikonli.javafx;
-    opens ooo.autopo.model.ui to com.fasterxml.jackson.databind;
+    requires org.pdfsam.injector;
+    requires jakarta.inject;
+    requires org.tinylog.api;
+    requires org.pdfsam.persistence;
+    requires org.slf4j;
 }

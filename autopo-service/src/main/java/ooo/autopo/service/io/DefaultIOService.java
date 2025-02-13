@@ -1,4 +1,4 @@
-package ooo.autopo.service;
+package ooo.autopo.service.io;
 
 /*
  * This file is part of the Autopo project
@@ -16,10 +16,13 @@ package ooo.autopo.service;
 
 import com.soberlemur.potentilla.Catalog;
 import com.soberlemur.potentilla.Header;
+import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.PoParser;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
+import jakarta.inject.Inject;
 import javafx.application.Platform;
 import ooo.autopo.model.PoFile;
+import ooo.autopo.service.ai.AIService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +46,12 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 public class DefaultIOService implements IOService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultIOService.class);
+    private final AIService aiService;
+
+    @Inject
+    public DefaultIOService(AIService aiService) {
+        this.aiService = aiService;
+    }
 
     @Override
     public void load(PoFile poFile) {
@@ -82,9 +91,21 @@ public class DefaultIOService implements IOService {
                 if (isNull(locale)) {
                     LOG.debug(i18n().tr("Trying to guess locale from filename '{}'", filename));
                     locale = localeFromString(StringUtils.removeEndIgnoreCase(filename, ".po"));
+                    if (isNull(locale)) {
+                        LOG.debug(i18n().tr("Trying to guess locale from file content with AI"));
+                        var concat = new StringBuilder();
+                        for (Message message : catalog) {
+                            ofNullable(message.getMsgstr()).filter(StringUtils::isNotBlank).ifPresent(concat::append);
+                            if (concat.length() > 300) {
+                                break;
+                            }
+                        }
+                        locale = ofNullable(aiService.languageTagFor(concat.toString())).filter(StringUtils::isNotBlank)
+                                                                                        .map(Locale::forLanguageTag)
+                                                                                        .orElse(null);
+                    }
                 }
             }
-
         }
         return locale;
     }
@@ -95,7 +116,7 @@ public class DefaultIOService implements IOService {
             var headerFragments = languageHeader.split("[@_]");
             if (headerFragments.length > 0) {
                 try {
-                    var builder = new Locale.Builder().setLanguageTag(headerFragments[0]);
+                    var builder = new Locale.Builder().setLanguage(headerFragments[0]);
                     if (headerFragments.length > 1) {
                         builder.setRegion(headerFragments[1]);
                         if (headerFragments.length > 2) {

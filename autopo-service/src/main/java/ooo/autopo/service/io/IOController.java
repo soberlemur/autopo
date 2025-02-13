@@ -1,4 +1,4 @@
-package ooo.autopo.service;
+package ooo.autopo.service.io;
 
 /*
  * This file is part of the Autopo project

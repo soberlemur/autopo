@@ -57,5 +57,9 @@
             <groupId>com.soberlemur</groupId>
             <artifactId>potentilla</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.pdfsam</groupId>
+            <artifactId>pdfsam-persistence</artifactId>
+        </dependency>
     </dependencies>
 </project>

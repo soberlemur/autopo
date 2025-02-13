@@ -1,8 +1,8 @@
-package ooo.autopo.service;
+package ooo.autopo.service.ai;
 
 /*
  * This file is part of the Autopo project
- * Created 05/02/25
+ * Created 13/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,16 +14,13 @@ package ooo.autopo.service;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import ooo.autopo.model.PoFile;
-
-import java.io.IOException;
-
 /**
  * @author Andrea Vacondio
  */
-public interface IOService {
+public interface AIService {
 
-    void load(PoFile poFile);
-
-    void save(PoFile poFile) throws IOException;
+    /**
+     * Given an input String in some unknown locale, it tried to return the languageTag as defined in the {@link java.util.Locale#forLanguageTag(String)}
+     */
+    String languageTagFor(String string);
 }
