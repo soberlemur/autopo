@@ -1,7 +1,8 @@
-package ooo.autopo.app;
+package ooo.autopo.app.ui;
+
 /*
  * This file is part of the Autopo project
- * Created 13/02/25
+ * Created 14/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -13,20 +14,10 @@ package ooo.autopo.app;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import org.tinylog.Logger;
-
-import java.lang.Thread.UncaughtExceptionHandler;
+import javafx.scene.layout.BorderPane;
 
 /**
- * {@link UncaughtExceptionHandler} that simply logs the exception
- *
  * @author Andrea Vacondio
  */
-public class UncaughtExceptionLogger implements UncaughtExceptionHandler {
-
-    @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        Logger.error(e, "Unexpected error");
-    }
-
+public class FileExplorer extends BorderPane {
 }

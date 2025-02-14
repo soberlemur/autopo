@@ -13,10 +13,16 @@ package ooo.autopo.app.config;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import javafx.application.HostServices;
 import ooo.autopo.app.ApplicationTitleController;
+import ooo.autopo.app.AutopoDescriptor;
 import ooo.autopo.app.WindowStatusController;
 import ooo.autopo.app.ui.notification.NotificationsController;
+import org.pdfsam.injector.Auto;
 import org.pdfsam.injector.Components;
+import org.pdfsam.injector.Provides;
+
+import java.io.IOException;
 
 /**
  * @author Andrea Vacondio
@@ -24,4 +30,20 @@ import org.pdfsam.injector.Components;
 @Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class })
 public class AppConfig {
 
+    private final HostServices services;
+
+    public AppConfig(HostServices services) {
+        this.services = services;
+    }
+
+    @Provides
+    public HostServices hostServices() {
+        return services;
+    }
+
+    @Provides
+    @Auto
+    public AutopoDescriptor descriptor() throws IOException {
+        return new AutopoDescriptor();
+    }
 }

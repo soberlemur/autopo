@@ -14,6 +14,7 @@
 module ooo.autopo.service {
     exports ooo.autopo.service.io;
     exports ooo.autopo.service.ai;
+    exports ooo.autopo.service.ui;
 
     requires com.soberlemur.potentilla;
     requires ooo.autopo.i18n;
@@ -25,5 +26,5 @@ module ooo.autopo.service {
     requires jakarta.inject;
     requires org.tinylog.api;
     requires org.pdfsam.persistence;
-    requires org.slf4j;
+    requires org.sejda.commons;
 }

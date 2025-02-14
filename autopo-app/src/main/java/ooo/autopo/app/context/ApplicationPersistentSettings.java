@@ -18,8 +18,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import org.pdfsam.persistence.PersistenceException;
 import org.pdfsam.persistence.PreferencesRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -28,14 +27,13 @@ import static java.util.Objects.nonNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
+import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
  * @author Andrea Vacondio
  */
 public class ApplicationPersistentSettings {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationPersistentSettings.class);
 
     private final PreferencesRepository repo;
     private final SimpleObjectProperty<PersistentPropertyChange<String>> stringSettingsChanges = new SimpleObjectProperty<>();
@@ -55,7 +53,7 @@ public class ApplicationPersistentSettings {
         try {
             return ofNullable(this.repo.getString(prop.key(), prop.defaultSupplier()));
         } catch (PersistenceException e) {
-            LOG.error("Unable to get persistent property: " + prop, e);
+            Logger.error(e, "Unable to get persistent property: {}", prop);
         }
         return ofNullable(prop.defaultSupplier().get());
     }
@@ -69,7 +67,7 @@ public class ApplicationPersistentSettings {
         try {
             return this.repo.getInt(prop.key(), prop.defaultSupplier());
         } catch (PersistenceException e) {
-            LOG.error("Unable to get persistent property: " + prop, e);
+            Logger.error(e, "Unable to get persistent property: {}", prop);
         }
         return prop.defaultSupplier().get();
     }
@@ -83,7 +81,7 @@ public class ApplicationPersistentSettings {
         try {
             return this.repo.getBoolean(prop.key(), prop.defaultSupplier());
         } catch (NumberFormatException | PersistenceException e) {
-            LOG.error("Unable to get persistent property: " + prop, e);
+            Logger.error(e, "Unable to get persistent property: {}", prop);
         }
         return prop.defaultSupplier().get();
     }
@@ -97,7 +95,7 @@ public class ApplicationPersistentSettings {
             this.repo.saveString(prop.key(), value);
             stringSettingsChanges.set(new PersistentPropertyChange<>(prop, ofNullable(value)));
         } catch (PersistenceException e) {
-            LOG.error("Unable to save persistent property", e);
+            Logger.error(e, "Unable to save persistent property: {}", prop);
         }
 
     }
@@ -111,7 +109,7 @@ public class ApplicationPersistentSettings {
             this.repo.saveInt(prop.key(), value);
             intSettingsChanges.set(new PersistentPropertyChange<>(prop, of(value)));
         } catch (PersistenceException e) {
-            LOG.error("Unable to save persistent property", e);
+            Logger.error(e, "Unable to save persistent property: {}", prop);
         }
     }
 
@@ -124,7 +122,7 @@ public class ApplicationPersistentSettings {
             this.repo.saveBoolean(prop.key(), value);
             boolSettingsChanges.set(new PersistentPropertyChange<>(prop, of(value)));
         } catch (PersistenceException e) {
-            LOG.error("Unable to save persistent property", e);
+            Logger.error(e, "Unable to save persistent property: {}", prop);
         }
     }
 
@@ -192,9 +190,9 @@ public class ApplicationPersistentSettings {
     public void clean() {
         try {
             this.repo.clean();
-            LOG.info("Persistent application settings deleted");
+            Logger.info(i18n().tr("Persistent application settings deleted"));
         } catch (PersistenceException e) {
-            LOG.error("Unable to clear application settings", e);
+            Logger.error(e, i18n().tr("Unable to clear application settings"));
         }
     }
 }

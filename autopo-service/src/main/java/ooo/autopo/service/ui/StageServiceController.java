@@ -18,8 +18,7 @@ import ooo.autopo.model.lifecycle.CleanupRequest;
 import ooo.autopo.model.ui.SetLatestStageStatusRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -30,7 +29,6 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 @Auto
 public class StageServiceController {
-    private static final Logger LOG = LoggerFactory.getLogger(StageServiceController.class);
 
     private StageService service;
 
@@ -42,13 +40,13 @@ public class StageServiceController {
 
     @EventListener
     public void requestStageStatus(SetLatestStageStatusRequest event) {
-        LOG.debug("Setting latest statge status to: {}", event.status());
+        Logger.debug("Setting latest stage status to: {}", event.status());
         service.save(event.status());
     }
 
     @EventListener
     public void clean(CleanupRequest event) {
-        LOG.debug("Cleaning up latest stage status");
+        Logger.debug("Cleaning up latest stage status");
         service.clean();
     }
 

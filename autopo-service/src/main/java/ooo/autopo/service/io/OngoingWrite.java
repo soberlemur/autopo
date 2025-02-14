@@ -1,7 +1,7 @@
-package ooo.autopo.app;
+package ooo.autopo.service.io;
 /*
  * This file is part of the Autopo project
- * Created 13/02/25
+ * Created 14/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -13,20 +13,28 @@ package ooo.autopo.app;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import org.tinylog.Logger;
+import javafx.scene.input.ClipboardContent;
 
-import java.lang.Thread.UncaughtExceptionHandler;
+import java.nio.file.Path;
 
 /**
- * {@link UncaughtExceptionHandler} that simply logs the exception
+ * Fluent interface to select the destination of a text write.
  *
  * @author Andrea Vacondio
  */
-public class UncaughtExceptionLogger implements UncaughtExceptionHandler {
+public interface OngoingWrite {
 
-    @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        Logger.error(e, "Unexpected error");
-    }
+    /**
+     * Where the content will be written.
+     *
+     * @param file
+     */
+    void to(Path file);
 
+    /**
+     * Where the content will be written.
+     *
+     * @param clipboard
+     */
+    void to(ClipboardContent clipboard);
 }

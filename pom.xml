@@ -32,6 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <maven.build.timestamp.format>dd-MMM-yyyy</maven.build.timestamp.format>
+        <autopo.builddate>${maven.build.timestamp}</autopo.builddate>
         <tinylog.version>2.7.0</tinylog.version>
         <junit.version>5.11.4</junit.version>
         <assertj.version>3.27.3</assertj.version>

@@ -18,8 +18,7 @@ import jakarta.inject.Inject;
 import ooo.autopo.model.PoLoadRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -28,8 +27,6 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 @Auto
 public class IOController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(IOController.class);
 
     private final IOService ioService;
 
@@ -41,7 +38,7 @@ public class IOController {
 
     @EventListener
     public void request(PoLoadRequest request) {
-        LOG.trace("PO load request received");
+        Logger.trace("PO load request received");
         Thread.ofVirtual().name("po-loading-thread").start(() -> ioService.load(request.poFile()));
     }
 }

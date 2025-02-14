@@ -17,8 +17,7 @@ import ooo.autopo.model.ui.StageStatus;
 import org.pdfsam.persistence.EntityRepository;
 import org.pdfsam.persistence.PersistenceException;
 import org.pdfsam.persistence.PreferencesRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.util.Optional;
 
@@ -28,8 +27,6 @@ import java.util.Optional;
  * @author Andrea Vacondio
  */
 public class DefaultStageService implements StageService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultStageService.class);
 
     static final String STAGE_STATUS_KEY = "stage.status";
     private final EntityRepository<StageStatus> repo;
@@ -43,7 +40,7 @@ public class DefaultStageService implements StageService {
         try {
             this.repo.save(STAGE_STATUS_KEY, status);
         } catch (PersistenceException e) {
-            LOG.error("Unable to store stage status", e);
+            Logger.error(e, "Unable to store stage status");
         }
     }
 
@@ -52,7 +49,7 @@ public class DefaultStageService implements StageService {
         try {
             return this.repo.get(STAGE_STATUS_KEY);
         } catch (PersistenceException e) {
-            LOG.error("Unable to get latest stage status", e);
+            Logger.error(e, "Unable to get latest stage status");
         }
         return Optional.empty();
     }
@@ -62,7 +59,7 @@ public class DefaultStageService implements StageService {
         try {
             this.repo.clean();
         } catch (PersistenceException e) {
-            LOG.error("Unable to clean the persisted stage status", e);
+            Logger.error(e, "Unable to clean the persisted stage status");
         }
     }
 }

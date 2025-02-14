@@ -25,4 +25,6 @@ module ooo.autopo.model {
     requires org.kordamp.ikonli.fluentui;
     requires org.kordamp.ikonli.javafx;
     opens ooo.autopo.model.ui to com.fasterxml.jackson.databind;
+    exports ooo.autopo.model.io;
+    exports ooo.autopo.model.notification;
 }

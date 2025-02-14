@@ -28,6 +28,7 @@ import ooo.autopo.app.config.AppConfig;
 import ooo.autopo.app.config.PersistenceConfig;
 import ooo.autopo.app.config.ServicesConfig;
 import ooo.autopo.app.context.StringPersistentProperty;
+import ooo.autopo.app.ui.AppContainer;
 import ooo.autopo.app.ui.notification.NotificationsContainer;
 import ooo.autopo.app.validation.CompositeDecoration;
 import ooo.autopo.i18n.SetLocaleRequest;
@@ -104,7 +105,7 @@ public class AutopoApp extends Application {
     }
 
     private void initInjector(Stage primaryStage) {
-        Injector.addConfig(new AppConfig(), new ServicesConfig(), new PersistenceConfig());
+        Injector.addConfig(new AppConfig(getHostServices()), new ServicesConfig(), new PersistenceConfig());
         app().injector(Injector.start());
     }
 

@@ -24,8 +24,7 @@ import javafx.application.Platform;
 import ooo.autopo.model.PoFile;
 import ooo.autopo.service.ai.AIService;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.util.IllformedLocaleException;
@@ -45,7 +44,6 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
  */
 public class DefaultIOService implements IOService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultIOService.class);
     private final AIService aiService;
 
     @Inject
@@ -56,22 +54,22 @@ public class DefaultIOService implements IOService {
     @Override
     public void load(PoFile poFile) {
         requireNotNullArg(poFile, "Cannot load a null poFile");
-        LOG.debug(i18n().tr("Loading .po file {}", poFile.poFile().getAbsolutePath()));
+        Logger.debug(i18n().tr("Loading .po file {}", poFile.poFile().getAbsolutePath()));
         Platform.runLater(() -> poFile.moveStatusTo(LOADING));
         try {
             Catalog catalog = new PoParser().parseCatalog(poFile.poFile());
             Locale locale = getLocale(catalog, poFile.poFile().getName());
             if (isNull(locale)) {
-                LOG.warn(i18n().tr("Unable to find or detect a valid locale"));
+                Logger.warn(i18n().tr("Unable to find or detect a valid locale"));
             }
             Platform.runLater(() -> {
                 poFile.catalog(catalog);
                 poFile.locale(locale);
                 poFile.moveStatusTo(LOADED);
             });
-            LOG.info(i18n().tr("File {} loaded", poFile.poFile().getAbsolutePath()));
+            Logger.info(i18n().tr("File {} loaded", poFile.poFile().getAbsolutePath()));
         } catch (IOException | ParseException e) {
-            LOG.error(i18n().tr("An error occurred parsing the .po file '{}'"), poFile.poFile().getAbsolutePath(), e);
+            Logger.error(e, i18n().tr("An error occurred parsing the .po file '{}'"), poFile.poFile().getAbsolutePath());
             Platform.runLater(() -> poFile.moveStatusTo(ERROR));
         }
     }
@@ -89,10 +87,10 @@ public class DefaultIOService implements IOService {
             if (isNull(locale)) {
                 locale = localeFromString(ofNullable(catalog.header()).map(h -> h.getValue("X-Poedit-Language")).orElse(null));
                 if (isNull(locale)) {
-                    LOG.debug(i18n().tr("Trying to guess locale from filename '{}'", filename));
+                    Logger.debug(i18n().tr("Trying to guess locale from filename '{}'", filename));
                     locale = localeFromString(StringUtils.removeEndIgnoreCase(filename, ".po"));
                     if (isNull(locale)) {
-                        LOG.debug(i18n().tr("Trying to guess locale from file content with AI"));
+                        Logger.debug(i18n().tr("Trying to guess locale from file content with AI"));
                         var concat = new StringBuilder();
                         for (Message message : catalog) {
                             ofNullable(message.getMsgstr()).filter(StringUtils::isNotBlank).ifPresent(concat::append);
@@ -112,7 +110,7 @@ public class DefaultIOService implements IOService {
 
     private Locale localeFromString(String languageHeader) {
         if (nonNull(languageHeader) && !languageHeader.isEmpty()) {
-            LOG.debug(i18n().tr("Trying to guess locale from '{}'", languageHeader));
+            Logger.debug(i18n().tr("Trying to guess locale from '{}'", languageHeader));
             var headerFragments = languageHeader.split("[@_]");
             if (headerFragments.length > 0) {
                 try {
@@ -126,7 +124,7 @@ public class DefaultIOService implements IOService {
 
                     return builder.build();
                 } catch (IllformedLocaleException e) {
-                    LOG.warn(i18n().tr("Invalid locale: {}", languageHeader));
+                    Logger.warn(i18n().tr("Invalid locale: {}", languageHeader));
                 }
             }
         }
