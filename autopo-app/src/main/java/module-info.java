@@ -35,6 +35,7 @@ module ooo.autopo.app {
     requires ooo.autopo.i18n;
     requires org.tinylog.impl;
     requires org.tinylog.api;
+    requires org.slf4j;
 
     opens ooo.autopo.app to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.ui to org.pdfsam.injector, org.pdfsam.eventstudio;

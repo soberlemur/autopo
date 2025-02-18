@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import net.synedra.validatorfx.DefaultDecoration;
 import ooo.autopo.app.config.AppConfig;
 import ooo.autopo.app.config.PersistenceConfig;
+import ooo.autopo.app.config.PreferencesConfig;
 import ooo.autopo.app.config.ServicesConfig;
 import ooo.autopo.app.context.StringPersistentProperty;
 import ooo.autopo.app.ui.AppContainer;
@@ -107,7 +108,7 @@ public class AutopoApp extends Application {
     }
 
     private void initInjector(Stage primaryStage) {
-        Injector.addConfig(new AppConfig(getHostServices()), new ServicesConfig(), new PersistenceConfig());
+        Injector.addConfig(new AppConfig(getHostServices()), new ServicesConfig(), new PersistenceConfig(), new PreferencesConfig());
         app().injector(Injector.start());
     }
 

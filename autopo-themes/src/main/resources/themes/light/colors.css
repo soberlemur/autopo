@@ -47,7 +47,7 @@
 
     -default-shadow-effect: dropshadow(three-pass-box, rgba(51, 77, 136, 0.2), 30, 0, 0, 10);
     -hover-shadow-effect: dropshadow(three-pass-box, rgba(51, 77, 136, 0.5), 30, 0, 0, 10);
-    -dnd-shadow-effect: dropshadow(three-pass-box, rgba(51, 77, 136, 0.1), 10, 0, 0, 10);
+    -small-shadow-effect: dropshadow(three-pass-box, rgba(51, 77, 136, 0.1), 10, 0, 0, 10);
 
     /** menu **/
     -menu-hover-color: -default-font-color-over-primary;
@@ -94,11 +94,17 @@
     -btn-selected-color: -grey-4;
     -btn-selected-border-color: -grey-6;
 
-    /** titled panel buttons **/
-    -btn-color-titled: white;
-    -btn-color-hover-titled: -grey-4;
-    -btn-focus-border-color-titled: -grey-5;
-    -btn-focus-border-color-hover-titled: derive(-btn-focus-border-color-titled, -10%);
+    /** split-pane **/
+    -split-pane-divider-color: -grey-3;
+
+    /** file-explorer **/
+    -fe-background-color: -grey-2;
+    -sidebar-border-color: -grey-4;
+    -sidebar-btn-color: -grey-1;
+    -sidebar-btn-color-hover: -grey-4;
+    -sidebar-btn-border-focus-color: -pdfsam-focus-color;
+    -sidebar-btn-border-focus-color-hover: derive(-pdfsam-focus-color, -10%);
+    -sidebar-arrow-color: -default-font-color;
 
     /** combo **/
     -combo-color: -default-dark-background;
@@ -106,12 +112,8 @@
     -combo-focus-border-color: -pdfsam-focus-color;
     -combo-focus-border-color-hover: -pdfsam-focus-color-hover;
     -combo-selected-color: derive(-combo-color-hover, -10%);
-
-    /** titled panel combos **/
-    -combo-color-titled: white;
-    -combo-color-hover-titled: -grey-4;
-    -combo-focus-border-color-titled: -grey-5;
-    -combo-focus-border-color-hover-titled: derive(-btn-focus-border-color-titled, -10%);
+    -combo-list-view-border-color: -grey-5;
+    -combo-list-view-background-color: -menu-background-color;
 
     /** header **/
     -header-background-color: -grey-1;
@@ -120,15 +122,6 @@
     -header-button-color-hover: derive(-header-button-color, -10%);
     -header-button-focus-color: -grey-2;
     -header-button-focus-color-hover: derive(-header-button-focus-color, -10%);
-
-    /** sidebar **/
-    -sidebar-background-color: -grey-1;
-    -sidebar-border-color: -grey-4;
-    -sidebar-btn-color: -grey-1;
-    -sidebar-btn-color-hover: -grey-4;
-    -sidebar-btn-border-focus-color: -pdfsam-focus-color;
-    -sidebar-btn-border-focus-color-hover: derive(-pdfsam-focus-color, -10%);
-    -sidebar-arrow-color: -default-font-color;
 
     /** fields **/
     -text-field-color: white;

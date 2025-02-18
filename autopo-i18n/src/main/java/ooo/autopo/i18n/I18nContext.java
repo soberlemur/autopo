@@ -37,7 +37,7 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 public final class I18nContext {
 
-    private final Set<Locale> supported = Set.of(Locale.ITALIAN, Locale.of("uk"));
+    private final Set<Locale> supported = Set.of(Locale.ITALIAN, Locale.UK);
 
     private final SimpleObjectProperty<Locale> locale = new SimpleObjectProperty<>();
     private Optional<ResourceBundle> bundle = empty();

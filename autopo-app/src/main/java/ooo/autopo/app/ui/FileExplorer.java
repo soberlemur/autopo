@@ -14,10 +14,16 @@ package ooo.autopo.app.ui;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import jakarta.inject.Inject;
 import javafx.scene.layout.BorderPane;
 
 /**
  * @author Andrea Vacondio
  */
 public class FileExplorer extends BorderPane {
+
+    @Inject
+    public FileExplorer() {
+        this.getStyleClass().add("file-explorer");
+    }
 }

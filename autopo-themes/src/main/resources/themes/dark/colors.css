@@ -102,7 +102,7 @@
     -status-label-color: -grey-2;
     -progress-bar-color: -grey-2;
 
-     /** fields **/
+    /** fields **/
     -text-field-color: -grey-2;
 
     /** tableview **/
@@ -141,12 +141,12 @@
     -fx-effect: none;
 }
 
-.close-button:hover > .ikonli-font-icon {
+.close-btn:hover > .ikonli-font-icon {
     -fx-text-fill: derive(-default-font-color, -35.0%) !important;
     -fx-icon-color: derive(-default-font-color, -35.0%) !important;
 }
 
-.close-button:armed > .ikonli-font-icon {
+.close-btn:armed > .ikonli-font-icon {
     -fx-text-fill: derive(-default-font-color, -20.0%) !important;
     -fx-icon-color: derive(-default-font-color, -20.0%) !important;
 }

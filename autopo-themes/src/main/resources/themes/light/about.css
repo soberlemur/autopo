@@ -10,9 +10,3 @@
 .about-panel .section {
     -fx-spacing: 6;
 }
-
-.about-panel .section-title {
-    -fx-font-size: 1.333333em;
-    -fx-padding: 1.333333em 0.0 0.0 0.0;
-    -fx-font-weight: bold;
-}

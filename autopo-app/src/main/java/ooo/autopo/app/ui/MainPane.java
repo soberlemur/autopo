@@ -15,6 +15,7 @@ package ooo.autopo.app.ui;
  */
 
 import jakarta.inject.Inject;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 
 /**
@@ -23,7 +24,11 @@ import javafx.scene.control.SplitPane;
 public class MainPane extends SplitPane {
     @Inject
     public MainPane(FileExplorer fileExplorer, TranslationsPane translationsPane) {
+        this.getStyleClass().add("main-pane");
+        var center = new ScrollPane(fileExplorer);
+        center.setFitToWidth(true);
+        center.setFitToHeight(true);
         this.getItems().addAll(fileExplorer, translationsPane);
-        this.setDividerPositions(0.1f);
+        this.setDividerPositions(0f);
     }
 }

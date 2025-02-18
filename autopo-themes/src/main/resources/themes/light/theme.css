@@ -56,6 +56,12 @@
     -fx-spacing: 2.5em;
 }
 
+.section-title {
+    -fx-font-size: 1.333333em;
+    -fx-padding: 1.333333em 0.0 0.0 0.0;
+    -fx-font-weight: bold;
+}
+
 .button-container {
     -fx-padding: 0.833333em;
     -fx-spacing: 0.75em;
@@ -101,12 +107,9 @@
     -fx-fill: -error-color;
 }
 
-/**
- * footer for pane
- */
-.pdfsam-footer-close-pane {
-    -fx-border-width: 0.0;
-    -fx-alignment: bottom-right;
+.grid {
+    -fx-hgap: 1em;
+    -fx-vgap: 1em;
 }
 
 /**
@@ -239,44 +242,13 @@ btn
 }
 
 /**
- * split button
+ * Main panel
  */
-.pdfsam-split-button, .pdfsam-split-button:default, .pdfsam-split-button:focus-visible {
-    -fx-padding: 0.0 0.0 0.0 1.166666em;
-    -fx-background-radius: 0.5em;
-}
-
-.pdfsam-split-button > .label, .pdfsam-split-button:focus-visible > .label {
-    -fx-text-fill: -default-font-color;
-    -fx-background-color: transparent;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.0;
-    -fx-padding: 0.583333em 0.5em 0.583333em 0.5em;
-}
-
-.pdfsam-split-button > .arrow-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0.0 0.5em 0.5em 0.0;
-    -fx-background-insets: 0.0;
-}
-
-.pdfsam-split-button > .arrow-button:hover {
-    -fx-background-color: derive(-btn-color-hover, -10%);
-    -fx-background-radius: 0.0 0.5em 0.5em 0.0;
-    -fx-background-insets: 0.0;
-}
-
-.pdfsam-split-button > .arrow-button:pressed {
-    -fx-background-color: -btn-color;
-    -fx-opacity: 0.7;
-}
-
-.toolbar-splitbutton, .toolbar-splitbutton:default, .toolbar-splitbutton:focus-visible {
-    -fx-padding: 0.0 0.0 0.0 0.5em;
-}
-
-.toolbar-splitbutton > .label, .toolbar-splitbutton:focus-visible > .label {
-    -fx-padding: 0.5em 0.5em 0.5em 0.5em;
+.main-pane {
+    -fx-padding: 0.0;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
 }
 
 /**
@@ -371,26 +343,6 @@ btn
     -fx-background-radius: 1em;
 }
 
-.pdfsam-titled-pane:focus-visible > .title > .arrow-button > .arrow {
-    -fx-background-color: -default-primary;
-}
-
-.pdfsam-titled-pane .btn {
-    -fx-background-color: -btn-color-titled;
-}
-
-.pdfsam-titled-pane .btn:hover {
-    -fx-background-color: -btn-color-hover-titled;
-}
-
-.pdfsam-titled-pane .btn:focus-visible {
-    -fx-background-color: -btn-focus-border-color-titled, -btn-color-titled;
-}
-
-.pdfsam-titled-pane .btn:focus-visible:hover {
-    -fx-background-color: -btn-focus-border-color-hover-titled, -btn-color-hover-titled;
-}
-
 .titled-pane:focused > .title > .arrow-button > .arrow {
     -fx-background-color: -default-arrow-color;
     -fx-background-insets: 0;
@@ -419,34 +371,8 @@ btn
 }
 
 /**
- * Table placeholder
- */
-.drag-drop-placeholder {
-    -fx-alignment: center;
-    -fx-font-weight: bold;
-    -fx-padding: 1.66666666667em;
-    -fx-font-size: 2.0em;
-    -fx-background-color: -drag-drop-color;
-    -fx-border-color: -drag-drop-border-color;
-    -fx-text-fill: -drag-drop-font-color;
-    -fx-border-radius: 0.583333em;
-    -fx-border-style: dashed;
-    -fx-border-width: 0.333333em;
-}
-
-.drag-drop-placeholder:disabled {
-    -fx-opacity: 1.0;
-    -fx-border-color: -drag-drop-border-color;
-    -fx-text-fill: -drag-drop-font-color;
-    -fx-border-width: 3.0px;
-}
-
-/**
  * Selection table
  */
-.selection-table {
-    -fx-min-height: 15.0em;
-}
 
 .table-row-cell:drag-hovered-row-top,
 .table-row-cell:drag-hovered-row-bottom {
@@ -460,16 +386,6 @@ btn
 
 .table-row-cell:drag-hovered-row-bottom {
     -fx-border-width: 0 0 0.11111em 0;
-}
-
-/**
- * Selection table toolbar
- */
-.selection-tool-bar:horizontal {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.0;
-    -fx-padding: 0.416667em 0.0 0.416667em 0.0;
 }
 
 /**
@@ -493,83 +409,6 @@ btn
 }
 
 /**
- * Password popup
- */
-.pdfsam-input-password {
-    -fx-background-color: -default-background-color;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.5em;
-    -fx-border-color: -pdfsam-border-color;
-    -fx-border-width: 1.0;
-    -fx-border-radius: 0.5em;
-    -fx-padding: 0.833333em;
-    -fx-spacing: 0.416667em;
-    -fx-effect: -pdfsam-shadow-effect;
-    -fx-border-style: none;
-}
-
-.pdfsam-input-password-content .btn {
-    -fx-padding: 0.0 1.166666em 0.0 1.166666em;
-}
-
-/**
- * Close button
- */
-.close-button {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.0;
-    -fx-padding: 0.0px;
-    -fx-font-size: 1.666667em;
-}
-
-.close-button:hover > .ikonli-font-icon {
-    -fx-text-fill: derive(-default-font-color, 70.0%) !important;
-    -fx-icon-color: derive(-default-font-color, 70.0%) !important;
-}
-
-.close-button:armed > .ikonli-font-icon {
-    -fx-text-fill: derive(-default-font-color, 30.0%) !important;
-    -fx-icon-color: derive(-default-font-color, 30.0%) !important;
-}
-
-/**
-Categories
- */
-.category-split {
-    -fx-background-color: -category-split-color;
-    -fx-icon-color: -category-split-color !important;
-}
-
-.category-merge {
-    -fx-background-color: -category-merge-color;
-    -fx-icon-color: -category-merge-color !important;
-}
-
-.category-edit {
-    -fx-background-color: -category-edit-color;
-    -fx-icon-color: -category-edit-color !important;
-}
-
-.category-convert {
-    -fx-background-color: -category-convert-color;
-    -fx-icon-color: -category-convert-color !important;
-}
-
-.category-other {
-    -fx-background-color: -category-others-color;
-    -fx-icon-color: -category-others-color !important;
-}
-
-.visual-category {
-    -fx-background-color: -category-visual-color;
-}
-
-.enhanced-category {
-    -fx-background-color: -category-enhanced-color;
-}
-
-/**
 * Arrows
 **/
 .menu-button > .arrow-button > .arrow,
@@ -584,28 +423,6 @@ Categories
 .web-view .form-select-button .arrow,
 .tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button > .arrow {
     -fx-background-color: -default-arrow-color, -default-arrow-color;
-}
-
-/**
- * Info pane
- */
-.info-props {
-    -fx-background-color: -infopane-border-color, -infopane-background-color;
-    -fx-background-insets: 0.0, 0.4;
-    -fx-background-radius: 0.25em, 0.25em;
-    -fx-padding: 1.25em;
-    -fx-hgap: 0.833333em;
-    -fx-vgap: 0.833333em;
-}
-
-.info-property-value, .info-property {
-    -fx-background-color: -infopane-background-color;
-    -fx-background-insets: 0.0;
-    -fx-border-radius: 0.0;
-}
-
-.info-property {
-    -fx-font-weight: bold;
 }
 
 /**
@@ -644,6 +461,10 @@ Categories
     -fx-border-color: -separator-color;
 }
 
+.separator:vertical .line {
+    -fx-border-color: -separator-color;
+}
+
 /**
  * Close button
  */
@@ -665,4 +486,14 @@ Categories
 
 .close-btn.big {
     -fx-font-size: 1.666667em;
+}
+
+/** divider **/
+.split-pane > .split-pane-divider {
+    -fx-padding: 0 1;
+}
+
+.split-pane:horizontal > .split-pane-divider, .split-pane:vertical > .split-pane-divider {
+    -fx-background-color: -split-pane-divider-color;
+    -fx-background-insets: 0;
 }

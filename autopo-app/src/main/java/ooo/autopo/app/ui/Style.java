@@ -27,8 +27,10 @@ public enum Style {
     TOOLBAR_BUTTON_CENTER("btn", "btn-center", "toolbar-btn"),
     OVERLAY_BUTTON("btn", "page-tile-overlay-btn"),
     SIDEBAR_BUTTON("btn", "sidebar-button"),
+    GRID("grid"),
     TOOLBAR("tool-toolbar-buttons");
 
+    public static final int DEFAULT_SPACING = 5;
     private final String[] classes;
 
     Style(String... classes) {

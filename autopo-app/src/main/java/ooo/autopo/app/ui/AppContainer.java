@@ -16,7 +16,6 @@ package ooo.autopo.app.ui;
 
 import jakarta.inject.Inject;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import ooo.autopo.app.ui.components.ClosablePane;
 
@@ -27,7 +26,6 @@ import java.util.Objects;
  */
 public class AppContainer extends BorderPane {
 
-    private final ScrollPane center = new ScrollPane();
     private final MainPane mainPanel;
     private Node overlay;
 
@@ -35,13 +33,7 @@ public class AppContainer extends BorderPane {
     public AppContainer(MainMenuBar menu, MainPane mainPanel, FooterBar footer) {
         setId("app-container");
         this.mainPanel = mainPanel;
-        center.getStyleClass().addAll(Style.CONTAINER.css());
-        center.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        center.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        center.setFitToWidth(true);
-        center.setFitToHeight(true);
-        center.setContent(mainPanel);
-        setCenter(center);
+        setCenter(mainPanel);
         setTop(menu);
         setBottom(footer);
     }
@@ -49,13 +41,13 @@ public class AppContainer extends BorderPane {
     public void overlay(Node overlay) {
         if (Objects.nonNull(overlay)) {
             this.overlay = overlay;
-            center.setContent(new ClosablePane(overlay));
+            setCenter(new ClosablePane(overlay));
         }
     }
 
     public void hideOverlay() {
         this.overlay = null;
-        center.setContent(mainPanel);
+        setCenter(mainPanel);
     }
 
 }

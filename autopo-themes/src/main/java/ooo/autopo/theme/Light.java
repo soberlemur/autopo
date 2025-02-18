@@ -35,14 +35,14 @@ public class Light implements Theme {
                        "/themes/light/footer.css",
                        "/themes/light/list.css",
                        "/themes/light/dialogs.css",
-                       "/themes/light/combo.css",
                        "/themes/light/scrollbars.css",
                        "/themes/light/notifications.css",
                        "/themes/light/about.css",
                        "/themes/light/menu.css",
                        "/themes/light/table.css",
-                       "/themes/light/sidebar.css",
+                       "/themes/light/fileexplorer.css",
                        "/themes/light/logs.css",
+                       "/themes/light/combo.css",
                        "/themes/light/theme.last.css");
     }
 

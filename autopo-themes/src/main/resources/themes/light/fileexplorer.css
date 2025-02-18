@@ -1,6 +1,6 @@
-.vertical-sidebar {
-    -fx-background-color: -sidebar-border-color, -sidebar-background-color;
-    -fx-background-insets: 0 0 0 0, 0 1 0 0;
+.file-explorer {
+    -fx-background-color: -fe-background-color;
+    -fx-background-insets: 0;
     -fx-padding: 1.666667em 0.666667em 1.0em 0.666667em;
 }
 

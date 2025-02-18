@@ -1,130 +1,145 @@
 /**
- * Combo
+Combo
  */
-.combo-box-base:hover > .arrow-button {
-    -fx-background-color: -fx-text-box-border, -grey-5;
-    -fx-background-insets: 0.0, 1.0;
-    -fx-background-radius: 0.0, 0.0;
+.combo-box-base:showing,
+.combo-box-base:editable:showing > .arrow-button {
+    -fx-background-color: -default-dark-background-hover;
+    -fx-opacity: 0.7;
+    -fx-effect: none;
 }
 
-.pdfsam-titled-pane .combo-box-base {
-    -fx-background-color: -combo-color-titled;
+.cmb-box, .spinner {
+    -fx-background-color: -default-dark-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 2;
 }
 
-.combo-box-base, .advanced-destination-pane .combo-box-base {
-    -fx-background-color: -combo-color;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.5em;
-    -fx-padding: 0.0;
-}
-
-.pdfsam-titled-pane .combo-box-base > .arrow-button {
-    -fx-background-color: -combo-color-titled, -combo-color-titled;
-}
-
-.combo-box-base > .arrow-button, .advanced-destination-pane .combo-box-base > .arrow-button {
-    -fx-background-color: -combo-color, -combo-color;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.0 0.5em 0.5em 0.0;
-}
-
-.pdfsam-titled-pane .combo-box-base:focus-visible {
-    -fx-background-color: -combo-focus-border-color-titled, -combo-color-titled;
-}
-
-.combo-box-base:focus-visible, .advanced-destination-pane .combo-box-base:focus-visible {
-    -fx-background-color: -combo-focus-border-color, -combo-color;
-    -fx-background-insets: 0.0, 1.0;
-}
-
-.combo-box-base:focus-visible > .arrow-button, .combo-box-base:hover > .arrow-button, .pdfsam-titled-pane .combo-box-base:focus-visible > .arrow-button, .pdfsam-titled-pane .combo-box-base:hover > .arrow-button {
+.cmb-box:editable {
     -fx-background-color: transparent;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.0 0.5em 0.5em 0.0;
 }
 
-.pdfsam-titled-pane .combo-box-base:hover {
-    -fx-background-color: -combo-color-hover-titled;
+.cmb-box.validatorfx-warning {
+    -fx-background-color: transparent;
+    -fx-focus-color: -warning-color;
 }
 
-.combo-box-base:hover, .advanced-destination-pane .combo-box-base:hover {
-    -fx-background-color: -combo-color-hover;
+.cmb-box.validatorfx-error {
+    -fx-background-color: transparent;
+    -fx-focus-color: -error-color;
 }
 
-.combo-box-base:armed > .arrow-button {
+.cmb-box:hover, .cmb-box:editable > .arrow-button:hover {
+    -fx-background-color: -default-dark-background-hover;
+}
+
+.cmb-box > .list-cell {
+    -fx-text-fill: -default-font-color;
+}
+
+.cmb-box:focused, .spinner:focused, .spinner:contains-focus {
+    -fx-background-color: -fx-focus-color, -default-dark-background;
+    -fx-background-insets: 0.0, 1.0;
+}
+
+.cmb-box:focused:hover, .spinner:focused:hover {
+    -fx-background-color: -fx-focus-color, -default-dark-background-hover;
+}
+
+.cmb-box:editable > .arrow-button,
+.date-picker > .arrow-button {
+    -fx-background-color: -default-dark-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0 2 2 0;
+}
+
+.cmb-box:editable > .text-field,
+.date-picker > .text-field,
+.spinner > .text-field {
+    -fx-background-color: -text-field-border-color, -text-field-color;
+    -fx-background-insets: 0.0, 1.0;
+    -fx-background-radius: 2 0 0 2;
+}
+
+.cmb-box:editable:focused,
+.date-picker:focused {
+    -fx-background-color: -fx-focus-color, -default-dark-background;
+    -fx-background-insets: 0.0, 1.0;
+    -fx-background-radius: 2;
+}
+
+.cmb-box:editable:focused > .text-field,
+.cmb-box:editable > .text-field:focused,
+.date-picker:focused > .text-field,
+.date-picker > .text-field:focused,
+.spinner:focused > .text-field,
+.spinner:contains-focus > .text-field {
+    -fx-background-color: -text-field-focus-color, -text-field-color;
+    -fx-background-insets: 0.0, 1 0 1 1;
+    -fx-background-radius: 2 0 0 2;
+}
+
+.cmb-box:editable:focused > .arrow-button,
+.date-picker:focused > .arrow-button {
+    -fx-background-color: -fx-focus-color, -default-dark-background;
+    -fx-background-insets: 0, 1 1 1 0;
+    -fx-background-radius: 0 2 2 0;
+}
+
+.cmb-box:editable:focused > .arrow-button:hover,
+.date-picker:focused > .arrow-button:hover {
+    -fx-background-color: -fx-focus-color, -default-dark-background-hover;
+    -fx-background-insets: 0, 1 1 1 0;
+    -fx-background-radius: 0 2 2 0;
+}
+
+.cmb-box:editable > .arrow-button:armed, .cmb-box:editable > .arrow-button:pressed {
     -fx-opacity: 0.7;
-    -fx-effect: none;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.0 0.5em 0.5em 0.0;
 }
 
-.combo-box-base:armed {
+.cmb-box:editable:focused:showing > .arrow-button {
+    -fx-background-color: -fx-focus-color, -default-dark-background-hover;
+    -fx-background-insets: 0, 1 1 1 0;
+    -fx-background-radius: 0 2 2 0;
     -fx-opacity: 0.7;
-    -fx-effect: none;
 }
 
 .combo-box-popup > .list-view {
-    -fx-translate-y: 2.0;
-    -fx-background-color: -menu-border-color, -menu-background-color;
-    -fx-background-insets: 0.0, 0.5;
-    -fx-background-radius: 6.0;
-    -fx-effect: -pdfsam-shadow-effect;
-    -fx-padding: 0.333333em 0.333333em 0.333333em 0.333333em;
+    -fx-background-color: -combo-list-view-border-color, -combo-list-view-background-color;
+    -fx-padding: 4.0 8.0;
+    -fx-effect: -small-shadow-effect;
+    -fx-background-radius: 2.0;
+    -fx-text-fill: -default-font-color-over-primary;
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
-    -fx-background-color: transparent;
-    -fx-padding: 4 0 4 5;
-    -fx-background-insets: 0.0, 1.0 0 1.0 0;
-    -fx-background-radius: 4.0;
+    -fx-background: transparent;
+    -fx-background-radius: 2.0;
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
-    -fx-background-color: -menu-background-color, -menu-hover-color;
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+    -fx-background-color: -default-primary, -default-dark-background;
+    -fx-background-insets: 0.0, 1.0;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+    -fx-background-color: -default-primary-hover-border, -fx-selection-bar;
+    -fx-background-insets: 0.0, 1.0;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
     -fx-text-fill: -default-font-color;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
+    -fx-text-fill: -default-font-color-over-primary;
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected,
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
-    -fx-background-color: -menu-background-color, -combo-selected-color;
-    -fx-background-insets: 0.0, 1.0 0 1.0 0;
+    -fx-text-fill: -default-font-color-over-primary;
 }
-
-.combo-box-base:editable > .arrow-button {
-    -fx-background-color: -pdfsam-border-color, -combo-color;
-    -fx-background-insets: 0.0, 0.4;
-    -fx-background-radius: 0.0 0.5em 0.5em 0;
-}
-
-.combo-box-base:focused:editable > .arrow-button {
-    -fx-background-color: -pdfsam-focus-color, -combo-color;
-    -fx-background-insets: 0.0, 0.4;
-    -fx-background-radius: 0.0 0.5em 0.5em 0;
-}
-
-.combo-box-base:editable:contains-focus > .arrow-button {
-    -fx-background-color: -combo-focus-border-color, -combo-color;
-    -fx-background-insets: 0.0, 0.4;
-    -fx-background-radius: 0.0 0.5em 0.5em 0;
-    -fx-effect: none;
-}
-
-.combo-box-base:hover:editable > .arrow-button {
-    -fx-background-color: -pdfsam-border-color, -combo-color;
-    -fx-background-insets: 0.0, 0.4;
-    -fx-background-radius: 0 0.5em 0.5em 0;
-}
-
-.combo-box-base:armed:editable > .arrow-button {
-    -fx-background-color: -btn-selected-color;
-    -fx-background-insets: 0.0;
-    -fx-background-radius: 0.5em;
-}
-
-.combo-box-base:hover:editable {
-}
-
-.combo-box-base:editable > .text-field {
-    -fx-background-radius: 0.5em 0 0 0.5em;
-}
-
