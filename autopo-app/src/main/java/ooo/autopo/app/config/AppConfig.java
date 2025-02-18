@@ -13,21 +13,27 @@ package ooo.autopo.app.config;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import jakarta.inject.Named;
 import javafx.application.HostServices;
 import ooo.autopo.app.ApplicationTitleController;
 import ooo.autopo.app.AutopoDescriptor;
 import ooo.autopo.app.WindowStatusController;
+import ooo.autopo.app.ui.AppContentController;
+import ooo.autopo.app.ui.OverlayItem;
+import ooo.autopo.app.ui.about.AboutOverlayItem;
+import ooo.autopo.app.ui.logs.LogsOverlayItem;
 import ooo.autopo.app.ui.notification.NotificationsController;
-import org.pdfsam.injector.Auto;
+import ooo.autopo.app.ui.settings.SettingsOverlayItem;
 import org.pdfsam.injector.Components;
 import org.pdfsam.injector.Provides;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Andrea Vacondio
  */
-@Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class })
+@Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class, AppContentController.class })
 public class AppConfig {
 
     private final HostServices services;
@@ -42,8 +48,13 @@ public class AppConfig {
     }
 
     @Provides
-    @Auto
     public AutopoDescriptor descriptor() throws IOException {
         return new AutopoDescriptor();
+    }
+
+    @Provides
+    @Named("overlays")
+    public List<OverlayItem> overlays() {
+        return List.of(new AboutOverlayItem(), new SettingsOverlayItem(), new LogsOverlayItem());
     }
 }

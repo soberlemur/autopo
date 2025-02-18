@@ -1,0 +1,18 @@
+.combo-box-popup > .list-view , .context-menu {
+    -fx-background-color: -menu-border-color, -menu-background-color;
+    -fx-background-insets: 0.0, 0.5;
+    -fx-background-radius: 0.0;
+	-fx-effect: none;
+}
+.pdfsam-input-password {
+    -fx-background-color: -pdfsam-border-color, -default-background-color;
+    -fx-background-insets: 0.0, 0.4;
+    -fx-background-radius: 0.0;
+	-fx-effect: none;
+    -fx-border-style: none;
+}
+
+.pdfsam-help-popup {
+    -fx-background-radius: 0.0;
+	-fx-effect: none;
+}

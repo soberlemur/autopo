@@ -29,6 +29,7 @@ import ooo.autopo.app.config.PersistenceConfig;
 import ooo.autopo.app.config.ServicesConfig;
 import ooo.autopo.app.context.StringPersistentProperty;
 import ooo.autopo.app.ui.AppContainer;
+import ooo.autopo.app.ui.Themes;
 import ooo.autopo.app.ui.notification.NotificationsContainer;
 import ooo.autopo.app.validation.CompositeDecoration;
 import ooo.autopo.i18n.SetLocaleRequest;
@@ -49,6 +50,7 @@ import java.util.Optional;
 import static java.util.Objects.nonNull;
 import static ooo.autopo.app.context.ApplicationContext.APPLICATION_TITLE;
 import static ooo.autopo.app.context.ApplicationContext.app;
+import static ooo.autopo.app.context.StringPersistentProperty.THEME;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -115,12 +117,19 @@ public class AutopoApp extends Application {
         StackPane.setAlignment(notifications, Pos.BOTTOM_RIGHT);
         rootStackPane.getChildren().addAll(app().instance(AppContainer.class), notifications);
         var mainScene = new Scene(rootStackPane);
+        initTheme(mainScene);
         mainScene.getAccelerators().put(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN), Platform::exit);
         return mainScene;
     }
 
     private void initStartupContentItem() {
         //TODO maybe open the latest project
+    }
+
+    private void initTheme(Scene scene) {
+        app().registerScene(scene);
+        var theme = app().persistentSettings().get(THEME).orElse(null);
+        app().runtimeState().theme(Themes.getOrDefault(theme));
     }
 
     private void cleanIfRequired() {

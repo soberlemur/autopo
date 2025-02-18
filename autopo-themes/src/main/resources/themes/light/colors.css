@@ -1,0 +1,157 @@
+.root {
+    -grey-1: #F9F9F9;
+    -grey-2: #F7F8FA;
+    -grey-on-grey-2: #6C707E;
+    -grey-on-grey-2-dis: #BDBDBD;
+    -grey-on-grey-2-hov: #EBECEE;
+    -grey-on-grey-2-focus: #DBDCDE;
+    -grey-3: #EBECEE;
+    -grey-4: #E1E1E1;
+    -grey-5: #D2D3D4;
+    -grey-6: #B2B2B2;
+
+    -warning-color: #EEAD69;
+    -error-color: #ef5350;
+    -info-color: #556ee6;
+    -success-color: #009245;
+
+    -default-primary: #556ee6;
+    -default-primary-hover: #485ec4;
+    -default-primary-hover-border: #4458b8;
+
+    /** general defaults**/
+    -default-background-color: white;
+    -default-light-background: -grey-2;
+    -default-light-background-hover: derive(-default-light-background, -5%);
+    -default-dark-background: -grey-3;
+    -default-dark-background-hover: derive(-default-dark-background, -20%);
+    -default-font-color: #07031F;
+    -default-font-color-over-primary: -default-font-color;
+    -default-arrow-color: -default-font-color;
+    -default-focus-color: -default-primary;
+    -default-focus-color-hover: derive(-default-focus-color, -10%);
+    -default-border-color: -grey-5;
+    -default-popup-background: white;
+
+    -fx-background: -default-background-color;
+    -fx-focus-color: -grey-4;
+    -fx-accent: -fx-focus-color;
+    -fx-text-box-border: -grey-4;
+    -fx-text-base-color: -default-font-color;
+    -fx-selection-bar: #d4e2ff;
+    -fx-table-cell-border-color: -grey-4;
+    -fx-focus-color: -default-focus-color;
+    -fx-font-smoothing-type: gray;
+    -fx-control-inner-background: white;
+    -fx-selection-bar-non-focused: derive(-grey-2, -25%);
+
+    -default-shadow-effect: dropshadow(three-pass-box, rgba(51, 77, 136, 0.2), 30, 0, 0, 10);
+    -hover-shadow-effect: dropshadow(three-pass-box, rgba(51, 77, 136, 0.5), 30, 0, 0, 10);
+    -dnd-shadow-effect: dropshadow(three-pass-box, rgba(51, 77, 136, 0.1), 10, 0, 0, 10);
+
+    /** menu **/
+    -menu-hover-color: -default-font-color-over-primary;
+    -menu-arrow-color: -default-font-color;
+    -menu-border-color: -grey-3;
+    -menu-background-color: -grey-2;
+    -accelerator-font-color: derive(-default-font-color, 20%);
+
+    /** tooltip **/
+    -tooltip-background-color: black;
+    -tooltip-font-color: white;
+    -tooltip-border-color: black;
+
+    /** footer **/
+    -footer-border-color: -grey-3;
+    -footer-background-color: -grey-2;
+    -status-label-color: -grey-on-grey-2;
+    -footer-button-icon-color: -grey-on-grey-2;
+    -footer-button-color-hover: -grey-on-grey-2-hov;
+    -footer-button-color-focus: -grey-on-grey-2-focus;
+
+    /** list view **/
+    -listview-background-color: -default-background-color;
+    -listview-border-color: -grey-6;
+
+    /** hyperlinks **/
+    -hyperlink-color: derive(-info-color, -20.0%);
+
+    /** notifications */
+    -notification-border-color: -default-border-color;
+    -notification-color: -default-background-color;
+
+    /** buttons **/
+    -btn-color: -default-dark-background;
+    -btn-color-hover: derive(-btn-color, -10%);
+    -btn-icon-color: -default-font-color;
+    -btn-default-color: -default-primary;
+    -btn-default-color-hover: derive(-btn-default-color, -10%);
+    -btn-default-focus-border-color: white;
+    -btn-default-focus-border-color-hover: white;
+    -btn-default-font-color: white;
+    -btn-focus-border-color: -default-focus-color;
+    -btn-focus-border-color-hover: -default-focus-color-hover;
+    -btn-selected-color: -grey-4;
+    -btn-selected-border-color: -grey-6;
+
+    /** titled panel buttons **/
+    -btn-color-titled: white;
+    -btn-color-hover-titled: -grey-4;
+    -btn-focus-border-color-titled: -grey-5;
+    -btn-focus-border-color-hover-titled: derive(-btn-focus-border-color-titled, -10%);
+
+    /** combo **/
+    -combo-color: -default-dark-background;
+    -combo-color-hover: derive(-combo-color, -10%);
+    -combo-focus-border-color: -pdfsam-focus-color;
+    -combo-focus-border-color-hover: -pdfsam-focus-color-hover;
+    -combo-selected-color: derive(-combo-color-hover, -10%);
+
+    /** titled panel combos **/
+    -combo-color-titled: white;
+    -combo-color-hover-titled: -grey-4;
+    -combo-focus-border-color-titled: -grey-5;
+    -combo-focus-border-color-hover-titled: derive(-btn-focus-border-color-titled, -10%);
+
+    /** header **/
+    -header-background-color: -grey-1;
+    -header-border-color: -grey-4;
+    -header-button-color: -header-background-color;
+    -header-button-color-hover: derive(-header-button-color, -10%);
+    -header-button-focus-color: -grey-2;
+    -header-button-focus-color-hover: derive(-header-button-focus-color, -10%);
+
+    /** sidebar **/
+    -sidebar-background-color: -grey-1;
+    -sidebar-border-color: -grey-4;
+    -sidebar-btn-color: -grey-1;
+    -sidebar-btn-color-hover: -grey-4;
+    -sidebar-btn-border-focus-color: -pdfsam-focus-color;
+    -sidebar-btn-border-focus-color-hover: derive(-pdfsam-focus-color, -10%);
+    -sidebar-arrow-color: -default-font-color;
+
+    /** fields **/
+    -text-field-color: white;
+    -text-field-focus-color: -default-primary;
+
+    /** checkbox **/
+    -checkbox-selected-color: -default-primary;
+    -checkbox-focus-color: -default-primary;
+
+    -fx-selection-bar-non-focused: derive(-grey-2, -25%);
+    /** tableview **/
+    -table-even-background-color: white;
+    -table-odd-background-color: -grey-2;
+    -table-border-color: derive(-table-odd-background-color, -10%);
+    -table-columne-header-color: derive(-table-odd-background-color, -3%);
+    -table-selected-background-color: -fx-selection-bar-non-focused;
+    -total-label-color: -default-dark-background;
+
+
+    /** scrollbars color **/
+    -scrollbar-color: -grey-3;
+    -scrollbar-color-thumb: -grey-5;
+
+    /** separator color **/
+    -separator-color: -grey-4;
+}

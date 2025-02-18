@@ -21,6 +21,9 @@ import static org.apache.commons.lang3.StringUtils.trim;
  * @author Andrea Vacondio
  */
 public record SetTitleRequest(String title) {
+
+    public static final SetTitleRequest SET_DEFAULT_TITLE_REQUEST = new SetTitleRequest("");
+
     public SetTitleRequest(String title) {
         this.title = trim(title);
     }

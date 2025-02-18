@@ -49,7 +49,8 @@ class Notification extends VBox {
         setId(UUID.randomUUID().toString());
         var closeButton = new Button();
         closeButton.setGraphic(new FontIcon(FluentUiFilledAL.DISMISS_20));
-        closeButton.getStyleClass().addAll("close-btn", "big");
+        closeButton.getStyleClass().addAll(Style.TOOLBAR_BUTTON.css());
+        closeButton.getStyleClass().add("big");
         closeButton.setOnAction(e -> eventStudio().broadcast(new RemoveNotificationRequest(getId())));
         var titleLabel = new Label(title);
         titleLabel.setPrefWidth(Integer.MAX_VALUE);

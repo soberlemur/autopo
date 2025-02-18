@@ -37,6 +37,7 @@ import static ooo.autopo.app.AutopoDescriptorProperty.COPYRIGHT;
 import static ooo.autopo.app.AutopoDescriptorProperty.DONATE_URL;
 import static ooo.autopo.app.AutopoDescriptorProperty.HOME_LABEL;
 import static ooo.autopo.app.AutopoDescriptorProperty.HOME_URL;
+import static ooo.autopo.app.AutopoDescriptorProperty.LICENSE_NAME;
 import static ooo.autopo.app.AutopoDescriptorProperty.LICENSE_URL;
 import static ooo.autopo.app.AutopoDescriptorProperty.NAME;
 import static ooo.autopo.app.AutopoDescriptorProperty.SCM_URL;
@@ -60,7 +61,7 @@ public class AboutPane extends HBox {
         addSectionTitle(descriptor.property(NAME, "Autopo"), left);
         left.getChildren().addAll(new Label(String.format("ver. %s", descriptor.property(VERSION))));
         addHyperlink(null, descriptor.property(VENDOR_URL), descriptor.property(COPYRIGHT), left);
-        addHyperlink(null, descriptor.property(LICENSE_URL), "EULA", left);
+        addHyperlink(null, descriptor.property(LICENSE_URL), descriptor.property(LICENSE_NAME), left);
         addHyperlink(FluentUiFilledAL.HOME_20, descriptor.property(HOME_URL), descriptor.property(HOME_LABEL), left);
 
         addSectionTitle(i18n().tr("Environment"), left);

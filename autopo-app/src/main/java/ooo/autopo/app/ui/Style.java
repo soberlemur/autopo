@@ -21,7 +21,6 @@ public enum Style {
     BUTTON("btn"),
     SAVE_BUTTON("btn", "toolbar-btn", "save-btn"),
     CLOSE_BUTTON("btn", "close-btn"),
-    TOOL_PANEL("pdfblack-container", "tool-panel"),
     TOOLBAR_BUTTON("btn", "toolbar-btn"),
     TOOLBAR_BUTTON_RIGHT("btn", "btn-right", "toolbar-btn"),
     TOOLBAR_BUTTON_LEFT("btn", "btn-left", "toolbar-btn"),

@@ -14,6 +14,8 @@ package ooo.autopo.app.context;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import javafx.application.ConditionalFeature;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.injector.Injector;
@@ -83,6 +85,16 @@ public class ApplicationContext implements Closeable {
      * @param scene
      */
     public void registerScene(Scene scene) {
+        this.runtimeState().theme().subscribe(t -> {
+            if (Objects.nonNull(t)) {
+                Platform.runLater(() -> {
+                    scene.getStylesheets().setAll(t.stylesheets());
+                    if (!Platform.isSupported(ConditionalFeature.TRANSPARENT_WINDOW)) {
+                        scene.getStylesheets().addAll(t.transparentIncapableStylesheets());
+                    }
+                });
+            }
+        });
         this.persistentSettings().settingsChanges(FONT_SIZE).subscribe(size -> {
             size.filter(StringUtils::isNotBlank).map(s -> String.format("-fx-font-size: %s;", s))
                 .ifPresentOrElse(scene.getRoot()::setStyle, () -> scene.getRoot().setStyle(""));

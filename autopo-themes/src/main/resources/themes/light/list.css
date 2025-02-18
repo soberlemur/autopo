@@ -1,0 +1,10 @@
+.list-view, .list-view:focused {
+    -fx-background-color: -listview-border-color, -listview-background-color;
+    -fx-background-insets: 0.0, 0.4;
+    -fx-background-radius: 8.0;
+    -fx-padding: 10 0.083333em;
+}
+
+.list-view > .virtual-flow > .scroll-bar:vertical {
+    -fx-padding: 0.083333em;
+}

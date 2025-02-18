@@ -172,6 +172,7 @@
         <module>autopo-i18n</module>
         <module>autopo-service</module>
         <module>autopo-model</module>
+<module>autopo-themes</module>
     </modules>
 
     <build>

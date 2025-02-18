@@ -44,7 +44,7 @@ public class NativeOpenUrlController {
 
     @EventListener
     public void openUrl(NativeOpenUrlRequest event) {
-        if (nonNull(event.url()) && event.url().isBlank()) {
+        if (nonNull(event.url()) && !event.url().isBlank()) {
             try {
                 services.showDocument(event.url());
             } catch (NullPointerException npe) {

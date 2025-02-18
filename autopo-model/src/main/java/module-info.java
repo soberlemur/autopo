@@ -15,6 +15,9 @@ module ooo.autopo.model {
     exports ooo.autopo.model;
     exports ooo.autopo.model.lifecycle;
     exports ooo.autopo.model.ui;
+    exports ooo.autopo.model.io;
+    exports ooo.autopo.model.notification;
+    exports ooo.autopo.model.ui.log;
 
     requires transitive com.soberlemur.potentilla;
     requires ooo.autopo.i18n;
@@ -24,7 +27,7 @@ module ooo.autopo.model {
     requires javafx.graphics;
     requires org.kordamp.ikonli.fluentui;
     requires org.kordamp.ikonli.javafx;
+    requires org.apache.commons.io;
     opens ooo.autopo.model.ui to com.fasterxml.jackson.databind;
-    exports ooo.autopo.model.io;
-    exports ooo.autopo.model.notification;
+
 }

@@ -16,6 +16,7 @@ package ooo.autopo.app.context;
 import java.util.function.Supplier;
 
 import static ooo.autopo.app.ConfigurableSystemProperty.LOCALE_PROP;
+import static ooo.autopo.app.ConfigurableSystemProperty.THEME_PROP;
 
 /**
  * Configurable String value property
@@ -25,6 +26,7 @@ import static ooo.autopo.app.ConfigurableSystemProperty.LOCALE_PROP;
 public enum StringPersistentProperty implements PersistentProperty<String> {
     STARTUP_PROJECT_PATH(() -> ""),
     LOCALE(() -> System.getProperty(LOCALE_PROP)),
+    THEME(() -> System.getProperty(THEME_PROP)),
     FONT_SIZE(() -> "");
 
     private final Supplier<String> defaultSupplier;

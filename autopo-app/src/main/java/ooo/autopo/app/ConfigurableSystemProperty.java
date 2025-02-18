@@ -20,6 +20,7 @@ package ooo.autopo.app;
 public class ConfigurableSystemProperty {
     public static final String LOCALE_PROP = "ooo.autopo.default.locale";
     public static final String CHECK_FOR_UPDATES_PROP = "ooo.autopo.default.checkforupdate";
+    public static final String THEME_PROP = "ooo.autopo.default.theme";
 
     private ConfigurableSystemProperty() {
         //HIDE

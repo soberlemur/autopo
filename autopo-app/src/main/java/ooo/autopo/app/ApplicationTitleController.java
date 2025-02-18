@@ -32,6 +32,8 @@ public class ApplicationTitleController {
         eventStudio().add(SetTitleRequest.class, request -> {
             if (isNotBlank(request.title())) {
                 primaryStage.setTitle(APPLICATION_TITLE + " - " + request.title());
+            } else {
+                primaryStage.setTitle(APPLICATION_TITLE);
             }
         });
     }

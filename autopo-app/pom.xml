@@ -60,6 +60,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-themes</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-impl</artifactId>
             <scope>compile</scope>
