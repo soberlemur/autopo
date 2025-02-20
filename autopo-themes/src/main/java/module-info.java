@@ -21,10 +21,8 @@ module ooo.autopo.themes {
     exports ooo.autopo.theme;
 
     requires ooo.autopo.i18n;
-    provides ooo.autopo.theme.Theme with ooo.autopo.theme.Light, ooo.autopo.theme.Dark, ooo.autopo.theme.LightMaroon, ooo.autopo.theme.DarkTeal;
+    provides ooo.autopo.theme.Theme with ooo.autopo.theme.Light, ooo.autopo.theme.Dark, ooo.autopo.theme.LightMaroon, ooo.autopo.theme.DarkTeal, ooo.autopo.theme.DarkPurple, ooo.autopo.theme.LightBlue;
 
     opens themes.light;
     opens themes.dark;
-    opens themes.lightmaroon;
-    opens themes.darkteal;
 }

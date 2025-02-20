@@ -16,11 +16,14 @@ package ooo.autopo.service.io;
 
 import jakarta.inject.Inject;
 import ooo.autopo.model.PoLoadRequest;
+import ooo.autopo.model.project.LoadProjectRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
 
+import static ooo.autopo.model.LoadingStatus.LOADING;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
  * @author Andrea Vacondio
@@ -37,8 +40,18 @@ public class IOController {
     }
 
     @EventListener
-    public void request(PoLoadRequest request) {
+    public void loadPo(PoLoadRequest request) {
         Logger.trace("PO load request received");
-        Thread.ofVirtual().name("po-loading-thread").start(() -> ioService.load(request.poFile()));
+        requireNotNullArg(request.poFile(), "Cannot load a null poFile");
+        request.poFile().moveStatusTo(LOADING);
+        Thread.ofVirtual().name("io-loading-thread").start(() -> ioService.load(request.poFile()));
+    }
+
+    @EventListener
+    public void loadProject(LoadProjectRequest request) {
+        Logger.trace("Project load request received");
+        requireNotNullArg(request.project(), "Cannot load a null project");
+        request.project().moveStatusTo(LOADING);
+        Thread.ofVirtual().name("io-loading-thread").start(() -> ioService.load(request.project()));
     }
 }

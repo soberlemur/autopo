@@ -18,7 +18,6 @@ module ooo.autopo.app {
 
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
-    requires javafx.controls;
     requires com.fasterxml.jackson.datatype.jdk8;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires ooo.autopo.service;
@@ -36,6 +35,7 @@ module ooo.autopo.app {
     requires org.tinylog.impl;
     requires org.tinylog.api;
     requires org.slf4j;
+    requires atlantafx.base;
 
     opens ooo.autopo.app to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.ui to org.pdfsam.injector, org.pdfsam.eventstudio;

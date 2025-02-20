@@ -32,7 +32,6 @@
     -fx-background-color: -footer-button-color-hover;
 }
 
-
 .footer-pane .footer-buttons .footer-button::focus-visible {
     -fx-background-color: -footer-button-color-focus;
 }

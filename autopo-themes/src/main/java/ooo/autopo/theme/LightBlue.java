@@ -1,7 +1,8 @@
 package ooo.autopo.theme;
+
 /*
  * This file is part of the Autopo project
- * Created 17/02/25
+ * Created 19/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -18,16 +19,16 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class LightMaroon extends Light {
+public class LightBlue extends Light {
 
     @Override
     public String id() {
-        return "KLDJHGH3N21A1Z";
+        return "AS876FDS7RB3";
     }
 
     @Override
     public String name() {
-        return i18n().tr("Light with maroon");
+        return i18n().tr("Light with blue");
     }
 
     @Override
@@ -37,7 +38,6 @@ public class LightMaroon extends Light {
 
     @Override
     public String defaultPrimary() {
-        return "#57353E";
+        return "#556EE6";
     }
-
 }

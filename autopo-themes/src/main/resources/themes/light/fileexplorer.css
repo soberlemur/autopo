@@ -1,120 +1,39 @@
 .file-explorer {
     -fx-background-color: -fe-background-color;
     -fx-background-insets: 0;
-    -fx-padding: 1.666667em 0.666667em 1.0em 0.666667em;
+    -fx-padding: 0 0 1.0em 0;
 }
 
-.vertical-sidebar .sidebar-scroll {
-    -fx-fit-to-width: true;
-    -fx-fit-to-height: true;
-    -fx-padding: 0;
-    -fx-hbar-policy: never;
-    -fx-vbar-policy: as-needed;
+.file-explorer-toolbar {
+    -fx-background-color: -fe-toolbar-border-color, -fe-toolbar-background-color;
+    -fx-background-insets: 0 0 0 0, 0 0 1 0;
+    -fx-background-radius: 0.0;
+    -fx-spacing: 0.5em;
+    -fx-padding: 0 0.6666667em;
+    -fx-alignment: center_right;
+    -fx-font-size: 1em;
 }
 
-.sidebar-expand-button {
-    -fx-padding: 0.0 0.0 0.5em 0.0;
-    -fx-alignment: top-right;
-    -fx-background-radius: 6px;
+.file-explorer-toolbar .file-explorer-toolbar-button {
+    -fx-font-size: 1.166667em;
+    -fx-padding: 0.166667em 0.416667em;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
 }
 
-.sidebar-expand-toggle, .sidebar-button {
-    -fx-background-color: -sidebar-background-color;
+.file-explorer-toolbar .file-explorer-toolbar-button > .ikonli-font-icon {
+    -fx-fill: -fe-button-icon-color;
 }
 
-.sidebar-expand-toggle:hover, .sidebar-button:hover {
-    -fx-background-color: -sidebar-btn-color-hover;
+.file-explorer-toolbar .file-explorer-toolbar-button:hover {
+    -fx-background-color: -fe-button-color-hover;
 }
 
-.sidebar-expand-toggle:focus-visible, .sidebar-button:focus-visible {
-    -fx-background-color: -sidebar-btn-border-focus-color, -sidebar-btn-color;
+.file-explorer-toolbar .file-explorer-toolbar-button::focus-visible {
+    -fx-background-color: -fe-button-color-focus;
 }
 
-.sidebar-expand-toggle:focus-visible:hover, .sidebar-button:focus-visible:hover {
-    -fx-background-color: -sidebar-btn-border-focus-color-hover, -sidebar-btn-color-hover;
+.file-explorer-toolbar .file-explorer-toolbar-button:armed {
+    -fx-opacity: 0.7;
 }
 
-.sidebar-button-arrow {
-    -fx-fill: -sidebar-arrow-color;
-}
-
-.sidebar-buttons {
-    -fx-background-color: -sidebar-background-color;
-    -fx-background-insets: 0.0;
-    -fx-spacing: 0.416667em;
-    -fx-padding: 0.0 0.5em 1.0em 0.5em;
-}
-
-.tools-buttons {
-    -fx-spacing: 0.416667em;
-}
-
-.sidebar-button {
-    -fx-background-radius: 0.666667em, 0.666667em, 0.666667em !important;
-    -fx-background-insets: 0.0;
-    -fx-padding: 0.416667em 0.5em 0.416667em 0.5em;
-    -fx-min-width: 3em;
-}
-
-.sidebar-button.error > .ikonli-font-icon {
-    -fx-icon-color: -error-color !important;
-}
-
-.sidebar-button.info > .ikonli-font-icon {
-    -fx-icon-color: -info-color !important;
-}
-
-.sidebar-button.warn > .ikonli-font-icon {
-    -fx-icon-color: -warning-color !important;
-}
-
-.sidebar-buttons .sidebar-button:selected {
-    -fx-background-insets: 0.0;
-    -fx-opacity: 1;
-    -fx-background-color: -default-primary;
-    -fx-text-fill: white;
-}
-
-.sidebar-buttons .sidebar-button:selected > .ikonli-font-icon {
-    -fx-icon-color: white !important;
-}
-
-.sidebar-button-notification-container > .ikonli-font-icon {
-    -fx-icon-size: 16px !important;
-    -fx-background-color: -default-primary;
-}
-
-.sidebar-button-notification-container.error > .notification {
-    -fx-fill: -error-color !important;
-}
-
-.sidebar-button-notification-container.info > .notification {
-    -fx-fill: -info-color !important;
-}
-
-.sidebar-button-notification-container.warn > .notification {
-    -fx-fill: -warning-color !important;
-}
-
-.tool-icon {
-    -fx-icon-size: 24px;
-}
-
-.spacer {
-    -fx-min-height: 1em;
-}
-
-.sidebar-button .ikonli-font-icon {
-    -fx-icon-size: 28px;
-}
-
-.sidebar-title {
-    -fx-font-size: 0.9em;
-}
-
-.sidebar-button.drag-over {
-    -fx-opacity: 0.6;
-    -fx-border-color: -default-primary;
-    -fx-border-width: 2px 0 0 0;
-    -fx-border-insets: 2px 0 0 0;
-}

@@ -99,12 +99,11 @@
 
     /** file-explorer **/
     -fe-background-color: -grey-2;
-    -sidebar-border-color: -grey-4;
-    -sidebar-btn-color: -grey-1;
-    -sidebar-btn-color-hover: -grey-4;
-    -sidebar-btn-border-focus-color: -pdfsam-focus-color;
-    -sidebar-btn-border-focus-color-hover: derive(-pdfsam-focus-color, -10%);
-    -sidebar-arrow-color: -default-font-color;
+    -fe-toolbar-border-color: -grey-3;
+    -fe-toolbar-background-color: -grey-2;
+    -fe-button-icon-color: -grey-on-grey-2;
+    -fe-button-color-hover: -grey-on-grey-2-hov;
+    -fe-button-color-focus: -grey-on-grey-2-focus;
 
     /** combo **/
     -combo-color: -default-dark-background;

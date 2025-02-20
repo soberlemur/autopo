@@ -14,8 +14,14 @@ package ooo.autopo.model.project;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableObjectValue;
+import ooo.autopo.model.LoadingStatus;
+
 import java.nio.file.Path;
 import java.util.Properties;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author Andrea Vacondio
@@ -23,17 +29,41 @@ import java.util.Properties;
 public class Project {
 
     private final Path location;
-    private final Properties properties;
+    private final Properties properties = new Properties();
+    private final SimpleObjectProperty<LoadingStatus> status = new SimpleObjectProperty<>(LoadingStatus.INITIAL);
 
-    public Project(Path location, Properties properties) {
+    public Project(Path location) {
         this.location = location;
-        this.properties = properties;
     }
 
     /**
      * @return the value for the property or null
      */
-    public String property(ProjectProperty property) {
+    public String getProperty(ProjectProperty property) {
         return properties.getProperty(property.key());
+    }
+
+    public void setProperty(ProjectProperty property, String value) {
+        properties.setProperty(property.key(), value);
+    }
+
+    /**
+     * Moves to the given loading status
+     */
+    public void moveStatusTo(LoadingStatus newStatus) {
+        requireNonNull(newStatus);
+        status.set(status.getValue().moveTo(newStatus));
+    }
+
+    public ObservableObjectValue<LoadingStatus> status() {
+        return this.status;
+    }
+
+    public Path location() {
+        return location;
+    }
+
+    public Properties properties() {
+        return properties;
     }
 }

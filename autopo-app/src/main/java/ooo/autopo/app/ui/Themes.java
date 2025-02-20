@@ -14,8 +14,9 @@ package ooo.autopo.app.ui;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import javafx.application.ColorScheme;
+import javafx.application.Platform;
 import ooo.autopo.theme.Theme;
-import org.apache.commons.lang3.SystemUtils;
 
 import java.util.Collections;
 import java.util.ServiceLoader;
@@ -57,32 +58,19 @@ public class Themes {
         return null;
     }
 
-    //TODO replace with some logic to at least detect light/dark theme and provide a sensible default
     private static Theme defaultTheme() {
         require(!THEMES.isEmpty(), () -> new IllegalStateException("No theme available"));
-        if (isDarkTheme()) {
-            for (Theme theme : THEMES.values()) {
-                if (theme.isDark()) {
-                    return theme;
-                }
-            }
-        }
+        ColorScheme colorScheme = Platform.getPreferences().getColorScheme();
         for (Theme theme : THEMES.values()) {
-            if (!theme.isDark()) {
+            if (theme.isDefault() && isSameScheme(theme, colorScheme)) {
                 return theme;
             }
         }
         return THEMES.get(THEMES.firstKey());
     }
 
-    private static boolean isDarkTheme() {
-        if (SystemUtils.IS_OS_WINDOWS) {
-
-        }
-        if (SystemUtils.IS_OS_MAC) {
-
-        }
-        return false;
+    private static boolean isSameScheme(Theme theme, ColorScheme colorScheme) {
+        return theme.isDark() == (ColorScheme.DARK == colorScheme);
     }
 
     /**

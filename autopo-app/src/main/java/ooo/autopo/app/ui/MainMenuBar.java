@@ -22,8 +22,14 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import ooo.autopo.app.io.Choosers;
+import ooo.autopo.model.project.LoadProjectRequest;
+import ooo.autopo.model.project.Project;
 import ooo.autopo.model.ui.SetOverlayItem;
 
+import java.nio.file.Files;
+
+import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -39,6 +45,15 @@ public class MainMenuBar extends MenuBar {
         exit.setOnAction(e -> Platform.exit());
         var open = new MenuItem(i18n().tr("_Open"));
         open.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
+        open.setOnAction(e -> {
+            var directoryChooser = Choosers.directoryChooser(i18n().tr("Select the project directory"));
+
+            ofNullable(directoryChooser.showDialog(this.getScene().getWindow())).filter(Files::isDirectory)
+                                                                                .map(Project::new)
+                                                                                .map(LoadProjectRequest::new)
+                                                                                .ifPresent(eventStudio()::broadcast);
+        });
+
         var fileMenu = new Menu(i18n().tr("File"));
         fileMenu.getItems().addAll(open, new SeparatorMenuItem(), exit);
 
