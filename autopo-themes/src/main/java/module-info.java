@@ -21,8 +21,10 @@ module ooo.autopo.themes {
     exports ooo.autopo.theme;
 
     requires ooo.autopo.i18n;
-    provides ooo.autopo.theme.Theme with ooo.autopo.theme.Light, ooo.autopo.theme.Dark, ooo.autopo.theme.LightMaroon, ooo.autopo.theme.DarkTeal, ooo.autopo.theme.DarkPurple, ooo.autopo.theme.LightBlue;
+    requires atlantafx.base;
+    provides ooo.autopo.theme.Theme with ooo.autopo.theme.PrimerLight, ooo.autopo.theme.PrimerDark, ooo.autopo.theme.CupertinoLight, ooo.autopo.theme.CupertinoDark, ooo.autopo.theme.NordLight, ooo.autopo.theme.NordDark, ooo.autopo.theme.Dracula;
 
     opens themes.light;
     opens themes.dark;
+    opens themes.base;
 }

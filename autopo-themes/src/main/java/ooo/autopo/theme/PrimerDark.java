@@ -1,7 +1,8 @@
 package ooo.autopo.theme;
+
 /*
  * This file is part of the Autopo project
- * Created 17/02/25
+ * Created 20/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -18,26 +19,24 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class LightMaroon extends Light {
+public class PrimerDark extends AtlantaThemeWrapper {
+
+    public PrimerDark() {
+        super(new atlantafx.base.theme.PrimerDark());
+    }
 
     @Override
     public String id() {
-        return "KLDJHGH3N21A1Z";
+        return "L38O0OAA1Q355HXZ";
     }
 
     @Override
     public String name() {
-        return i18n().tr("Light with maroon");
+        return i18n().tr("Dark");
     }
 
     @Override
     public boolean isDefault() {
-        return false;
+        return true;
     }
-
-    @Override
-    public String defaultPrimary() {
-        return "#57353E";
-    }
-
 }

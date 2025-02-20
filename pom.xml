@@ -54,6 +54,7 @@
         <potentilla.version>0.0.1-SNAPSHOT</potentilla.version>
         <validatorfx.version>0.5.1</validatorfx.version>
         <jackson.version>2.18.2</jackson.version>
+        <atlantafx.version>2.0.1</atlantafx.version>
     </properties>
 
     <distributionManagement>
@@ -172,7 +173,7 @@
         <module>autopo-i18n</module>
         <module>autopo-service</module>
         <module>autopo-model</module>
-<module>autopo-themes</module>
+        <module>autopo-themes</module>
     </modules>
 
     <build>
@@ -375,6 +376,11 @@
                 <groupId>net.synedra</groupId>
                 <artifactId>validatorfx</artifactId>
                 <version>${validatorfx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mkpaz</groupId>
+                <artifactId>atlantafx-base</artifactId>
+                <version>${atlantafx.version}</version>
             </dependency>
             <!-- test -->
             <dependency>

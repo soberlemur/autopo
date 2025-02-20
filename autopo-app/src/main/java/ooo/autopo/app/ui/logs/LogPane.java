@@ -25,6 +25,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import ooo.autopo.app.io.Choosers;
+import ooo.autopo.app.ui.components.NotClosable;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.ui.log.ClearLogRequest;
 import ooo.autopo.model.ui.log.SaveLogRequest;
@@ -42,14 +43,13 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  *
  * @author Andrea Vacondio
  */
-public class LogPane extends BorderPane {
+public class LogPane extends BorderPane implements NotClosable {
 
     private final LogListView logView;
 
     @Inject
     public LogPane(LogListView view, LogPaneToolbar toolbar) {
         this.logView = view;
-        getStyleClass().addAll("logs-pane", "spaced-container");
         setCenter(this.logView);
         setTop(toolbar);
         var copyItem = new MenuItem(i18n().tr("Copy"));

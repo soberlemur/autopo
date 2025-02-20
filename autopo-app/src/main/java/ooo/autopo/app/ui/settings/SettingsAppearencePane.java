@@ -45,6 +45,7 @@ class SettingsAppearencePane extends GridPane {
     public SettingsAppearencePane(@Named("localeCombo") PreferenceComboBox<ComboItem<String>> localeCombo,
             @Named("themeCombo") PreferenceComboBox<ComboItem<String>> themeCombo,
             @Named("fontSizeCombo") PreferenceComboBox<ComboItem<String>> fontSizeCombo) {
+        this.getStyleClass().add("settings-panel");
         add(new Label(i18n().tr("Language:")), 0, 0);
         i18n().getSupported().stream().map(ComboItem::fromLocale).sorted(Comparator.comparing(ComboItem::description))
               .forEach(localeCombo.getItems()::add);

@@ -36,5 +36,9 @@
             <artifactId>autopo-i18n</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-base</artifactId>
+        </dependency>
     </dependencies>
 </project>

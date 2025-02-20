@@ -2,7 +2,7 @@ package ooo.autopo.theme;
 
 /*
  * This file is part of the Autopo project
- * Created 19/02/25
+ * Created 20/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -19,25 +19,19 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class LightBlue extends Light {
+public class Dracula extends AtlantaThemeWrapper {
+
+    public Dracula() {
+        super(new atlantafx.base.theme.Dracula());
+    }
 
     @Override
     public String id() {
-        return "AS876FDS7RB3";
+        return "L3W12ZM7UQ13G";
     }
 
     @Override
     public String name() {
-        return i18n().tr("Light with blue");
-    }
-
-    @Override
-    public boolean isDefault() {
-        return false;
-    }
-
-    @Override
-    public String defaultPrimary() {
-        return "#556EE6";
+        return i18n().tr("Darcula");
     }
 }

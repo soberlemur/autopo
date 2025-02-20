@@ -25,14 +25,14 @@ public interface Theme {
     String id();
 
     /**
-     * @return a collection of stylesheets paths
+     * @return a non null List of stylesheets paths
      */
     List<String> stylesheets();
 
     /**
      * @return a collection of stylesheets paths to be loaded if the platform is transparent incapable
      */
-    List<String> transparentIncapableStylesheets();
+    String transparentIncapableStylesheets();
 
     /**
      * @return The theme name
@@ -50,10 +50,7 @@ public interface Theme {
     boolean isDefault();
 
     /**
-     * @return the String representation of the default primary color for this theme as specified in {@link javafx.scene.paint.Color#web(String)} or null if the
-     * system accent color should be used
+     * @return the path to the theme user-agent stylesheet. See Application. setUserAgentStylesheet(String) for more info.
      */
-    default String defaultPrimary() {
-        return null;
-    }
+    String getUserAgentStylesheet();
 }

@@ -14,6 +14,7 @@ package ooo.autopo.app.context;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -88,19 +89,23 @@ public class ApplicationContext implements Closeable {
         this.runtimeState().theme().subscribe(t -> {
             if (Objects.nonNull(t)) {
                 Platform.runLater(() -> {
+                    Application.setUserAgentStylesheet(t.getUserAgentStylesheet());
                     scene.getStylesheets().setAll(t.stylesheets());
-                    if (!Platform.isSupported(ConditionalFeature.TRANSPARENT_WINDOW)) {
+                    if (!Platform.isSupported(ConditionalFeature.TRANSPARENT_WINDOW) && StringUtils.isNotBlank(t.transparentIncapableStylesheets())) {
                         scene.getStylesheets().addAll(t.transparentIncapableStylesheets());
                     }
                 });
             }
         });
         this.persistentSettings().settingsChanges(FONT_SIZE).subscribe(size -> {
-            size.filter(StringUtils::isNotBlank).map(s -> String.format("-fx-font-size: %s;", s))
+            size.filter(StringUtils::isNotBlank)
+                .map(s -> String.format("-fx-font-size: %s;", s))
                 .ifPresentOrElse(scene.getRoot()::setStyle, () -> scene.getRoot().setStyle(""));
         });
 
-        this.persistentSettings().get(FONT_SIZE).filter(not(String::isBlank))
+        this.persistentSettings()
+            .get(FONT_SIZE)
+            .filter(not(String::isBlank))
             .ifPresent(size -> scene.getRoot().setStyle(String.format("-fx-font-size: %s;", size)));
     }
 
@@ -115,13 +120,11 @@ public class ApplicationContext implements Closeable {
      * @return an instance of type
      */
     public <T> T instance(Class<T> type) {
-        return injector.orElseThrow(() -> new IllegalStateException("Injector not set for this application"))
-                       .instance(type);
+        return injector.orElseThrow(() -> new IllegalStateException("Injector not set for this application")).instance(type);
     }
 
     public <T> T instance(Key<T> key) {
-        return injector.orElseThrow(() -> new IllegalStateException("Injector not set for this application"))
-                       .instance(key);
+        return injector.orElseThrow(() -> new IllegalStateException("Injector not set for this application")).instance(key);
     }
 
     public void clean() {

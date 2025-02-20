@@ -1,0 +1,60 @@
+.spaced-container {
+    -fx-border-width: 0.0;
+    -fx-padding: 1.166666em;
+    -fx-spacing: 2.5em;
+}
+
+.section-title {
+    -fx-font-size: 1.333333em;
+    -fx-padding: 1.333333em 0.0 0.0 0.0;
+    -fx-font-weight: bold;
+}
+
+
+.autopo-container {
+    -fx-border-width: 0.0;
+    -fx-padding: 0.666667em;
+}
+
+/**
+ * Footer
+ */
+.footer {
+    -fx-background-color: -color-border-muted, -color-bg-subtle;
+    -fx-background-insets: 0, 1px 0 0 0;
+}
+
+/**
+ * About panel
+ */
+.about-panel {
+    -fx-padding: 1.5em;
+}
+
+.about-panel .label, .about-panel .hyperlink {
+    -fx-font-size: 1.166666em;
+    -fx-padding: 0;
+}
+
+.about-panel .section {
+    -fx-spacing: 6;
+}
+
+/**
+ * Settings panel
+ */
+.settings-panel {
+    -fx-hgap: 1em;
+    -fx-vgap: 1em;
+}
+
+/**
+ * Log
+ */
+.warn-log {
+    -fx-text-fill: -color-accent-emphasis;
+}
+
+.error-log {
+    -fx-text-fill: -color-danger-emphasis;
+}

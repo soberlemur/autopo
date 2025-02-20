@@ -18,6 +18,7 @@ import jakarta.inject.Inject;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import ooo.autopo.app.ui.components.ClosablePane;
+import ooo.autopo.app.ui.components.NotClosable;
 
 import java.util.Objects;
 
@@ -41,7 +42,11 @@ public class AppContainer extends BorderPane {
     public void overlay(Node overlay) {
         if (Objects.nonNull(overlay)) {
             this.overlay = overlay;
-            setCenter(new ClosablePane(overlay));
+            if (overlay instanceof NotClosable) {
+                setCenter(overlay);
+            } else {
+                setCenter(new ClosablePane(overlay));
+            }
         }
     }
 

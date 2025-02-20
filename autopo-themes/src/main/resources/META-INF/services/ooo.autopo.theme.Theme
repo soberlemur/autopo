@@ -1,4 +1,7 @@
-ooo.autopo.theme.Light
-ooo.autopo.theme.Dark
-ooo.autopo.theme.DarkTeal
-ooo.autopo.theme.LightMaroon
+ooo.autopo.theme.PrimerLight
+ooo.autopo.theme.PrimerDark
+ooo.autopo.theme.CupertinoLight
+ooo.autopo.theme.CupertinoDark
+ooo.autopo.theme.Dracula
+ooo.autopo.theme.NordDark
+ooo.autopo.theme.NordLight

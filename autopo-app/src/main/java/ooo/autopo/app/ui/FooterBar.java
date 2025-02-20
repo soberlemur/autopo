@@ -14,10 +14,13 @@ package ooo.autopo.app.ui;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.theme.Styles;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import ooo.autopo.model.ui.SetOverlayItem;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -28,24 +31,22 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 /**
  * @author Andrea Vacondio
  */
-public class FooterBar extends HBox {
+public class FooterBar extends ToolBar {
 
     private final Label status = new Label();
 
     public FooterBar() {
-        this.getStyleClass().add("footer-pane");
-        this.status.getStyleClass().add("status-label");
+        this.getStyleClass().add("footer");
+        //  this.status.getStyleClass().add("status-label");
         this.status.setText("Ready");
-        HBox buttonGroup = new HBox();
-        buttonGroup.getStyleClass().add("footer-buttons");
-
+        var spacer = new Pane();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         var logsButton = new Button();
-        logsButton.getStyleClass().add("footer-button");
         logsButton.setGraphic(new FontIcon(FluentUiRegularAL.DOCUMENT_ONE_PAGE_24));
+        logsButton.getStyleClass().addAll(Styles.SMALL);
         logsButton.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("LOGS")));
         logsButton.setTooltip(new Tooltip(i18n().tr("Open application logs")));
-        buttonGroup.getChildren().add(logsButton);
-        HBox.setHgrow(buttonGroup, javafx.scene.layout.Priority.ALWAYS);
-        this.getChildren().addAll(status, buttonGroup);
+
+        this.getItems().addAll(status, spacer, logsButton);
     }
 }

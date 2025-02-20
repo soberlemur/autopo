@@ -13,6 +13,8 @@ package ooo.autopo.app.ui.logs;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.theme.Styles;
+import atlantafx.base.theme.Tweaks;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -43,6 +45,7 @@ class LogListView extends ListView<LogMessage> {
             n.ifPresent(items::setMaxCapacity);
         });
         setId("log-view");
+        getStyleClass().addAll(Styles.DENSE, Styles.STRIPED, Tweaks.EDGE_TO_EDGE);
         setItems(items);
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setCellFactory(list -> new TextCell());

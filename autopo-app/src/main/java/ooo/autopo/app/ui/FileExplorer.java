@@ -14,14 +14,18 @@ package ooo.autopo.app.ui;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.theme.Styles;
+import atlantafx.base.theme.Tweaks;
 import jakarta.inject.Inject;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.util.Subscription;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.project.LoadProjectRequest;
@@ -53,24 +57,27 @@ public class FileExplorer extends BorderPane {
         eventStudio().addAnnotatedListeners(this);
 
         var expand = new Button();
-        expand.getStyleClass().add("file-explorer-toolbar-button");
+        expand.getStyleClass().addAll(Styles.SMALL);
         expand.setGraphic(new FontIcon(FluentUiFilledAL.ARROW_MAXIMIZE_20));
         expand.setOnAction(e -> root.setExpanded(true));
         expand.setTooltip(new Tooltip(i18n().tr("Expand")));
 
         var collapse = new Button();
-        collapse.getStyleClass().add("file-explorer-toolbar-button");
+        collapse.getStyleClass().addAll(Styles.SMALL);
         collapse.setGraphic(new FontIcon(FluentUiFilledAL.ARROW_MINIMIZE_20));
         collapse.setOnAction(e -> root.setExpanded(false));
         collapse.setTooltip(new Tooltip(i18n().tr("Collapse")));
 
-        var toolbar = new HBox(expand, collapse);
+        var spacer = new Pane();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+
+        var toolbar = new ToolBar(spacer, expand, collapse);
         toolbar.getStyleClass().add("file-explorer-toolbar");
-        HBox.setHgrow(toolbar, javafx.scene.layout.Priority.ALWAYS);
         this.setTop(toolbar);
 
         var treeView = new TreeView<>(root);
-        treeView.getStyleClass().add("file-explorer-tree");
+
+        treeView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
         this.setCenter(treeView);
 
     }

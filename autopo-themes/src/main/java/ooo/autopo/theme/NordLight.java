@@ -1,7 +1,8 @@
 package ooo.autopo.theme;
+
 /*
  * This file is part of the Autopo project
- * Created 17/02/25
+ * Created 20/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -13,36 +14,24 @@ package ooo.autopo.theme;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
  * @author Andrea Vacondio
  */
-public class Dark extends Light {
+public class NordLight extends AtlantaThemeWrapper {
 
-    @Override
-    public String id() {
-        return "L38O0OAA1Q355HXZ";
+    public NordLight() {
+        super(new atlantafx.base.theme.NordLight());
     }
 
     @Override
-    public List<String> stylesheets() {
-        var styles = new ArrayList<>(super.stylesheets());
-        styles.add("/themes/dark/colors.css");
-        styles.add("/themes/dark/theme.css");
-        return styles;
+    public String id() {
+        return "II2L0L08A1AQ4NNR5";
     }
 
     @Override
     public String name() {
-        return i18n().tr("Dark");
-    }
-
-    @Override
-    public boolean isDark() {
-        return true;
+        return i18n().tr("Nord light");
     }
 }

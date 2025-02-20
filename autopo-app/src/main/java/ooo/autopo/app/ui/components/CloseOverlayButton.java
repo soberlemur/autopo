@@ -14,9 +14,8 @@ package ooo.autopo.app.ui.components;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.theme.Styles;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
-import ooo.autopo.app.ui.Style;
 import ooo.autopo.model.ui.HideOverlayItem;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -29,10 +28,9 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 public class CloseOverlayButton extends Button {
     public CloseOverlayButton() {
-        setText("");
+        setText(i18n().tr("Close"));
         setGraphic(new FontIcon(FluentUiFilledAL.DISMISS_20));
+        getStyleClass().addAll(Styles.SMALL);
         setOnAction(e -> eventStudio().broadcast(HideOverlayItem.INSTANCE));
-        setTooltip(new Tooltip(i18n().tr("Close")));
-        getStyleClass().addAll(Style.CLOSE_BUTTON.css());
     }
 }
