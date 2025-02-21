@@ -39,6 +39,7 @@ public class AppContentController {
 
     private final AppContainer container;
     private final Map<String, OverlayItem> overlays;
+    private OverlayItem activeOverlay;
 
     @Inject
     public AppContentController(AppContainer container, @Named("overlays") List<OverlayItem> overlays) {
@@ -52,8 +53,13 @@ public class AppContentController {
         Logger.trace("Request to set overlay to '{}'", request.id());
         var item = overlays.get(request.id());
         if (nonNull(item)) {
-            container.overlay(item.panel().get());
-            eventStudio().broadcast(new SetTitleRequest(item.name()));
+            if (!item.equals(this.activeOverlay) || !item.closeOnSecondPress()) {
+                this.activeOverlay = item;
+                container.overlay(item.panel().get());
+                eventStudio().broadcast(new SetTitleRequest(item.name()));
+            } else {
+                hideOverlay(HideOverlayItem.INSTANCE);
+            }
         }
     }
 
@@ -61,6 +67,7 @@ public class AppContentController {
     public void hideOverlay(HideOverlayItem request) {
         Logger.trace("Request to hide the overlay node");
         container.hideOverlay();
+        this.activeOverlay = null;
         eventStudio().broadcast(SetTitleRequest.SET_DEFAULT_TITLE_REQUEST);
     }
 }

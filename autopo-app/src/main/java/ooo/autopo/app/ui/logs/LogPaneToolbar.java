@@ -19,7 +19,6 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
-import ooo.autopo.app.ui.Style;
 import ooo.autopo.app.ui.components.CloseOverlayButton;
 import ooo.autopo.model.ui.log.ClearLogRequest;
 import ooo.autopo.model.ui.log.SaveLogRequest;
@@ -62,7 +61,6 @@ class LogPaneToolbar extends ToolBar {
             setGraphic(new FontIcon(FluentUiRegularMZ.SAVE_20));
             getStyleClass().addAll(Styles.SMALL);
             setOnAction(e -> eventStudio().broadcast(new SaveLogRequest()));
-            getStyleClass().addAll(Style.TOOLBAR_BUTTON.css());
         }
     }
 }

@@ -28,4 +28,12 @@ public interface OverlayItem {
     String name();
 
     Supplier<Node> panel();
+
+    /**
+     * @return true if the overlay should be closed when a second show request arrives. Ex. the log panel has a button to show it, first click shows the panel,
+     * second click hides it.
+     */
+    default boolean closeOnSecondPress() {
+        return false;
+    }
 }

@@ -16,6 +16,16 @@
     -fx-padding: 0.666667em;
 }
 
+.tool-bar > .container > .button.with_errors .font-icon,
+.tool-bar > .container > .menu-button.with_errors .font-icon,
+.tool-bar > .container > .split-menu-button.with_errors .font-icon,
+.tool-bar > .container > .button.with_errors .ikonli-font-icon,
+.tool-bar > .container > .menu-button.with_errors .ikonli-font-icon,
+.tool-bar > .container > .split-menu-button.with_errors .ikonli-font-icon {
+    -fx-icon-color: -color-danger-fg;
+    -fx-fill: -color-danger-subtle;
+}
+
 /**
  * Footer
  */

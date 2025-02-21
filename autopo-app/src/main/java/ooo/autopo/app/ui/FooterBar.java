@@ -21,6 +21,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import ooo.autopo.app.ui.logs.ErrorLoggedEvent;
 import ooo.autopo.model.ui.SetOverlayItem;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -46,6 +47,12 @@ public class FooterBar extends ToolBar {
         logsButton.getStyleClass().addAll(Styles.SMALL);
         logsButton.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("LOGS")));
         logsButton.setTooltip(new Tooltip(i18n().tr("Open application logs")));
+        eventStudio().add(ErrorLoggedEvent.class, e -> logsButton.getStyleClass().add("with_errors"));
+        eventStudio().add(SetOverlayItem.class, e -> {
+            if ("LOGS".equals(e.id())) {
+                logsButton.getStyleClass().remove("with_errors");
+            }
+        });
 
         this.getItems().addAll(status, spacer, logsButton);
     }

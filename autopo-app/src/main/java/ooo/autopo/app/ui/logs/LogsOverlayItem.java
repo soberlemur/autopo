@@ -40,4 +40,9 @@ public class LogsOverlayItem implements OverlayItem {
     public Supplier<Node> panel() {
         return () -> app().instance(LogPane.class);
     }
+
+    @Override
+    public boolean closeOnSecondPress() {
+        return true;
+    }
 }

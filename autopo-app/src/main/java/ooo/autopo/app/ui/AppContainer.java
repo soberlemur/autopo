@@ -28,7 +28,6 @@ import java.util.Objects;
 public class AppContainer extends BorderPane {
 
     private final MainPane mainPanel;
-    private Node overlay;
 
     @Inject
     public AppContainer(MainMenuBar menu, MainPane mainPanel, FooterBar footer) {
@@ -41,7 +40,6 @@ public class AppContainer extends BorderPane {
 
     public void overlay(Node overlay) {
         if (Objects.nonNull(overlay)) {
-            this.overlay = overlay;
             if (overlay instanceof NotClosable) {
                 setCenter(overlay);
             } else {
@@ -51,7 +49,6 @@ public class AppContainer extends BorderPane {
     }
 
     public void hideOverlay() {
-        this.overlay = null;
         setCenter(mainPanel);
     }
 
