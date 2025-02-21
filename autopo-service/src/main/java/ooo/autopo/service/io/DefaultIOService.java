@@ -104,6 +104,11 @@ public class DefaultIOService implements IOService {
     }
 
     @Override
+    public void save(Project project) {
+
+    }
+
+    @Override
     public void save(PoFile poFile) throws IOException {
 
     }

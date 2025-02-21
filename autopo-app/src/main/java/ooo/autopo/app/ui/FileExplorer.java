@@ -22,7 +22,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
@@ -39,6 +38,7 @@ import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.project.LoadProjectRequest;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
+import ooo.autopo.model.project.SaveProjectRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
@@ -58,7 +58,7 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 public class FileExplorer extends BorderPane {
 
     private Project currentProject;
-    private TreeItem<TreeNode> root = new TreeItem<>();
+    private final TreeItem<TreeNode> root = new TreeItem<>();
 
     @Inject
     public FileExplorer() {
@@ -87,16 +87,13 @@ public class FileExplorer extends BorderPane {
         var rename = new MenuItem(i18n().tr("Rename project"));
         rename.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
         rename.setOnAction(e -> {
-            var dialog = new TextInputDialog(root.getValue().name());
-            dialog.setTitle(i18n().tr("Rename project"));
-            dialog.setHeaderText(null);
-            dialog.setContentText(i18n().tr("Project name:"));
+            var dialog = new RenameProjectDialog(root.getValue().name());
             dialog.initOwner(getScene().getWindow());
             dialog.showAndWait().ifPresent(name -> {
                 if (StringUtils.isNotBlank(name)) {
                     currentProject.setProperty(ProjectProperty.NAME, name);
-                    actualizeRoot();
-                    //TODO save project file
+                    actualizeRootName();
+                    eventStudio().broadcast(new SaveProjectRequest(currentProject));
                 }
             });
         });
@@ -154,10 +151,11 @@ public class FileExplorer extends BorderPane {
         this.disableProperty().unbind();
         this.disableProperty().bind(Bindings.equal(LoadingStatus.LOADING, request.project().status()));
         this.currentProject = request.project();
+        this.root.getChildren().clear();
         final Subscription[] subscription = new Subscription[1];
         subscription[0] = request.project().status().subscribe(status -> {
             if (status == LoadingStatus.LOADED) {
-                actualizeRoot();
+                actualizeRootName();
                 var templateRootItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE, i18n().tr("Template"), null, null));
                 var templatePath = ofNullable(this.currentProject.getProperty(ProjectProperty.TEMPLATE_PATH)).map(Paths::get).orElse(null);
                 if (nonNull(templatePath)) {
@@ -173,7 +171,7 @@ public class FileExplorer extends BorderPane {
         });
     }
 
-    private void actualizeRoot() {
+    private void actualizeRootName() {
         root.setValue(new TreeNode(NodeType.PROJECT, this.currentProject.getProperty(ProjectProperty.NAME), null, null));
     }
 

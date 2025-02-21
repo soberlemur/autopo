@@ -17,6 +17,7 @@ package ooo.autopo.service.io;
 import jakarta.inject.Inject;
 import ooo.autopo.model.PoLoadRequest;
 import ooo.autopo.model.project.LoadProjectRequest;
+import ooo.autopo.model.project.SaveProjectRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
@@ -53,5 +54,19 @@ public class IOController {
         requireNotNullArg(request.project(), "Cannot load a null project");
         request.project().moveStatusTo(LOADING);
         Thread.ofVirtual().name("io-loading-thread").start(() -> ioService.load(request.project()));
+    }
+
+    @EventListener
+    public void saveProject(SaveProjectRequest request) {
+        Logger.trace("Project save request received");
+        requireNotNullArg(request.project(), "Cannot save a null project");
+        throw new UnsupportedOperationException("Not yet implemented");
+   /*     Thread.ofVirtual().name("io-saving-thread").start(() -> {
+            try {
+                ioService.save(request.project());
+            } catch (Exception e) {
+                Logger.error(e, "Error saving project");
+            }
+        });*/
     }
 }

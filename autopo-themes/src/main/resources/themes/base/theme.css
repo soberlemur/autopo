@@ -68,3 +68,17 @@
 .error-log {
     -fx-text-fill: -color-danger-emphasis;
 }
+
+/**
+ * Notifications
+ */
+.notifications {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 0.0;
+    -fx-alignment: bottom-center;
+    -fx-translate-y: -42.0;
+    -fx-spacing: 0.416667em;
+    -fx-max-width: 28.333333em;
+    -fx-min-width: 28.333333em
+}
