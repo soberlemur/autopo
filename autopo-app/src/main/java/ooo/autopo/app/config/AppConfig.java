@@ -15,6 +15,7 @@ package ooo.autopo.app.config;
 
 import jakarta.inject.Named;
 import javafx.application.HostServices;
+import ooo.autopo.app.AppServiceExceptionHandler;
 import ooo.autopo.app.ApplicationTitleController;
 import ooo.autopo.app.AutopoDescriptor;
 import ooo.autopo.app.WindowStatusController;
@@ -33,7 +34,8 @@ import java.util.List;
 /**
  * @author Andrea Vacondio
  */
-@Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class, AppContentController.class })
+@Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class, AppContentController.class,
+        AppServiceExceptionHandler.class })
 public class AppConfig {
 
     private final HostServices services;

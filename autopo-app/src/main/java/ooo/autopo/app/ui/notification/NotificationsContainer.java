@@ -13,16 +13,21 @@ package ooo.autopo.app.ui.notification;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import javafx.animation.FadeTransition;
+import atlantafx.base.controls.Notification;
+import atlantafx.base.theme.Styles;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
+import javafx.event.Event;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import ooo.autopo.model.notification.NotificationType;
+import ooo.autopo.model.ui.SetOverlayItem;
 
-import static java.util.Objects.nonNull;
+import static atlantafx.base.util.Animations.fadeIn;
+import static atlantafx.base.util.Animations.fadeOut;
+import static ooo.autopo.i18n.I18nContext.i18n;
+import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
  * @author Andrea Vacondio
@@ -34,41 +39,32 @@ public class NotificationsContainer extends VBox {
         setMaxHeight(Region.USE_PREF_SIZE);
     }
 
-    void addNotification(String title, Node message) {
+    void addNotification(String message, NotificationType type) {
         Platform.runLater(() -> {
-            Notification toAdd = doAddNotification(title, message);
-            fadeIn(toAdd, e -> toAdd.fadeAway(Duration.seconds(5)));
+            fadeIn(doAddNotification(message, type), Duration.millis(300)).playFromStart();
         });
     }
 
-    void addStickyNotification(String title, Node message) {
-        Platform.runLater(() -> {
-            Notification toAdd = doAddNotification(title, message);
-            fadeIn(toAdd, null);
-        });
-    }
-
-    private Notification doAddNotification(String title, Node message) {
-        var toAdd = new Notification(title, message);
-        toAdd.onFade(e -> getChildren().remove(toAdd));
+    private Notification doAddNotification(String message, NotificationType type) {
+        var toAdd = new Notification(message, type.getGraphic());
+        toAdd.getStyleClass().add(Styles.ELEVATED_1);
+        switch (type) {
+        case WARN -> toAdd.getStyleClass().add(Styles.WARNING);
+        case ERROR -> {
+            toAdd.getStyleClass().add(Styles.DANGER);
+            var openLogsButton = new Button(i18n().tr("Open logs"));
+            openLogsButton.setOnAction(e -> {
+                toAdd.getOnClose().handle(new Event(Event.ANY));
+                eventStudio().broadcast(new SetOverlayItem("LOGS"));
+            });
+            toAdd.setPrimaryActions(openLogsButton);
+        }
+        }
+        var fadeOut = fadeOut(toAdd, Duration.millis(300));
+        fadeOut.setOnFinished(fe -> getChildren().remove(toAdd));
+        toAdd.setOnClose(e -> fadeOut.playFromStart());
         getChildren().add(toAdd);
         return toAdd;
     }
 
-    private void fadeIn(Notification toAdd, EventHandler<ActionEvent> onFinished) {
-        var transition = new FadeTransition(Duration.millis(300), toAdd);
-        transition.setFromValue(0);
-        transition.setToValue(1);
-        if (nonNull(onFinished)) {
-            transition.setOnFinished(onFinished);
-        }
-        transition.play();
-    }
-
-    void removeNotification(String id) {
-        Node found = lookup(String.format("#%s", id));
-        if (found instanceof Notification remove) {
-            remove.fadeAway();
-        }
-    }
 }

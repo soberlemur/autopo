@@ -1,7 +1,8 @@
 package ooo.autopo.app;
+
 /*
  * This file is part of the Autopo project
- * Created 13/02/25
+ * Created 22/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -15,24 +16,21 @@ package ooo.autopo.app;
 
 import ooo.autopo.model.notification.AddNotificationRequest;
 import ooo.autopo.model.notification.NotificationType;
+import ooo.autopo.service.ServiceExceptionHandler;
+import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-
-import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
- * {@link UncaughtExceptionHandler} that simply logs the exception
- *
  * @author Andrea Vacondio
  */
-public class UncaughtExceptionLogger implements UncaughtExceptionHandler {
+@Auto
+public class AppServiceExceptionHandler implements ServiceExceptionHandler {
 
     @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        Logger.error(e, "Unexpected error");
-        eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("Unexpected error")));
+    public void accept(Throwable throwable, String message) {
+        Logger.error(throwable, message);
+        eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, message));
     }
-
 }

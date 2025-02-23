@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 module ooo.autopo.service {
+    exports ooo.autopo.service;
     exports ooo.autopo.service.io;
     exports ooo.autopo.service.ai;
     exports ooo.autopo.service.ui;

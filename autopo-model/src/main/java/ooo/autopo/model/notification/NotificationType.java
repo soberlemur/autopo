@@ -14,8 +14,8 @@ package ooo.autopo.model.notification;
  */
 
 import javafx.scene.Node;
-import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
-import org.kordamp.ikonli.fluentui.FluentUiFilledMZ;
+import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
+import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
@@ -25,38 +25,22 @@ public enum NotificationType {
     INFO {
         @Override
         public Node getGraphic() {
-            return new FontIcon(FluentUiFilledAL.INFO_20);
-        }
-
-        @Override
-        public String getStyleClass() {
-            return "notification-info";
+            return new FontIcon(FluentUiRegularAL.INFO_20);
         }
     },
     WARN {
         @Override
         public Node getGraphic() {
-            return new FontIcon(FluentUiFilledMZ.WARNING_20);
-        }
-
-        @Override
-        public String getStyleClass() {
-            return "notification-warn";
+            return new FontIcon(FluentUiRegularMZ.WARNING_20);
         }
     },
     ERROR {
         @Override
         public Node getGraphic() {
-            return FontIcon.of(FluentUiFilledAL.DISMISS_20);
-        }
-
-        @Override
-        public String getStyleClass() {
-            return "notification-error";
+            return FontIcon.of(FluentUiRegularAL.ERROR_CIRCLE_20);
         }
     };
 
     public abstract Node getGraphic();
 
-    public abstract String getStyleClass();
 }

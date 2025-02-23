@@ -34,7 +34,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Subscription;
+import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
+import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.project.LoadProjectRequest;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
@@ -45,7 +47,7 @@ import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
 
-import java.nio.file.Paths;
+import java.nio.file.Files;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
@@ -59,6 +61,7 @@ public class FileExplorer extends BorderPane {
 
     private Project currentProject;
     private final TreeItem<TreeNode> root = new TreeItem<>();
+    private final TreeItem<TreeNode> templateRootItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE, i18n().tr("Template"), null, null));
 
     @Inject
     public FileExplorer() {
@@ -101,7 +104,20 @@ public class FileExplorer extends BorderPane {
 
         var selectTemplate = new MenuItem(i18n().tr("Select template"));
         selectTemplate.setAccelerator(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
-        selectTemplate.setOnAction(e -> System.out.println("Template"));
+        selectTemplate.setOnAction(e -> {
+            var fileChooser = Choosers.fileChooser(i18n().tr("Select a template"), FileType.POT);
+
+            var template = ofNullable(fileChooser.showOpenSingleDialog(this.getScene().getWindow())).filter(Files::isRegularFile)
+                                                                                                    .map(t -> currentProject.location().relativize(t))
+                                                                                                    .orElse(null);
+
+            if (nonNull(template)) {
+                currentProject.setProperty(ProjectProperty.TEMPLATE_PATH, template.toString());
+                actualizeTemplate();
+                eventStudio().broadcast(new SaveProjectRequest(currentProject));
+            }
+
+        });
         var templateContextMenu = new ContextMenu(selectTemplate);
 
         var treeView = new TreeView<>(root);
@@ -156,16 +172,8 @@ public class FileExplorer extends BorderPane {
         subscription[0] = request.project().status().subscribe(status -> {
             if (status == LoadingStatus.LOADED) {
                 actualizeRootName();
-                var templateRootItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE, i18n().tr("Template"), null, null));
-                var templatePath = ofNullable(this.currentProject.getProperty(ProjectProperty.TEMPLATE_PATH)).map(Paths::get).orElse(null);
-                if (nonNull(templatePath)) {
-                    var templateItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE,
-                                                                   templatePath.getFileName().toString(),
-                                                                   templatePath.toAbsolutePath().toString(),
-                                                                   new FontIcon(FluentUiRegularAL.DOCUMENT_EDIT_20)));
-                    templateRootItem.getChildren().add(templateItem);
-                }
                 root.getChildren().add(templateRootItem);
+                actualizeTemplate();
                 ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
             }
         });
@@ -173,6 +181,19 @@ public class FileExplorer extends BorderPane {
 
     private void actualizeRootName() {
         root.setValue(new TreeNode(NodeType.PROJECT, this.currentProject.getProperty(ProjectProperty.NAME), null, null));
+    }
+
+    private void actualizeTemplate() {
+        var templatePath = ofNullable(this.currentProject.getProperty(ProjectProperty.TEMPLATE_PATH)).map(currentProject.location()::resolve)
+                                                                                                     .orElse(null);
+        if (nonNull(templatePath)) {
+            templateRootItem.getChildren().clear();
+            var templateItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE,
+                                                           templatePath.getFileName().toString(),
+                                                           templatePath.toAbsolutePath().toString(),
+                                                           new FontIcon(FluentUiRegularAL.DOCUMENT_EDIT_20)));
+            templateRootItem.getChildren().add(templateItem);
+        }
     }
 
     public record TreeNode(NodeType type, String name, String tooltip, Node graphics) {

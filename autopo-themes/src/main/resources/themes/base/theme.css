@@ -82,3 +82,7 @@
     -fx-max-width: 28.333333em;
     -fx-min-width: 28.333333em
 }
+
+.notification.danger > .container, .notification.warning > .container, .notification.success > .container, .notification.accent > .container {
+    -fx-background-radius: 4px, 4px, 4px, 0 4px 4px 0;
+}

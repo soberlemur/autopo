@@ -1,8 +1,8 @@
-package ooo.autopo.service.io;
+package ooo.autopo.service;
 
 /*
  * This file is part of the Autopo project
- * Created 05/02/25
+ * Created 22/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,19 +14,10 @@ package ooo.autopo.service.io;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import ooo.autopo.model.PoFile;
-import ooo.autopo.model.project.Project;
+import java.util.function.BiConsumer;
 
 /**
  * @author Andrea Vacondio
  */
-public interface IOService {
-
-    void load(PoFile poFile);
-
-    void load(Project project);
-
-    void save(PoFile poFile);
-
-    void save(Project project);
+public interface ServiceExceptionHandler extends BiConsumer<Throwable, String> {
 }

@@ -15,6 +15,7 @@ package ooo.autopo.app.config;
  */
 
 import jakarta.inject.Named;
+import ooo.autopo.app.AppServiceExceptionHandler;
 import ooo.autopo.model.ui.StageStatus;
 import ooo.autopo.service.ai.AIService;
 import ooo.autopo.service.ai.DefaultAIService;
@@ -33,10 +34,11 @@ import org.pdfsam.persistence.EntityRepository;
  * @author Andrea Vacondio
  */
 @Components({ IOController.class, StageServiceController.class, NativeOpenUrlController.class })
+
 public class ServicesConfig {
     @Provides
-    IOService io(DefaultIOService ioService) {
-        return ioService;
+    IOService io(DefaultAIService aiService, AppServiceExceptionHandler exceptionHandler) {
+        return new DefaultIOService(aiService, exceptionHandler);
     }
 
     @Provides
@@ -48,4 +50,5 @@ public class ServicesConfig {
     public StageService stageService(@Named("stageStatusRepo") EntityRepository<StageStatus> repo) {
         return new DefaultStageService(repo);
     }
+
 }

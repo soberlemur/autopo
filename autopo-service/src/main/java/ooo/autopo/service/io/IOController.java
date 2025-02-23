@@ -22,6 +22,9 @@ import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static ooo.autopo.model.LoadingStatus.LOADING;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
@@ -33,6 +36,7 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 public class IOController {
 
     private final IOService ioService;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor(Thread.ofVirtual().name("io-thread-", 0).factory());
 
     @Inject
     public IOController(IOService ioService) {
@@ -45,7 +49,7 @@ public class IOController {
         Logger.trace("PO load request received");
         requireNotNullArg(request.poFile(), "Cannot load a null poFile");
         request.poFile().moveStatusTo(LOADING);
-        Thread.ofVirtual().name("io-loading-thread").start(() -> ioService.load(request.poFile()));
+        executorService.submit(() -> ioService.load(request.poFile()));
     }
 
     @EventListener
@@ -53,20 +57,13 @@ public class IOController {
         Logger.trace("Project load request received");
         requireNotNullArg(request.project(), "Cannot load a null project");
         request.project().moveStatusTo(LOADING);
-        Thread.ofVirtual().name("io-loading-thread").start(() -> ioService.load(request.project()));
+        executorService.submit(() -> ioService.load(request.project()));
     }
 
     @EventListener
     public void saveProject(SaveProjectRequest request) {
         Logger.trace("Project save request received");
         requireNotNullArg(request.project(), "Cannot save a null project");
-        throw new UnsupportedOperationException("Not yet implemented");
-   /*     Thread.ofVirtual().name("io-saving-thread").start(() -> {
-            try {
-                ioService.save(request.project());
-            } catch (Exception e) {
-                Logger.error(e, "Error saving project");
-            }
-        });*/
+        executorService.submit(() -> ioService.save(request.project()));
     }
 }

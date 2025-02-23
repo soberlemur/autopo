@@ -19,12 +19,12 @@ import com.soberlemur.potentilla.Header;
 import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.PoParser;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
-import jakarta.inject.Inject;
 import javafx.application.Platform;
 import ooo.autopo.model.PoFile;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
+import ooo.autopo.service.ServiceExceptionHandler;
 import ooo.autopo.service.ai.AIService;
 import org.apache.commons.lang3.StringUtils;
 import org.tinylog.Logger;
@@ -48,10 +48,15 @@ import static ooo.autopo.model.LoadingStatus.LOADED;
 public class DefaultIOService implements IOService {
 
     private final AIService aiService;
+    private ServiceExceptionHandler exceptionHandler = Logger::error;
 
-    @Inject
     public DefaultIOService(AIService aiService) {
         this.aiService = aiService;
+    }
+
+    public DefaultIOService(AIService aiService, ServiceExceptionHandler exceptionHandler) {
+        this.aiService = aiService;
+        this.exceptionHandler = exceptionHandler;
     }
 
     @Override
@@ -70,8 +75,9 @@ public class DefaultIOService implements IOService {
             });
             Logger.info(i18n().tr("File {} loaded"), poFile.poFile().getAbsolutePath());
         } catch (IOException | ParseException e) {
-            Logger.error(e, i18n().tr("An error occurred parsing the .po file '{}'"), poFile.poFile().getAbsolutePath());
             Platform.runLater(() -> poFile.moveStatusTo(ERROR));
+            exceptionHandler.accept(e, i18n().tr("An error occurred parsing the .po file '{0}'", poFile.poFile().getAbsolutePath()));
+
         }
     }
 
@@ -90,26 +96,33 @@ public class DefaultIOService implements IOService {
                 try (var stream = Files.list(project.location())) {
                     stream.filter(path -> FileType.POT.matches(path.getFileName().toString()))
                           .findFirst()
-                          .ifPresent(p -> project.setProperty(ProjectProperty.TEMPLATE_PATH, p.toAbsolutePath().toString()));
+                          .ifPresent(p -> project.setProperty(ProjectProperty.TEMPLATE_PATH, p.relativize(project.location()).toString()));
 
                 }
                 project.properties().store(Files.newBufferedWriter(projectDescriptorPath), null);
             }
             Platform.runLater(() -> project.moveStatusTo(LOADED));
-            Logger.info(i18n().tr("Project {} loaded"), projectDescriptorPath.toAbsolutePath().toString());
         } catch (IOException | ParseException e) {
-            Logger.error(e, i18n().tr("An error occurred loading project file '{}'"), projectDescriptorPath.toAbsolutePath().toString());
             Platform.runLater(() -> project.moveStatusTo(ERROR));
+            exceptionHandler.accept(e, i18n().tr("An error occurred loading project file '{0}'", projectDescriptorPath.toAbsolutePath().toString()));
         }
+        Logger.info(i18n().tr("Project {} loaded"), projectDescriptorPath.toAbsolutePath().toString());
+
     }
 
     @Override
     public void save(Project project) {
-
+        var projectDescriptorPath = project.location().resolve(Path.of(".autopo.ooo"));
+        Logger.debug(i18n().tr("Loading project file {}"), projectDescriptorPath.toAbsolutePath().toString());
+        try {
+            project.properties().store(Files.newBufferedWriter(projectDescriptorPath), null);
+        } catch (IOException e) {
+            exceptionHandler.accept(e, i18n().tr("An error occurred saving project file '{0}'", projectDescriptorPath.toAbsolutePath().toString()));
+        }
     }
 
     @Override
-    public void save(PoFile poFile) throws IOException {
+    public void save(PoFile poFile) {
 
     }
 

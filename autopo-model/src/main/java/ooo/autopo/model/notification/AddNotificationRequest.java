@@ -19,9 +19,8 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 /**
  * @author Andrea Vacondio
  */
-public record AddNotificationRequest(NotificationType type, String title, String message) {
+public record AddNotificationRequest(NotificationType type, String message) {
     public AddNotificationRequest {
-        requireNotBlank(title, "Notification title cannot be blank");
         requireNotBlank(message, "Notification message cannot be blank");
         requireNotNullArg(type, "Notification type cannot be null");
     }

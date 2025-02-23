@@ -14,10 +14,7 @@ package ooo.autopo.app.ui.notification;
  */
 
 import jakarta.inject.Inject;
-import javafx.scene.control.Label;
 import ooo.autopo.model.notification.AddNotificationRequest;
-import ooo.autopo.model.notification.NotificationType;
-import ooo.autopo.model.notification.RemoveNotificationRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
 
@@ -39,21 +36,6 @@ public class NotificationsController {
 
     @EventListener
     public void onAddRequest(AddNotificationRequest event) {
-        container.addNotification(event.title(), buildLabel(event.message(), event.type()));
-    }
-
-    @EventListener
-    public void onRemoveRequest(RemoveNotificationRequest request) {
-        container.removeNotification(request.id());
-    }
-
-    private Label buildLabel(String message, NotificationType type) {
-        Label textLabel = new Label(message);
-        textLabel.getStyleClass().add("notification-text");
-        if (type != null) {
-            textLabel.getStyleClass().add(type.getStyleClass());
-            textLabel.setGraphic(type.getGraphic());
-        }
-        return textLabel;
+        container.addNotification(event.message(), event.type());
     }
 }
