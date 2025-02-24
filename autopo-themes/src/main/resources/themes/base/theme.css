@@ -16,22 +16,14 @@
     -fx-padding: 0.666667em;
 }
 
-.tool-bar > .container > .button.with_errors .font-icon,
-.tool-bar > .container > .menu-button.with_errors .font-icon,
-.tool-bar > .container > .split-menu-button.with_errors .font-icon,
-.tool-bar > .container > .button.with_errors .ikonli-font-icon,
-.tool-bar > .container > .menu-button.with_errors .ikonli-font-icon,
-.tool-bar > .container > .split-menu-button.with_errors .ikonli-font-icon {
-    -fx-icon-color: -color-danger-fg;
-    -fx-fill: -color-danger-subtle;
-}
-
 /**
  * Footer
  */
 .footer {
     -fx-background-color: -color-border-muted, -color-bg-subtle;
     -fx-background-insets: 0, 1px 0 0 0;
+    -fx-padding: 1px 10px 0 10px;
+    -fx-alignment: center-left;
 }
 
 /**

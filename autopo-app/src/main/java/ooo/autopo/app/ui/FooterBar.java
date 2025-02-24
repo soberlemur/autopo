@@ -15,16 +15,19 @@ package ooo.autopo.app.ui;
  */
 
 import atlantafx.base.theme.Styles;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import ooo.autopo.app.ui.logs.ErrorLoggedEvent;
+import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.ui.SetOverlayItem;
+import ooo.autopo.model.ui.SetStatusLabelRequest;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.pdfsam.eventstudio.annotation.EventListener;
 
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
@@ -32,28 +35,44 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 /**
  * @author Andrea Vacondio
  */
-public class FooterBar extends ToolBar {
+public class FooterBar extends HBox {
 
     private final Label status = new Label();
 
     public FooterBar() {
         this.getStyleClass().add("footer");
-        //  this.status.getStyleClass().add("status-label");
-        this.status.setText("Ready");
         var spacer = new Pane();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         var logsButton = new Button();
         logsButton.setGraphic(new FontIcon(FluentUiRegularAL.DOCUMENT_ONE_PAGE_24));
-        logsButton.getStyleClass().addAll(Styles.SMALL);
+        logsButton.getStyleClass().addAll(Styles.SMALL, Styles.FLAT);
         logsButton.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("LOGS")));
         logsButton.setTooltip(new Tooltip(i18n().tr("Open application logs")));
-        eventStudio().add(ErrorLoggedEvent.class, e -> logsButton.getStyleClass().add("with_errors"));
+        eventStudio().add(ErrorLoggedEvent.class, e -> logsButton.getStyleClass().add(Styles.DANGER));
         eventStudio().add(SetOverlayItem.class, e -> {
             if ("LOGS".equals(e.id())) {
-                logsButton.getStyleClass().remove("with_errors");
+                logsButton.getStyleClass().remove(Styles.DANGER);
             }
         });
 
-        this.getItems().addAll(status, spacer, logsButton);
+        this.getChildren().addAll(status, spacer, logsButton);
+        eventStudio().addAnnotatedListeners(this);
+    }
+
+    @EventListener
+    public void onStatus(SetStatusLabelRequest status) {
+        setStatusMessage(status.status());
+    }
+
+    @EventListener
+    public void onIOEvent(IOEvent event) {
+        switch (event.type()) {
+        case SAVED -> setStatusMessage(i18n().tr("File {0} saved", event.path().toString()));
+        case LOADED -> setStatusMessage(i18n().tr("File {0} loaded", event.path().toString()));
+        }
+    }
+
+    private void setStatusMessage(String message) {
+        Platform.runLater(() -> this.status.setText(message));
     }
 }

@@ -15,7 +15,6 @@ package ooo.autopo.app.config;
  */
 
 import jakarta.inject.Named;
-import ooo.autopo.app.AppServiceExceptionHandler;
 import ooo.autopo.model.ui.StageStatus;
 import ooo.autopo.service.ai.AIService;
 import ooo.autopo.service.ai.DefaultAIService;
@@ -23,6 +22,8 @@ import ooo.autopo.service.io.DefaultIOService;
 import ooo.autopo.service.io.IOController;
 import ooo.autopo.service.io.IOService;
 import ooo.autopo.service.io.NativeOpenUrlController;
+import ooo.autopo.service.project.DefaultRecentsService;
+import ooo.autopo.service.project.RecentsService;
 import ooo.autopo.service.ui.DefaultStageService;
 import ooo.autopo.service.ui.StageService;
 import ooo.autopo.service.ui.StageServiceController;
@@ -37,13 +38,18 @@ import org.pdfsam.persistence.EntityRepository;
 
 public class ServicesConfig {
     @Provides
-    IOService io(DefaultAIService aiService, AppServiceExceptionHandler exceptionHandler) {
-        return new DefaultIOService(aiService, exceptionHandler);
+    IOService io(DefaultAIService aiService) {
+        return new DefaultIOService(aiService);
     }
 
     @Provides
     AIService ai(DefaultAIService aiService) {
         return aiService;
+    }
+
+    @Provides
+    RecentsService recents(DefaultRecentsService recentsService) {
+        return recentsService;
     }
 
     @Provides

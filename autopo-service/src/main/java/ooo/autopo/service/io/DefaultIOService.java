@@ -22,9 +22,10 @@ import com.soberlemur.potentilla.catalog.parse.ParseException;
 import javafx.application.Platform;
 import ooo.autopo.model.PoFile;
 import ooo.autopo.model.io.FileType;
+import ooo.autopo.model.io.IOEvent;
+import ooo.autopo.model.io.IOEventType;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
-import ooo.autopo.service.ServiceExceptionHandler;
 import ooo.autopo.service.ai.AIService;
 import org.apache.commons.lang3.StringUtils;
 import org.tinylog.Logger;
@@ -41,6 +42,7 @@ import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.LoadingStatus.ERROR;
 import static ooo.autopo.model.LoadingStatus.LOADED;
+import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
  * @author Andrea Vacondio
@@ -48,19 +50,13 @@ import static ooo.autopo.model.LoadingStatus.LOADED;
 public class DefaultIOService implements IOService {
 
     private final AIService aiService;
-    private ServiceExceptionHandler exceptionHandler = Logger::error;
 
     public DefaultIOService(AIService aiService) {
         this.aiService = aiService;
     }
 
-    public DefaultIOService(AIService aiService, ServiceExceptionHandler exceptionHandler) {
-        this.aiService = aiService;
-        this.exceptionHandler = exceptionHandler;
-    }
-
     @Override
-    public void load(PoFile poFile) {
+    public void load(PoFile poFile) throws IOException, ParseException {
         Logger.debug(i18n().tr("Loading .po file {}"), poFile.poFile().getAbsolutePath());
         try {
             Catalog catalog = new PoParser().parseCatalog(poFile.poFile());
@@ -73,17 +69,17 @@ public class DefaultIOService implements IOService {
                 poFile.locale(locale);
                 poFile.moveStatusTo(LOADED);
             });
+            eventStudio().broadcast(new IOEvent(poFile.poFile().toPath(), IOEventType.LOADED));
             Logger.info(i18n().tr("File {} loaded"), poFile.poFile().getAbsolutePath());
         } catch (IOException | ParseException e) {
             Platform.runLater(() -> poFile.moveStatusTo(ERROR));
-            exceptionHandler.accept(e, i18n().tr("An error occurred parsing the .po file '{0}'", poFile.poFile().getAbsolutePath()));
-
+            throw e;
         }
     }
 
     @Override
-    public void load(Project project) {
-        var projectDescriptorPath = project.location().resolve(Path.of(".autopo.ooo"));
+    public void load(Project project) throws IOException {
+        var projectDescriptorPath = project.location().resolve(Path.of("autopo.ooo"));
         Logger.debug(i18n().tr("Loading project file {}"), projectDescriptorPath.toAbsolutePath().toString());
         try {
             if (Files.exists(projectDescriptorPath)) {
@@ -102,28 +98,28 @@ public class DefaultIOService implements IOService {
                 project.properties().store(Files.newBufferedWriter(projectDescriptorPath), null);
             }
             Platform.runLater(() -> project.moveStatusTo(LOADED));
-        } catch (IOException | ParseException e) {
+            eventStudio().broadcast(new IOEvent(projectDescriptorPath, IOEventType.LOADED));
+            Logger.info(i18n().tr("Project {} loaded"), projectDescriptorPath.toAbsolutePath().toString());
+        } catch (IOException e) {
             Platform.runLater(() -> project.moveStatusTo(ERROR));
-            exceptionHandler.accept(e, i18n().tr("An error occurred loading project file '{0}'", projectDescriptorPath.toAbsolutePath().toString()));
+            throw e;
         }
-        Logger.info(i18n().tr("Project {} loaded"), projectDescriptorPath.toAbsolutePath().toString());
-
     }
 
     @Override
-    public void save(Project project) {
-        var projectDescriptorPath = project.location().resolve(Path.of(".autopo.ooo"));
-        Logger.debug(i18n().tr("Loading project file {}"), projectDescriptorPath.toAbsolutePath().toString());
-        try {
-            project.properties().store(Files.newBufferedWriter(projectDescriptorPath), null);
-        } catch (IOException e) {
-            exceptionHandler.accept(e, i18n().tr("An error occurred saving project file '{0}'", projectDescriptorPath.toAbsolutePath().toString()));
-        }
+    public void save(Project project) throws IOException {
+        var projectDescriptorPath = project.location().resolve(Path.of("autopo.ooo"));
+        Logger.debug(i18n().tr("Saving project file {}"), projectDescriptorPath.toAbsolutePath().toString());
+        project.properties().store(Files.newBufferedWriter(projectDescriptorPath), null);
+        eventStudio().broadcast(new IOEvent(projectDescriptorPath, IOEventType.SAVED));
+        Logger.info(i18n().tr("File {} saved"), projectDescriptorPath.toAbsolutePath().toString());
+
     }
 
     @Override
     public void save(PoFile poFile) {
-
+        eventStudio().broadcast(new IOEvent(poFile.poFile().toPath(), IOEventType.SAVED));
+        Logger.info(i18n().tr("File {} loaded"), poFile.poFile().getAbsolutePath());
     }
 
     private Locale getLocale(Catalog catalog, String filename) {

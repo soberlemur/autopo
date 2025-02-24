@@ -14,6 +14,7 @@ package ooo.autopo.app.ui;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import jakarta.inject.Inject;
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -26,8 +27,11 @@ import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.project.LoadProjectRequest;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.ui.SetOverlayItem;
+import ooo.autopo.service.project.RecentsService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
@@ -38,11 +42,18 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 public class MainMenuBar extends MenuBar {
 
-    public MainMenuBar() {
+    private final Menu recent;
+    private final RecentsService recentsService;
 
+    @Inject
+    public MainMenuBar(RecentsService recentsService) {
+        this.recentsService = recentsService;
         var exit = new MenuItem(i18n().tr("E_xit"));
         exit.setId("exitMenuItem");
         exit.setOnAction(e -> Platform.exit());
+
+        var projects = new Menu(i18n().tr("_Projects"));
+        projects.setId("projectsMenuItem");
         var open = new MenuItem(i18n().tr("_Open"));
         open.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
         open.setOnAction(e -> {
@@ -54,8 +65,12 @@ public class MainMenuBar extends MenuBar {
                                                                                 .ifPresent(eventStudio()::broadcast);
         });
 
+        recent = new Menu(i18n().tr("Recen_ts"));
+        recent.setId("recentsMenuItem");
+        projects.getItems().addAll(open);
+
         var fileMenu = new Menu(i18n().tr("File"));
-        fileMenu.getItems().addAll(open, new SeparatorMenuItem(), exit);
+        fileMenu.getItems().addAll(projects, new SeparatorMenuItem(), exit);
 
         var settings = new MenuItem(i18n().tr("Settings"));
         settings.setId("settingsMenuItem");
@@ -76,5 +91,12 @@ public class MainMenuBar extends MenuBar {
         var helpMenu = new Menu(i18n().tr("Help"));
         helpMenu.getItems().addAll(logs, new SeparatorMenuItem(), about);
         getMenus().addAll(fileMenu, editMenu, helpMenu);
+    }
+
+    MenuItem recentProjectMenuItem(String path) {
+        var item = new MenuItem(StringUtils.abbreviate(path, path.length(), 60));
+        item.setOnAction(a -> eventStudio().broadcast(new LoadProjectRequest(new Project(Paths.get(path)))));
+        item.setMnemonicParsing(false);
+        return item;
     }
 }

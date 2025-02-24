@@ -14,17 +14,22 @@ package ooo.autopo.service.io;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import com.soberlemur.potentilla.catalog.parse.ParseException;
 import jakarta.inject.Inject;
 import ooo.autopo.model.PoLoadRequest;
 import ooo.autopo.model.project.LoadProjectRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
+import ooo.autopo.service.ServiceExceptionHandler;
+import ooo.autopo.service.project.RecentsService;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.LoadingStatus.LOADING;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
@@ -36,11 +41,14 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 public class IOController {
 
     private final IOService ioService;
+    private final RecentsService recentsService;
+    private ServiceExceptionHandler exceptionHandler = Logger::error;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor(Thread.ofVirtual().name("io-thread-", 0).factory());
 
     @Inject
-    public IOController(IOService ioService) {
+    public IOController(IOService ioService, RecentsService recentsService) {
         this.ioService = ioService;
+        this.recentsService = recentsService;
         eventStudio().addAnnotatedListeners(this);
     }
 
@@ -49,7 +57,13 @@ public class IOController {
         Logger.trace("PO load request received");
         requireNotNullArg(request.poFile(), "Cannot load a null poFile");
         request.poFile().moveStatusTo(LOADING);
-        executorService.submit(() -> ioService.load(request.poFile()));
+        executorService.submit(() -> {
+            try {
+                ioService.load(request.poFile());
+            } catch (IOException | ParseException e) {
+                exceptionHandler.accept(e, i18n().tr("An error occurred loading .po file '{0}'", request.poFile().toString()));
+            }
+        });
     }
 
     @EventListener
@@ -57,13 +71,26 @@ public class IOController {
         Logger.trace("Project load request received");
         requireNotNullArg(request.project(), "Cannot load a null project");
         request.project().moveStatusTo(LOADING);
-        executorService.submit(() -> ioService.load(request.project()));
+        executorService.submit(() -> {
+            try {
+                ioService.load(request.project());
+                recentsService.addProject(request.project());
+            } catch (IOException e) {
+                exceptionHandler.accept(e, i18n().tr("An error occurred loading project file '{0}'", request.project().location().toAbsolutePath().toString()));
+            }
+        });
     }
 
     @EventListener
     public void saveProject(SaveProjectRequest request) {
         Logger.trace("Project save request received");
         requireNotNullArg(request.project(), "Cannot save a null project");
-        executorService.submit(() -> ioService.save(request.project()));
+        executorService.submit(() -> {
+            try {
+                ioService.save(request.project());
+            } catch (IOException e) {
+                exceptionHandler.accept(e, i18n().tr("An error occurred saving project to '{0}'", request.project().location().toAbsolutePath().toString()));
+            }
+        });
     }
 }

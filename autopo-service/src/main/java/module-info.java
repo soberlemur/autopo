@@ -16,6 +16,7 @@ module ooo.autopo.service {
     exports ooo.autopo.service.io;
     exports ooo.autopo.service.ai;
     exports ooo.autopo.service.ui;
+    exports ooo.autopo.service.project;
 
     requires com.soberlemur.potentilla;
     requires ooo.autopo.i18n;

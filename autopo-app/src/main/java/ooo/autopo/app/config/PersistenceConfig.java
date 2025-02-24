@@ -28,6 +28,7 @@ import ooo.autopo.model.ui.StageStatus;
 import org.pdfsam.injector.Provides;
 import org.pdfsam.persistence.DefaultEntityRepository;
 import org.pdfsam.persistence.EntityRepository;
+import org.pdfsam.persistence.PreferencesRepository;
 
 /**
  * @author Andrea Vacondio
@@ -51,5 +52,11 @@ public class PersistenceConfig {
     @Named("stageStatusRepo")
     public EntityRepository<StageStatus> stageStatusRepo(ObjectMapper mapper) {
         return new DefaultEntityRepository<>("/ooo/autopo/cleanable/stage", mapper, StageStatus.class);
+    }
+
+    @Provides
+    @Named("recentRepository")
+    PreferencesRepository recentRepository() {
+        return new PreferencesRepository("/ooo/autopo/user/projects");
     }
 }
