@@ -24,17 +24,21 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import ooo.autopo.app.io.Choosers;
+import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.project.LoadProjectRequest;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.ui.SetOverlayItem;
 import ooo.autopo.service.project.RecentsService;
 import org.apache.commons.lang3.StringUtils;
+import org.pdfsam.eventstudio.annotation.EventListener;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static ooo.autopo.model.io.FileType.OOO;
+import static ooo.autopo.model.io.IOEventType.LOADED;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
@@ -67,7 +71,15 @@ public class MainMenuBar extends MenuBar {
 
         recent = new Menu(i18n().tr("Recen_ts"));
         recent.setId("recentsMenuItem");
-        projects.getItems().addAll(open);
+        populateRecents();
+        var clear = new MenuItem(i18n().tr("_Clear recents"));
+        clear.setOnAction(e -> {
+            recentsService.clear();
+            recent.getItems().clear();
+        });
+        clear.setId("clearWorkspaces");
+
+        projects.getItems().addAll(open, new SeparatorMenuItem(), recent, clear);
 
         var fileMenu = new Menu(i18n().tr("File"));
         fileMenu.getItems().addAll(projects, new SeparatorMenuItem(), exit);
@@ -91,6 +103,19 @@ public class MainMenuBar extends MenuBar {
         var helpMenu = new Menu(i18n().tr("Help"));
         helpMenu.getItems().addAll(logs, new SeparatorMenuItem(), about);
         getMenus().addAll(fileMenu, editMenu, helpMenu);
+        eventStudio().addAnnotatedListeners(this);
+    }
+
+    @EventListener(priority = Integer.MIN_VALUE)
+    public void onProjectLoaded(IOEvent event) {
+        if (LOADED == event.type() && OOO == event.fileType()) {
+            recent.getItems().clear();
+            populateRecents();
+        }
+    }
+
+    private void populateRecents() {
+        recentsService.getRecentProjects().stream().filter(StringUtils::isNotBlank).map(this::recentProjectMenuItem).forEach(recent.getItems()::add);
     }
 
     MenuItem recentProjectMenuItem(String path) {
@@ -99,4 +124,5 @@ public class MainMenuBar extends MenuBar {
         item.setMnemonicParsing(false);
         return item;
     }
+
 }

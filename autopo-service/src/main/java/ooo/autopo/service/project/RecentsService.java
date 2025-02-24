@@ -14,15 +14,14 @@ package ooo.autopo.service.project;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import ooo.autopo.model.project.Project;
-
+import java.nio.file.Path;
 import java.util.List;
 
 /**
  * @author Andrea Vacondio
  */
 public interface RecentsService {
-    void addProject(Project project);
+    void addProject(Path projectPath);
 
     List<String> getRecentProjects();
 

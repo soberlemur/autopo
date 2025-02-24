@@ -31,9 +31,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.tinylog.Logger;
 
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.IllformedLocaleException;
+import java.util.List;
 import java.util.Locale;
 
 import static java.util.Objects.isNull;
@@ -57,10 +62,10 @@ public class DefaultIOService implements IOService {
 
     @Override
     public void load(PoFile poFile) throws IOException, ParseException {
-        Logger.debug(i18n().tr("Loading .po file {}"), poFile.poFile().getAbsolutePath());
+        Logger.debug(i18n().tr("Loading .po file {}"), poFile.poFile().toString());
         try {
-            Catalog catalog = new PoParser().parseCatalog(poFile.poFile());
-            Locale locale = getLocale(catalog, poFile.poFile().getName());
+            Catalog catalog = new PoParser().parseCatalog(poFile.poFile().toFile());
+            Locale locale = getLocale(catalog, poFile.poFile().getFileName().toString());
             if (isNull(locale)) {
                 Logger.warn(i18n().tr("Unable to find or detect a valid locale"));
             }
@@ -69,8 +74,8 @@ public class DefaultIOService implements IOService {
                 poFile.locale(locale);
                 poFile.moveStatusTo(LOADED);
             });
-            eventStudio().broadcast(new IOEvent(poFile.poFile().toPath(), IOEventType.LOADED));
-            Logger.info(i18n().tr("File {} loaded"), poFile.poFile().getAbsolutePath());
+            eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.LOADED, FileType.PO));
+            Logger.info(i18n().tr("File {} loaded"), poFile.poFile().toString());
         } catch (IOException | ParseException e) {
             Platform.runLater(() -> poFile.moveStatusTo(ERROR));
             throw e;
@@ -89,16 +94,41 @@ public class DefaultIOService implements IOService {
             } else {
                 Logger.debug(i18n().tr("Creating project descriptor file '{}'"), projectDescriptorPath.toAbsolutePath().toString());
                 project.setProperty(ProjectProperty.NAME, RandomProjectNameGenerator.instance().getName());
-                try (var stream = Files.list(project.location())) {
-                    stream.filter(path -> FileType.POT.matches(path.getFileName().toString()))
-                          .findFirst()
-                          .ifPresent(p -> project.setProperty(ProjectProperty.TEMPLATE_PATH, p.relativize(project.location()).toString()));
-
-                }
+                project.setProperty(ProjectProperty.EXCLUDE, "target");
                 project.properties().store(Files.newBufferedWriter(projectDescriptorPath), null);
             }
+
+            Files.walkFileTree(project.location(), new SimpleFileVisitor<>() {
+                private final List<Path> excludes = ofNullable(project.getProperty(ProjectProperty.EXCLUDE))
+                        .stream()
+                        .flatMap(v -> Arrays.stream(v.split("\\|"))).map(project.location()::resolve).map(Path::normalize).toList();
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    if (FileType.PO.matches(file.getFileName().toString())) {
+                        project.addTranslation(new PoFile(file));
+                        Logger.trace("Found .po file '{}'", file.toString());
+                    }
+                    if (FileType.POT.matches(file.getFileName().toString()) && isNull(project.getProperty(ProjectProperty.TEMPLATE_PATH))) {
+                        project.setProperty(ProjectProperty.TEMPLATE_PATH, project.location().relativize(file).toString());
+                        Logger.debug(i18n().tr("Found template file '{}'"), project.getProperty(ProjectProperty.TEMPLATE_PATH));
+                    }
+
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+                    if (excludes.contains(dir.normalize())) {
+                        Logger.trace(i18n().tr("Skipping directory '{}'"), dir.toString());
+                        return FileVisitResult.SKIP_SUBTREE;
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+
             Platform.runLater(() -> project.moveStatusTo(LOADED));
-            eventStudio().broadcast(new IOEvent(projectDescriptorPath, IOEventType.LOADED));
+            eventStudio().broadcast(new IOEvent(project.location(), IOEventType.LOADED, FileType.OOO));
             Logger.info(i18n().tr("Project {} loaded"), projectDescriptorPath.toAbsolutePath().toString());
         } catch (IOException e) {
             Platform.runLater(() -> project.moveStatusTo(ERROR));
@@ -111,15 +141,15 @@ public class DefaultIOService implements IOService {
         var projectDescriptorPath = project.location().resolve(Path.of("autopo.ooo"));
         Logger.debug(i18n().tr("Saving project file {}"), projectDescriptorPath.toAbsolutePath().toString());
         project.properties().store(Files.newBufferedWriter(projectDescriptorPath), null);
-        eventStudio().broadcast(new IOEvent(projectDescriptorPath, IOEventType.SAVED));
+        eventStudio().broadcast(new IOEvent(projectDescriptorPath, IOEventType.SAVED, FileType.OOO));
         Logger.info(i18n().tr("File {} saved"), projectDescriptorPath.toAbsolutePath().toString());
 
     }
 
     @Override
     public void save(PoFile poFile) {
-        eventStudio().broadcast(new IOEvent(poFile.poFile().toPath(), IOEventType.SAVED));
-        Logger.info(i18n().tr("File {} loaded"), poFile.poFile().getAbsolutePath());
+        eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
+        Logger.info(i18n().tr("File {} loaded"), poFile.poFile().toString());
     }
 
     private Locale getLocale(Catalog catalog, String filename) {

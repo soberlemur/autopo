@@ -20,7 +20,6 @@ import ooo.autopo.model.PoLoadRequest;
 import ooo.autopo.model.project.LoadProjectRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
 import ooo.autopo.service.ServiceExceptionHandler;
-import ooo.autopo.service.project.RecentsService;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
@@ -41,14 +40,12 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 public class IOController {
 
     private final IOService ioService;
-    private final RecentsService recentsService;
     private ServiceExceptionHandler exceptionHandler = Logger::error;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor(Thread.ofVirtual().name("io-thread-", 0).factory());
 
     @Inject
-    public IOController(IOService ioService, RecentsService recentsService) {
+    public IOController(IOService ioService) {
         this.ioService = ioService;
-        this.recentsService = recentsService;
         eventStudio().addAnnotatedListeners(this);
     }
 
@@ -74,7 +71,6 @@ public class IOController {
         executorService.submit(() -> {
             try {
                 ioService.load(request.project());
-                recentsService.addProject(request.project());
             } catch (IOException e) {
                 exceptionHandler.accept(e, i18n().tr("An error occurred loading project file '{0}'", request.project().location().toAbsolutePath().toString()));
             }

@@ -20,7 +20,8 @@ package ooo.autopo.model.project;
 public enum ProjectProperty {
     ID("ooo.autopo.id"),
     NAME("ooo.autopo.name"),
-    TEMPLATE_PATH("ooo.autopo.template.path");
+    TEMPLATE_PATH("ooo.autopo.template.path"),
+    EXCLUDE("ooo.autopo.exclude");
 
     private final String key;
 

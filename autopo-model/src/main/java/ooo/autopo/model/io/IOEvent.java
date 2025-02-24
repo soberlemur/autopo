@@ -19,5 +19,5 @@ import java.nio.file.Path;
 /**
  * @author Andrea Vacondio
  */
-public record IOEvent(Path path, IOEventType type) {
+public record IOEvent(Path path, IOEventType type, FileType fileType) {
 }

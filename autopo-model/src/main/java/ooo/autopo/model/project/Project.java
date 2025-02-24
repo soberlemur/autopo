@@ -17,9 +17,13 @@ package ooo.autopo.model.project;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import ooo.autopo.model.LoadingStatus;
+import ooo.autopo.model.PoFile;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.Properties;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static java.util.Objects.requireNonNull;
 
@@ -31,6 +35,7 @@ public class Project {
     private final Path location;
     private final Properties properties = new Properties();
     private final SimpleObjectProperty<LoadingStatus> status = new SimpleObjectProperty<>(LoadingStatus.INITIAL);
+    private final SortedSet<PoFile> translations = new TreeSet<>(Comparator.comparing(PoFile::poFile));
 
     public Project(Path location) {
         this.location = location;
@@ -65,5 +70,13 @@ public class Project {
 
     public Properties properties() {
         return properties;
+    }
+
+    public SortedSet<PoFile> translations() {
+        return translations;
+    }
+
+    public void addTranslation(PoFile poFile) {
+        this.translations.add(poFile);
     }
 }

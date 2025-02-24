@@ -47,14 +47,7 @@ import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
 
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
@@ -183,71 +176,9 @@ public class FileExplorer extends BorderPane {
                 root.getChildren().add(templateRootItem);
                 root.getChildren().add(translationsRootItem);
                 actualizeTemplate();
-                //Files.walkFileTree(, )
+                actualizeTranslations();
                 ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
             }
-        });
-    }
-
-    private void scanDirectory(Path startPath, TreeItem<String> rootItem) throws IOException {
-        Map<Path, TreeItem<String>> directoryMap = new HashMap<>();
-        directoryMap.put(startPath, rootItem);
-
-        Files.walkFileTree(startPath, new SimpleFileVisitor<>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                if (shouldSkip(file)) {
-                    return FileVisitResult.SKIP_SUBTREE;
-                }
-
-                if (file.toString().endsWith(".po")) {
-                    Path parentDir = file.getParent();
-                    TreeItem<String> parentItem = directoryMap.get(parentDir);
-                    if (parentItem == null) {
-                        parentItem = createTreeItemForDirectory(parentDir);
-                        directoryMap.put(parentDir, parentItem);
-                        TreeItem<String> grandParentItem = directoryMap.get(parentDir.getParent());
-                        if (grandParentItem != null) {
-                            grandParentItem.getChildren().add(parentItem);
-                        }
-                    }
-                    parentItem.getChildren().add(new TreeItem<>(file.getFileName().toString()));
-                }
-                return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-                if (shouldSkip(dir)) {
-                    return FileVisitResult.SKIP_SUBTREE;
-                }
-
-                directoryMap.putIfAbsent(dir, new TreeItem<>(dir.getFileName().toString()));
-                return FileVisitResult.CONTINUE;
-            }
-        });
-
-        // Remove empty branches
-        removeEmptyBranches(rootItem);
-    }
-
-    private boolean shouldSkip(Path path) {
-        //    for (String skipPath : pathsToSkip) {
-        //      if (path.startsWith(Paths.get(skipPath))) {
-        //        return true;
-        //  }
-        //}
-        return false;
-    }
-
-    private TreeItem<String> createTreeItemForDirectory(Path directory) {
-        return new TreeItem<>(directory.getFileName().toString());
-    }
-
-    private void removeEmptyBranches(TreeItem<String> item) {
-        item.getChildren().removeIf(child -> {
-            removeEmptyBranches(child);
-            return child.getChildren().isEmpty() && !child.getValue().endsWith(".po");
         });
     }
 
@@ -256,8 +187,7 @@ public class FileExplorer extends BorderPane {
     }
 
     private void actualizeTemplate() {
-        var templatePath = ofNullable(this.currentProject.getProperty(ProjectProperty.TEMPLATE_PATH)).map(currentProject.location()::resolve)
-                                                                                                     .orElse(null);
+        var templatePath = ofNullable(this.currentProject.getProperty(ProjectProperty.TEMPLATE_PATH)).map(currentProject.location()::resolve).orElse(null);
         if (nonNull(templatePath)) {
             templateRootItem.getChildren().clear();
             var templateItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE,
@@ -266,6 +196,18 @@ public class FileExplorer extends BorderPane {
                                                            new FontIcon(FluentUiRegularAL.DOCUMENT_EDIT_20)));
             templateRootItem.getChildren().add(templateItem);
         }
+    }
+
+    private void actualizeTranslations() {
+        translationsRootItem.getChildren().clear();
+        currentProject.translations()
+                      .stream()
+                      .map(t -> new TreeNode(NodeType.PO,
+                                             t.poFile().getFileName().toString(),
+                                             t.poFile().toAbsolutePath().toString(),
+                                             new FontIcon(FluentUiRegularAL.LOCAL_LANGUAGE_20)))
+                      .map(TreeItem::new)
+                      .forEach(translationsRootItem.getChildren()::add);
     }
 
     public record TreeNode(NodeType type, String name, String tooltip, Node graphics) {

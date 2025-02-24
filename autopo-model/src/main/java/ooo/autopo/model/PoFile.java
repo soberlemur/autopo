@@ -20,7 +20,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import static java.util.Objects.requireNonNull;
@@ -32,18 +32,18 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 public class PoFile {
 
     private final SimpleObjectProperty<LoadingStatus> status = new SimpleObjectProperty<>(LoadingStatus.INITIAL);
-    private File poFile;
+    private Path poFile;
     private Locale locale;
     private Catalog catalog;
     private ObservableList<PoEntry> entries = FXCollections.observableArrayList();
 
-    public PoFile(File poFile) {
+    public PoFile(Path poFile) {
         requireNotNullArg(poFile, "The input .po file cannot be null");
         this.poFile = poFile;
 
     }
 
-    public File poFile() {
+    public Path poFile() {
         return poFile;
     }
 

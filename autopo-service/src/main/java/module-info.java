@@ -23,10 +23,10 @@ module ooo.autopo.service {
     requires org.pdfsam.eventstudio;
     requires transitive ooo.autopo.model;
     requires org.apache.commons.lang3;
-    requires javafx.graphics;
     requires org.pdfsam.injector;
     requires jakarta.inject;
     requires org.tinylog.api;
     requires org.pdfsam.persistence;
     requires org.sejda.commons;
+    requires javafx.controls;
 }

@@ -17,7 +17,6 @@ package ooo.autopo.service.project;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import ooo.autopo.model.lifecycle.ShutdownEvent;
-import ooo.autopo.model.project.Project;
 import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.persistence.PersistenceException;
@@ -25,6 +24,7 @@ import org.pdfsam.persistence.PreferencesRepository;
 import org.sejda.commons.collection.LRUMap;
 import org.tinylog.Logger;
 
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -65,10 +65,10 @@ public class DefaultRecentsService implements RecentsService {
     }
 
     @Override
-    public void addProject(Project project) {
-        requireNotNullArg(project, "Null project not allowed");
-        cache.put(project.location().toAbsolutePath().toString(), Long.toString(Instant.now().toEpochMilli()));
-        Logger.trace("Added recently used projects {}", project.location().toString());
+    public void addProject(Path projectPath) {
+        requireNotNullArg(projectPath, "Null project not allowed");
+        cache.put(projectPath.toAbsolutePath().toString(), Long.toString(Instant.now().toEpochMilli()));
+        Logger.trace("Added recently used projects {}", projectPath.toString());
     }
 
     @Override

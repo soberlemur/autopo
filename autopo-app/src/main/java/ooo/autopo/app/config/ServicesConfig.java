@@ -23,6 +23,7 @@ import ooo.autopo.service.io.IOController;
 import ooo.autopo.service.io.IOService;
 import ooo.autopo.service.io.NativeOpenUrlController;
 import ooo.autopo.service.project.DefaultRecentsService;
+import ooo.autopo.service.project.RecentsProjectsController;
 import ooo.autopo.service.project.RecentsService;
 import ooo.autopo.service.ui.DefaultStageService;
 import ooo.autopo.service.ui.StageService;
@@ -34,7 +35,7 @@ import org.pdfsam.persistence.EntityRepository;
 /**
  * @author Andrea Vacondio
  */
-@Components({ IOController.class, StageServiceController.class, NativeOpenUrlController.class })
+@Components({ IOController.class, StageServiceController.class, NativeOpenUrlController.class, RecentsProjectsController.class })
 
 public class ServicesConfig {
     @Provides
