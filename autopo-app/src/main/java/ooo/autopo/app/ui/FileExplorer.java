@@ -30,6 +30,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -105,24 +106,20 @@ public class FileExplorer extends BorderPane {
 
         var selectTemplate = new MenuItem(i18n().tr("Select template"));
         selectTemplate.setAccelerator(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
-        selectTemplate.setOnAction(e -> {
-            var fileChooser = Choosers.fileChooser(i18n().tr("Select a template"), FileType.POT);
-
-            var template = ofNullable(fileChooser.showOpenSingleDialog(this.getScene().getWindow())).filter(Files::isRegularFile)
-                                                                                                    .map(t -> currentProject.location().relativize(t))
-                                                                                                    .orElse(null);
-
-            if (nonNull(template)) {
-                currentProject.setProperty(ProjectProperty.TEMPLATE_PATH, template.toString());
-                actualizeTemplate();
-                eventStudio().broadcast(new SaveProjectRequest(currentProject));
-            }
-
-        });
+        selectTemplate.setOnAction(e -> selectTemplate());
         var templateContextMenu = new ContextMenu(selectTemplate);
 
         var treeView = new TreeView<>(root);
         treeView.setCellFactory(tv -> new TreeCell<>() {
+            {
+                addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                    if (!isEmpty() && event.getClickCount() == 2 && getTreeItem().isLeaf() && getTreeItem().getValue().type() == NodeType.TEMPLATE) {
+                        event.consume();
+                        selectTemplate();
+                    }
+                });
+            }
+
             @Override
             protected void updateItem(TreeNode item, boolean empty) {
                 super.updateItem(item, empty);
@@ -147,9 +144,22 @@ public class FileExplorer extends BorderPane {
                 }
             }
         });
-        treeView.getStyleClass().addAll(Styles.DENSE, Tweaks.ALT_ICON, Tweaks.EDGE_TO_EDGE);
+        treeView.getStyleClass().addAll(Styles.DENSE, Tweaks.ALT_ICON, Tweaks.EDGE_TO_EDGE, "files-tree-view");
         this.setCenter(treeView);
+    }
 
+    private void selectTemplate() {
+        var fileChooser = Choosers.fileChooser(i18n().tr("Select a template"), FileType.POT);
+
+        var template = ofNullable(fileChooser.showOpenSingleDialog(this.getScene().getWindow())).filter(Files::isRegularFile)
+                                                                                                .map(t -> currentProject.location().relativize(t))
+                                                                                                .orElse(null);
+
+        if (nonNull(template)) {
+            currentProject.setProperty(ProjectProperty.TEMPLATE_PATH, template.toString());
+            actualizeTemplate();
+            eventStudio().broadcast(new SaveProjectRequest(currentProject));
+        }
     }
 
     private void traverseTreeItems(TreeItem<?> node, boolean expand) {

@@ -30,6 +30,7 @@ import ooo.autopo.app.config.PreferencesConfig;
 import ooo.autopo.app.config.ServicesConfig;
 import ooo.autopo.app.context.StringPersistentProperty;
 import ooo.autopo.app.ui.AppContainer;
+import ooo.autopo.app.ui.MainPane;
 import ooo.autopo.app.ui.Themes;
 import ooo.autopo.app.ui.notification.NotificationsContainer;
 import ooo.autopo.app.validation.CompositeDecoration;
@@ -84,8 +85,12 @@ public class AutopoApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        this.primaryStage.setWidth(1024);
         initInjector(primaryStage);
         cleanIfRequired();
+        app().instance(WindowStatusController.class).setStage(primaryStage);
+        app().instance(ApplicationTitleController.class).setStage(primaryStage);
+
         //  var config = app().instance(AppBrand.class);
         //  System.setProperty(IOUtils.TMP_BUFFER_PREFIX_PROPERTY_NAME, config.property(BrandableProperty.HANDLE, "pdfblack"));
         primaryStage.setScene(initScene());
@@ -93,13 +98,11 @@ public class AutopoApp extends Application {
 
         //   primaryStage.getIcons().addAll(config.icons());
 
-        app().instance(WindowStatusController.class).setStage(primaryStage);
-        app().instance(ApplicationTitleController.class).setStage(primaryStage);
-
         DefaultDecoration.setFactory(CompositeDecoration::createCompositeDecoration);
         initStartupContentItem();
 
         primaryStage.show();
+        app().instance(MainPane.class).setDividerPositions(0.15f);
         // keep the scale updated
         // primaryStage.getScene().getWindow().outputScaleXProperty().addListener((a, b, c) -> app().runtimeState().scale(c.doubleValue()));
         closeSplash();

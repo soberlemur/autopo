@@ -78,3 +78,10 @@
 .notification.danger > .container, .notification.warning > .container, .notification.success > .container, .notification.accent > .container {
     -fx-background-radius: 4px, 4px, 4px, 0 4px 4px 0;
 }
+
+/**
+* Files tree view
+ */
+.files-tree-view {
+    -fx-padding: 0 2 0 0;
+}

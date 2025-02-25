@@ -25,10 +25,9 @@ public class MainPane extends SplitPane {
     @Inject
     public MainPane(FileExplorer fileExplorer, TranslationsPane translationsPane) {
         this.getStyleClass().add("main-pane");
-        var center = new ScrollPane(fileExplorer);
+        var center = new ScrollPane(translationsPane);
         center.setFitToWidth(true);
         center.setFitToHeight(true);
-        this.getItems().addAll(fileExplorer, translationsPane);
-        this.setDividerPositions(0f);
+        this.getItems().addAll(fileExplorer, center);
     }
 }
