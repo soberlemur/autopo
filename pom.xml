@@ -55,6 +55,7 @@
         <validatorfx.version>0.5.1</validatorfx.version>
         <jackson.version>2.18.2</jackson.version>
         <atlantafx.version>2.0.1</atlantafx.version>
+        <junit.pioneer.version>2.3.0</junit.pioneer.version>
     </properties>
 
     <distributionManagement>
@@ -438,6 +439,12 @@
                 <version>${assertj.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.pdfsam</groupId>
+                <artifactId>pdfsam-test</artifactId>
+                <version>${pdfsam.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -490,6 +497,12 @@
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit-pioneer</groupId>
+            <artifactId>junit-pioneer</artifactId>
+            <version>${junit.pioneer.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
