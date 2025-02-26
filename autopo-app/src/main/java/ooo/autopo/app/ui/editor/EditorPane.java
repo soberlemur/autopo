@@ -1,8 +1,8 @@
-package ooo.autopo.service.io;
+package ooo.autopo.app.ui.editor;
 
 /*
  * This file is part of the Autopo project
- * Created 05/02/25
+ * Created 25/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,22 +14,22 @@ package ooo.autopo.service.io;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import com.soberlemur.potentilla.catalog.parse.ParseException;
+import jakarta.inject.Inject;
+import javafx.geometry.Orientation;
+import javafx.scene.control.SplitPane;
 import ooo.autopo.model.po.PoFile;
-import ooo.autopo.model.project.Project;
-
-import java.io.IOException;
 
 /**
  * @author Andrea Vacondio
  */
-public interface IOService {
 
-    void load(PoFile poFile) throws IOException, ParseException;
+public class EditorPane extends SplitPane {
 
-    void load(Project project) throws IOException;
+    private PoFile poFile;
 
-    void save(PoFile poFile);
-
-    void save(Project project) throws IOException;
+    @Inject
+    public EditorPane(TranslationsPane translationsPane, TranslationEditPane translationEditPane) {
+        this.setOrientation(Orientation.VERTICAL);
+        this.getItems().addAll(translationsPane, translationEditPane);
+    }
 }

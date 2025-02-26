@@ -13,6 +13,7 @@
  */
 module ooo.autopo.model {
     exports ooo.autopo.model;
+    exports ooo.autopo.model.po;
     exports ooo.autopo.model.project;
     exports ooo.autopo.model.lifecycle;
     exports ooo.autopo.model.ui;

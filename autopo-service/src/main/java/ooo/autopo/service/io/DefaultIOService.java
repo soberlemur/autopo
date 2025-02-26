@@ -20,10 +20,10 @@ import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.PoParser;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
 import javafx.application.Platform;
-import ooo.autopo.model.PoFile;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.io.IOEventType;
+import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
 import ooo.autopo.service.ai.AIService;
@@ -148,6 +148,7 @@ public class DefaultIOService implements IOService {
 
     @Override
     public void save(PoFile poFile) {
+        //TODO make sure to add the standard language header
         eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
         Logger.info(i18n().tr("File {} loaded"), poFile.poFile().toString());
     }
@@ -160,7 +161,7 @@ public class DefaultIOService implements IOService {
             if (isNull(locale)) {
                 locale = localeFromString(ofNullable(catalog.header()).map(h -> h.getValue("X-Poedit-Language")).orElse(null));
                 if (isNull(locale)) {
-                    Logger.debug(i18n().tr("Trying to guess locale from filename '{}'", filename));
+                    Logger.debug(i18n().tr("Trying to guess locale from filename '{}'"), filename);
                     locale = localeFromString(StringUtils.removeEndIgnoreCase(filename, ".po"));
                     if (isNull(locale)) {
                         Logger.debug(i18n().tr("Trying to guess locale from file content with AI"));
@@ -183,7 +184,7 @@ public class DefaultIOService implements IOService {
 
     private Locale localeFromString(String languageHeader) {
         if (nonNull(languageHeader) && !languageHeader.isEmpty()) {
-            Logger.debug(i18n().tr("Trying to guess locale from '{}'", languageHeader));
+            Logger.debug(i18n().tr("Trying to guess locale from '{}'"), languageHeader);
             var headerFragments = languageHeader.split("[@_]");
             if (headerFragments.length > 0) {
                 try {
@@ -197,7 +198,7 @@ public class DefaultIOService implements IOService {
 
                     return builder.build();
                 } catch (IllformedLocaleException e) {
-                    Logger.warn(i18n().tr("Invalid locale: {}", languageHeader));
+                    Logger.warn(i18n().tr("Invalid locale: {}"), languageHeader);
                 }
             }
         }

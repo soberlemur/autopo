@@ -14,7 +14,7 @@ package ooo.autopo.model.consistency;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import ooo.autopo.model.PoEntry;
+import ooo.autopo.model.po.PoEntry;
 
 import java.util.Locale;
 import java.util.Set;
@@ -60,8 +60,8 @@ public interface ConsistencyValidator extends BiConsumer<PoEntry, Locale> {
     default void accept(PoEntry entry, Locale locale) {
         //we validate only if there is a translated value and if we shouldn't skip for the given target locale
         var language = locale.getLanguage();
-        if (isNotBlank(entry.value().getValue()) && shouldValidate(language)) {
-            ofNullable(validate(entry.key().msgId(), entry.value().getValue(), language)).ifPresent(entry::addWarning);
+        if (isNotBlank(entry.translatedValue().getValue()) && shouldValidate(language)) {
+            ofNullable(validate(entry.key().msgId(), entry.translatedValue().getValue(), language)).ifPresent(entry::addWarning);
         }
     }
 

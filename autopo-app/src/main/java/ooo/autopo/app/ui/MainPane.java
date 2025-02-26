@@ -15,19 +15,16 @@ package ooo.autopo.app.ui;
  */
 
 import jakarta.inject.Inject;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
+import ooo.autopo.app.ui.editor.EditorContainer;
 
 /**
  * @author Andrea Vacondio
  */
 public class MainPane extends SplitPane {
     @Inject
-    public MainPane(FileExplorer fileExplorer, TranslationsPane translationsPane) {
+    public MainPane(FileExplorer fileExplorer, EditorContainer editor) {
         this.getStyleClass().add("main-pane");
-        var center = new ScrollPane(translationsPane);
-        center.setFitToWidth(true);
-        center.setFitToHeight(true);
-        this.getItems().addAll(fileExplorer, center);
+        this.getItems().addAll(fileExplorer, editor);
     }
 }

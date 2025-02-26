@@ -16,8 +16,8 @@ package ooo.autopo.service.io;
 
 import com.soberlemur.potentilla.catalog.parse.ParseException;
 import jakarta.inject.Inject;
-import ooo.autopo.model.PoLoadRequest;
-import ooo.autopo.model.project.LoadProjectRequest;
+import ooo.autopo.model.po.PoLoadRequest;
+import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
 import ooo.autopo.service.ServiceExceptionHandler;
 import org.pdfsam.eventstudio.annotation.EventListener;
@@ -64,7 +64,7 @@ public class IOController {
     }
 
     @EventListener
-    public void loadProject(LoadProjectRequest request) {
+    public void loadProject(ProjectLoadRequest request) {
         Logger.trace("Project load request received");
         requireNotNullArg(request.project(), "Cannot load a null project");
         request.project().moveStatusTo(LOADING);

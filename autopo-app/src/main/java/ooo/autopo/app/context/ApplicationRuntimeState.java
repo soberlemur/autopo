@@ -15,13 +15,17 @@ package ooo.autopo.app.context;
  */
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
+import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.project.Project;
 import ooo.autopo.theme.Theme;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import static java.util.Optional.ofNullable;
 
@@ -32,6 +36,8 @@ public class ApplicationRuntimeState {
 
     private final SimpleObjectProperty<Theme> theme = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Path> workingPath = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Project> project = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<PoFile> poFile = new SimpleObjectProperty<>();
 
     /**
      * @return the current theme
@@ -41,10 +47,41 @@ public class ApplicationRuntimeState {
     }
 
     /**
-     * Sets the application scale
+     * Sets the application theme
      */
     public void theme(Theme theme) {
         ofNullable(theme).ifPresent(this.theme::set);
+    }
+
+    /**
+     * @return the current project
+     */
+    public ObservableObjectValue<Project> project() {
+        return this.project;
+    }
+
+    /**
+     * Sets the current project
+     */
+    public void project(Project project) {
+        if (Objects.nonNull(project)) {
+            this.project.set(project);
+            this.poFile.set(null);
+        }
+    }
+
+    /**
+     * @return the current .po file
+     */
+    public ObservableObjectValue<PoFile> poFile() {
+        return this.poFile;
+    }
+
+    /**
+     * Sets the current .po file
+     */
+    public void poFile(PoFile poFile) {
+        ofNullable(poFile).ifPresent(this.poFile::set);
     }
 
     /**

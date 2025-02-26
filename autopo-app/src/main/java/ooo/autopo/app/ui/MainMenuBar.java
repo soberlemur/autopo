@@ -25,7 +25,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.io.IOEvent;
-import ooo.autopo.model.project.LoadProjectRequest;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.ui.SetOverlayItem;
 import ooo.autopo.service.project.RecentsService;
@@ -36,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static java.util.Optional.ofNullable;
+import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.io.FileType.OOO;
 import static ooo.autopo.model.io.IOEventType.LOADED;
@@ -65,8 +65,7 @@ public class MainMenuBar extends MenuBar {
 
             ofNullable(directoryChooser.showDialog(this.getScene().getWindow())).filter(Files::isDirectory)
                                                                                 .map(Project::new)
-                                                                                .map(LoadProjectRequest::new)
-                                                                                .ifPresent(eventStudio()::broadcast);
+                                                                                .ifPresent(app().runtimeState()::project);
         });
 
         recent = new Menu(i18n().tr("Recen_ts"));
@@ -120,7 +119,7 @@ public class MainMenuBar extends MenuBar {
 
     MenuItem recentProjectMenuItem(String path) {
         var item = new MenuItem(StringUtils.abbreviate(path, path.length(), 60));
-        item.setOnAction(a -> eventStudio().broadcast(new LoadProjectRequest(new Project(Paths.get(path)))));
+        item.setOnAction(a -> app().runtimeState().project(new Project(Paths.get(path))));
         item.setMnemonicParsing(false);
         return item;
     }

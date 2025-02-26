@@ -17,5 +17,5 @@ package ooo.autopo.model.project;
 /**
  * @author Andrea Vacondio
  */
-public record LoadProjectRequest(Project project) {
+public record ProjectLoadRequest(Project project) {
 }

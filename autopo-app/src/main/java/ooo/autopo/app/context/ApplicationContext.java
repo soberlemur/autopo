@@ -18,6 +18,8 @@ import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.project.Project;
 import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.injector.Injector;
 import org.pdfsam.injector.Key;
@@ -78,6 +80,20 @@ public class ApplicationContext implements Closeable {
             }
         }
         return this.runtimeState;
+    }
+
+    /**
+     * @return the current project or null if no project has been selected yet
+     */
+    public Project currentProject() {
+        return runtimeState().project().getValue();
+    }
+
+    /**
+     * @return the current .po file or null if no .po file has been selected yet
+     */
+    public PoFile currentPoFile() {
+        return runtimeState().poFile().getValue();
     }
 
     /**

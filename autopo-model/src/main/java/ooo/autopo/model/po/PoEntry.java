@@ -1,4 +1,4 @@
-package ooo.autopo.model;
+package ooo.autopo.model.po;
 
 /*
  * This file is part of the Autopo project
@@ -44,7 +44,7 @@ public class PoEntry {
     private final SimpleStringProperty value;
     private final ObservableList<String> comments = FXCollections.observableArrayList();
     private final ObservableList<String> warnings = FXCollections.observableArrayList();
-    private Subscription warningsUpdatersubscription;
+    private Subscription warningsUpdaterSubscription;
 
     public PoEntry(Message message) {
         RequireUtils.requireNotNullArg(message, "Message cannot be null");
@@ -71,7 +71,11 @@ public class PoEntry {
         return key;
     }
 
-    public SimpleStringProperty value() {
+    public ObservableValue<String> untranslatedValue() {
+        return new SimpleStringProperty(message.getMsgId());
+    }
+
+    public SimpleStringProperty translatedValue() {
         return value;
     }
 
@@ -89,8 +93,8 @@ public class PoEntry {
      */
     public void onLocaleUpdate(Locale targetLocale) {
         if (Objects.nonNull(targetLocale)) {
-            Optional.ofNullable(warningsUpdatersubscription).ifPresent(Subscription::unsubscribe);
-            this.warningsUpdatersubscription = this.value.subscribe(v -> {
+            Optional.ofNullable(warningsUpdaterSubscription).ifPresent(Subscription::unsubscribe);
+            this.warningsUpdaterSubscription = this.value.subscribe(v -> {
                 warnings.clear();
                 ConsistencyValidator.VALIDATORS.accept(this, targetLocale);
             });

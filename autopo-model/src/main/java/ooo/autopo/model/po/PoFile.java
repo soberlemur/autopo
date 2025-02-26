@@ -1,4 +1,4 @@
-package ooo.autopo.model;
+package ooo.autopo.model.po;
 
 /*
  * This file is part of the Autopo project
@@ -19,6 +19,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ooo.autopo.model.LoadingStatus;
 
 import java.nio.file.Path;
 import java.util.Locale;
@@ -77,7 +78,7 @@ public class PoFile {
     }
 
     //TODO verify if we need an immutable view or if it needs to be observable at all
-    private ObservableList<PoEntry> entries() {
+    public ObservableList<PoEntry> entries() {
         return entries;
     }
 

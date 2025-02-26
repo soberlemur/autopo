@@ -18,6 +18,8 @@ import javafx.application.HostServices;
 import ooo.autopo.app.AppServiceExceptionHandler;
 import ooo.autopo.app.ApplicationTitleController;
 import ooo.autopo.app.AutopoDescriptor;
+import ooo.autopo.app.PoLoadController;
+import ooo.autopo.app.ProjectLoadController;
 import ooo.autopo.app.WindowStatusController;
 import ooo.autopo.app.ui.AppContentController;
 import ooo.autopo.app.ui.OverlayItem;
@@ -35,7 +37,7 @@ import java.util.List;
  * @author Andrea Vacondio
  */
 @Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class, AppContentController.class,
-        AppServiceExceptionHandler.class })
+        AppServiceExceptionHandler.class, ProjectLoadController.class, PoLoadController.class })
 public class AppConfig {
 
     private final HostServices services;

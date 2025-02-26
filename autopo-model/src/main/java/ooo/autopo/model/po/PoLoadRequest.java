@@ -1,4 +1,4 @@
-package ooo.autopo.service.io;
+package ooo.autopo.model.po;
 
 /*
  * This file is part of the Autopo project
@@ -14,22 +14,15 @@ package ooo.autopo.service.io;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import com.soberlemur.potentilla.catalog.parse.ParseException;
-import ooo.autopo.model.po.PoFile;
-import ooo.autopo.model.project.Project;
-
-import java.io.IOException;
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
  * @author Andrea Vacondio
  */
-public interface IOService {
+public record PoLoadRequest(PoFile poFile) {
 
-    void load(PoFile poFile) throws IOException, ParseException;
+    public PoLoadRequest {
+        requireNotNullArg(poFile, "Cannot load a null poFile");
+    }
 
-    void load(Project project) throws IOException;
-
-    void save(PoFile poFile);
-
-    void save(Project project) throws IOException;
 }

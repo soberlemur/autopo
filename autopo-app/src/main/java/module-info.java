@@ -14,6 +14,7 @@
 module ooo.autopo.app {
     exports ooo.autopo.app;
     exports ooo.autopo.app.ui;
+    exports ooo.autopo.app.ui.editor;
     exports ooo.autopo.app.ui.logs;
 
     requires net.synedra.validatorfx;
@@ -42,6 +43,7 @@ module ooo.autopo.app {
     opens ooo.autopo.app.ui.about to org.pdfsam.injector;
     opens ooo.autopo.app.ui.logs to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.ui.settings to org.pdfsam.injector;
+    opens ooo.autopo.app.ui.editor to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.config to org.pdfsam.injector;
     opens ooo.autopo.app.ui.notification to org.pdfsam.injector, org.pdfsam.eventstudio;
 

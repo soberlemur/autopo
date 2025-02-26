@@ -38,8 +38,7 @@ import javafx.util.Subscription;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.FileType;
-import ooo.autopo.model.project.LoadProjectRequest;
-import ooo.autopo.model.project.Project;
+import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.ProjectProperty;
 import ooo.autopo.model.project.SaveProjectRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +51,7 @@ import java.nio.file.Files;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
+import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -60,10 +60,9 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 public class FileExplorer extends BorderPane {
 
-    private Project currentProject;
     private final TreeItem<TreeNode> root = new TreeItem<>();
-    private final TreeItem<TreeNode> templateRootItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE, i18n().tr("Template"), null, null));
-    private final TreeItem<TreeNode> translationsRootItem = new TreeItem<>(new TreeNode(NodeType.PO_PARENT, i18n().tr("Translations"), null, null));
+    private final TreeItem<TreeNode> templateRootItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE, i18n().tr("Template"), null, null, null));
+    private final TreeItem<TreeNode> translationsRootItem = new TreeItem<>(new TreeNode(NodeType.PO_PARENT, i18n().tr("Translations"), null, null, null));
 
     @Inject
     public FileExplorer() {
@@ -96,9 +95,11 @@ public class FileExplorer extends BorderPane {
             dialog.initOwner(getScene().getWindow());
             dialog.showAndWait().ifPresent(name -> {
                 if (StringUtils.isNotBlank(name)) {
-                    currentProject.setProperty(ProjectProperty.NAME, name);
-                    actualizeRootName();
-                    eventStudio().broadcast(new SaveProjectRequest(currentProject));
+                    ofNullable(app().currentProject()).ifPresent(p -> {
+                        p.setProperty(ProjectProperty.NAME, name);
+                        actualizeRootName();
+                        eventStudio().broadcast(new SaveProjectRequest(p));
+                    });
                 }
             });
         });
@@ -107,15 +108,27 @@ public class FileExplorer extends BorderPane {
         var selectTemplate = new MenuItem(i18n().tr("Select template"));
         selectTemplate.setAccelerator(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
         selectTemplate.setOnAction(e -> selectTemplate());
-        var templateContextMenu = new ContextMenu(selectTemplate);
+        var selectTemplateContextMenu = new ContextMenu(selectTemplate);
+
+        var editPo = new MenuItem(i18n().tr("Edit"));
+        var editPoContextMenu = new ContextMenu(editPo);
+
+        var treeView = getTreeNodeTreeView(selectTemplateContextMenu, renameProjectContextMenu);
+        treeView.getStyleClass().addAll(Styles.DENSE, Tweaks.ALT_ICON, Tweaks.EDGE_TO_EDGE, "files-tree-view");
+        this.setCenter(treeView);
+    }
+
+    private TreeView<TreeNode> getTreeNodeTreeView(ContextMenu selectTemplateContextMenu, ContextMenu renameProjectContextMenu) {
 
         var treeView = new TreeView<>(root);
         treeView.setCellFactory(tv -> new TreeCell<>() {
+            private Runnable onDoubleClick;
+
             {
                 addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                    if (!isEmpty() && event.getClickCount() == 2 && getTreeItem().isLeaf() && getTreeItem().getValue().type() == NodeType.TEMPLATE) {
+                    if (!isEmpty() && event.getClickCount() == 2 && getTreeItem().isLeaf() && nonNull(onDoubleClick)) {
                         event.consume();
-                        selectTemplate();
+                        onDoubleClick.run();
                     }
                 });
             }
@@ -128,37 +141,34 @@ public class FileExplorer extends BorderPane {
                     setContextMenu(null);
                     setTooltip(null);
                     setGraphic(null);
+                    onDoubleClick = null;
                 } else {
                     setText(item.name());
                     setGraphic(item.graphics());
                     switch (item.type()) {
                     case PROJECT -> setContextMenu(renameProjectContextMenu);
-                    case TEMPLATE -> setContextMenu(templateContextMenu);
+                    case TEMPLATE -> setContextMenu(selectTemplateContextMenu);
                     case PO, PO_PARENT -> setContextMenu(null);
                     }
-                    if (StringUtils.isNotBlank(item.tooltip())) {
-                        setTooltip(new Tooltip(item.tooltip()));
-                    } else {
-                        setTooltip(null);
-                    }
+                    setTooltip(ofNullable(item.tooltip()).filter(StringUtils::isNotBlank).map(Tooltip::new).orElse(null));
+                    onDoubleClick = item.onDoubleClick();
                 }
             }
         });
-        treeView.getStyleClass().addAll(Styles.DENSE, Tweaks.ALT_ICON, Tweaks.EDGE_TO_EDGE, "files-tree-view");
-        this.setCenter(treeView);
+        return treeView;
     }
 
     private void selectTemplate() {
         var fileChooser = Choosers.fileChooser(i18n().tr("Select a template"), FileType.POT);
 
-        var template = ofNullable(fileChooser.showOpenSingleDialog(this.getScene().getWindow())).filter(Files::isRegularFile)
-                                                                                                .map(t -> currentProject.location().relativize(t))
-                                                                                                .orElse(null);
+        var template = ofNullable(fileChooser.showOpenSingleDialog(this.getScene().getWindow())).filter(Files::isRegularFile).orElse(null);
 
         if (nonNull(template)) {
-            currentProject.setProperty(ProjectProperty.TEMPLATE_PATH, template.toString());
-            actualizeTemplate();
-            eventStudio().broadcast(new SaveProjectRequest(currentProject));
+            ofNullable(app().currentProject()).ifPresent(p -> {
+                p.setProperty(ProjectProperty.TEMPLATE_PATH, p.location().relativize(template).toString());
+                actualizeTemplate();
+                eventStudio().broadcast(new SaveProjectRequest(p));
+            });
         }
     }
 
@@ -174,10 +184,9 @@ public class FileExplorer extends BorderPane {
     }
 
     @EventListener(priority = Integer.MIN_VALUE)
-    public void onLoadProject(LoadProjectRequest request) {
+    public void onLoadProject(ProjectLoadRequest request) {
         this.disableProperty().unbind();
         this.disableProperty().bind(Bindings.equal(LoadingStatus.LOADING, request.project().status()));
-        this.currentProject = request.project();
         this.root.getChildren().clear();
         final Subscription[] subscription = new Subscription[1];
         subscription[0] = request.project().status().subscribe(status -> {
@@ -187,40 +196,45 @@ public class FileExplorer extends BorderPane {
                 root.getChildren().add(translationsRootItem);
                 actualizeTemplate();
                 actualizeTranslations();
+                traverseTreeItems(root, true);
                 ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
             }
         });
     }
 
     private void actualizeRootName() {
-        root.setValue(new TreeNode(NodeType.PROJECT, this.currentProject.getProperty(ProjectProperty.NAME), null, null));
+        root.setValue(new TreeNode(NodeType.PROJECT, app().currentProject().getProperty(ProjectProperty.NAME), null, null, null));
     }
 
     private void actualizeTemplate() {
-        var templatePath = ofNullable(this.currentProject.getProperty(ProjectProperty.TEMPLATE_PATH)).map(currentProject.location()::resolve).orElse(null);
+        var templatePath = ofNullable(app().currentProject().getProperty(ProjectProperty.TEMPLATE_PATH)).map(app().currentProject().location()::resolve)
+                                                                                                        .orElse(null);
         if (nonNull(templatePath)) {
             templateRootItem.getChildren().clear();
             var templateItem = new TreeItem<>(new TreeNode(NodeType.TEMPLATE,
                                                            templatePath.getFileName().toString(),
                                                            templatePath.toAbsolutePath().toString(),
-                                                           new FontIcon(FluentUiRegularAL.DOCUMENT_EDIT_20)));
+                                                           new FontIcon(FluentUiRegularAL.DOCUMENT_EDIT_20),
+                                                           this::selectTemplate));
             templateRootItem.getChildren().add(templateItem);
         }
     }
 
     private void actualizeTranslations() {
         translationsRootItem.getChildren().clear();
-        currentProject.translations()
-                      .stream()
-                      .map(t -> new TreeNode(NodeType.PO,
-                                             t.poFile().getFileName().toString(),
-                                             t.poFile().toAbsolutePath().toString(),
-                                             new FontIcon(FluentUiRegularAL.LOCAL_LANGUAGE_20)))
-                      .map(TreeItem::new)
-                      .forEach(translationsRootItem.getChildren()::add);
+        app().currentProject()
+             .translations()
+             .stream()
+             .map(t -> new TreeNode(NodeType.PO,
+                                    t.poFile().getFileName().toString(),
+                                    t.poFile().toAbsolutePath().toString(),
+                                    new FontIcon(FluentUiRegularAL.LOCAL_LANGUAGE_20),
+                                    () -> app().runtimeState().poFile(t)))
+             .map(TreeItem::new)
+             .forEach(translationsRootItem.getChildren()::add);
     }
 
-    public record TreeNode(NodeType type, String name, String tooltip, Node graphics) {
+    public record TreeNode(NodeType type, String name, String tooltip, Node graphics, Runnable onDoubleClick) {
     }
 
     private enum NodeType {

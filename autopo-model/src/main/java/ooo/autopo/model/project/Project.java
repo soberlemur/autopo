@@ -17,7 +17,7 @@ package ooo.autopo.model.project;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import ooo.autopo.model.LoadingStatus;
-import ooo.autopo.model.PoFile;
+import ooo.autopo.model.po.PoFile;
 
 import java.nio.file.Path;
 import java.util.Comparator;

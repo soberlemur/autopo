@@ -27,6 +27,13 @@
 }
 
 /**
+ * Translations toolbar
+ */
+.translations-toolbar {
+    -fx-padding: 4px 10px;
+}
+
+/**
  * About panel
  */
 .about-panel {
@@ -40,6 +47,13 @@
 
 .about-panel .section {
     -fx-spacing: 6;
+}
+
+/**
+ * Placeholder panel
+ */
+.placeholder-pane {
+    -fx-alignment: center;
 }
 
 /**
