@@ -29,9 +29,10 @@ import org.sejda.commons.util.RequireUtils;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static javafx.util.Subscription.combine;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Andrea Vacondio
@@ -41,7 +42,8 @@ public class PoEntry {
     private final SimpleBooleanProperty modified = new SimpleBooleanProperty();
     private final MessageKey key;
     private final Message message;
-    private final SimpleStringProperty value;
+    private final SimpleStringProperty untranslatedValue = new SimpleStringProperty();
+    private final SimpleStringProperty translatedValue = new SimpleStringProperty();
     private final ObservableList<String> comments = FXCollections.observableArrayList();
     private final ObservableList<String> warnings = FXCollections.observableArrayList();
     private Subscription warningsUpdaterSubscription;
@@ -50,9 +52,10 @@ public class PoEntry {
         RequireUtils.requireNotNullArg(message, "Message cannot be null");
         this.key = new MessageKey(message);
         this.message = message;
-        this.value = new SimpleStringProperty(message.getMsgstr());
+        this.translatedValue.set(message.getMsgstr());
+        this.untranslatedValue.set(message.getMsgId());
         this.comments.addAll(message.getComments());
-        var compositeSubscription = combine(this.value.subscribe((o, n) -> modified.set(true)), this.comments.subscribe(() -> modified.set(true)));
+        var compositeSubscription = combine(this.translatedValue.subscribe((o, n) -> modified.set(true)), this.comments.subscribe(() -> modified.set(true)));
         var oneTime = new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -63,7 +66,7 @@ public class PoEntry {
             }
         };
         modified.addListener(oneTime);
-        this.value.subscribe((o, n) -> message.setMsgstr(n));
+        this.translatedValue.subscribe((o, n) -> message.setMsgstr(n));
         //TODO listener for comments updating the message comments
     }
 
@@ -72,11 +75,11 @@ public class PoEntry {
     }
 
     public ObservableValue<String> untranslatedValue() {
-        return new SimpleStringProperty(message.getMsgId());
+        return untranslatedValue;
     }
 
     public SimpleStringProperty translatedValue() {
-        return value;
+        return translatedValue;
     }
 
     public ObservableList<String> comments() {
@@ -87,14 +90,23 @@ public class PoEntry {
         return modified;
     }
 
+    public boolean contains(String search) {
+        if (isNotBlank(search)) {
+            var searchLowerCase = search.toLowerCase();
+            return ofNullable(untranslatedValue.get()).map(String::toLowerCase).map(s -> s.contains(searchLowerCase)).orElse(false) || ofNullable(
+                    translatedValue.get()).map(String::toLowerCase).map(s -> s.contains(searchLowerCase)).orElse(false);
+        }
+        return false;
+    }
+
     /**
      * Notifies this entry that the target locale for this entry has changed. Consistency validators change depending on the target locale and this method takes
      * care of it.
      */
     public void onLocaleUpdate(Locale targetLocale) {
         if (Objects.nonNull(targetLocale)) {
-            Optional.ofNullable(warningsUpdaterSubscription).ifPresent(Subscription::unsubscribe);
-            this.warningsUpdaterSubscription = this.value.subscribe(v -> {
+            ofNullable(warningsUpdaterSubscription).ifPresent(Subscription::unsubscribe);
+            this.warningsUpdaterSubscription = this.translatedValue.subscribe(v -> {
                 warnings.clear();
                 ConsistencyValidator.VALIDATORS.accept(this, targetLocale);
             });

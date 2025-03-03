@@ -38,7 +38,9 @@ public interface ConsistencyValidator extends BiConsumer<PoEntry, Locale> {
                                                            .andThen(new TrailingLinefeed())
                                                            .andThen(new QuestionMark())
                                                            .andThen(new SpanishQuestionMark())
-                                                           .andThen(new ExclamationMark());
+                                                           .andThen(new ExclamationMark())
+                                                           .andThen(new SpanishExclamationMark())
+                                                           .andThen(new SpanishLeadingCase());
     String VALID = null;
 
     /**

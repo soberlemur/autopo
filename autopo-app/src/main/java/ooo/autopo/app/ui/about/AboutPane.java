@@ -45,8 +45,8 @@ import static ooo.autopo.app.AutopoDescriptorProperty.SUPPORT_URL;
 import static ooo.autopo.app.AutopoDescriptorProperty.TRACKER_URL;
 import static ooo.autopo.app.AutopoDescriptorProperty.VENDOR_URL;
 import static ooo.autopo.app.AutopoDescriptorProperty.VERSION;
+import static ooo.autopo.app.io.ObjectCollectionWriter.writeContent;
 import static ooo.autopo.i18n.I18nContext.i18n;
-import static ooo.autopo.service.io.ObjectCollectionWriter.writeContent;
 
 /**
  * @author Andrea Vacondio

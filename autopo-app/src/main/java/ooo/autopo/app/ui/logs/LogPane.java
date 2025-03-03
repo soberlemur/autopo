@@ -34,8 +34,8 @@ import org.pdfsam.eventstudio.annotation.EventListener;
 import java.util.Collection;
 import java.util.Objects;
 
+import static ooo.autopo.app.io.ObjectCollectionWriter.writeContent;
 import static ooo.autopo.i18n.I18nContext.i18n;
-import static ooo.autopo.service.io.ObjectCollectionWriter.writeContent;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**

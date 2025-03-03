@@ -11,7 +11,7 @@
  * without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
-package ooo.autopo.service.io;
+package ooo.autopo.app;
 
 import jakarta.inject.Inject;
 import javafx.application.HostServices;

@@ -18,6 +18,7 @@ import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.project.Project;
 import org.apache.commons.lang3.StringUtils;
@@ -94,6 +95,13 @@ public class ApplicationContext implements Closeable {
      */
     public PoFile currentPoFile() {
         return runtimeState().poFile().getValue();
+    }
+
+    /**
+     * @return the current entry of the.po file or null if no entry has been selected yet
+     */
+    public PoEntry currentPoEntry() {
+        return runtimeState().poEntry().getValue();
     }
 
     /**

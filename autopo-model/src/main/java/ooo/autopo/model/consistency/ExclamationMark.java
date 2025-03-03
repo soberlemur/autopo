@@ -22,7 +22,7 @@ import static ooo.autopo.i18n.I18nContext.i18n;
  * @author Andrea Vacondio
  */
 public class ExclamationMark implements ConsistencyValidator {
-    private static final Set<String> EXCLUDE = Set.of("hy", "bo", "dz");
+    private static final Set<String> EXCLUDE = Set.of("hy", "bo", "es", "dz", "gl");
 
     @Override
     public String validate(String original, String translated, String targetLanguage) {

@@ -15,13 +15,13 @@ package ooo.autopo.app.config;
  */
 
 import jakarta.inject.Named;
+import ooo.autopo.app.NativeOpenUrlController;
 import ooo.autopo.model.ui.StageStatus;
 import ooo.autopo.service.ai.AIService;
 import ooo.autopo.service.ai.DefaultAIService;
 import ooo.autopo.service.io.DefaultIOService;
 import ooo.autopo.service.io.IOController;
 import ooo.autopo.service.io.IOService;
-import ooo.autopo.service.io.NativeOpenUrlController;
 import ooo.autopo.service.project.DefaultRecentsService;
 import ooo.autopo.service.project.RecentsProjectsController;
 import ooo.autopo.service.project.RecentsService;

@@ -17,6 +17,7 @@ package ooo.autopo.app.context;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
+import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.theme.Theme;
@@ -38,6 +39,7 @@ public class ApplicationRuntimeState {
     private final SimpleObjectProperty<Path> workingPath = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<PoFile> poFile = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<PoEntry> poEntry = new SimpleObjectProperty<>();
 
     /**
      * @return the current theme
@@ -81,7 +83,24 @@ public class ApplicationRuntimeState {
      * Sets the current .po file
      */
     public void poFile(PoFile poFile) {
-        ofNullable(poFile).ifPresent(this.poFile::set);
+        if (Objects.nonNull(poFile)) {
+            this.poFile.set(poFile);
+            this.poEntry.set(null);
+        }
+    }
+
+    /**
+     * @return the current entry in the current .po file
+     */
+    public ObservableObjectValue<PoEntry> poEntry() {
+        return this.poEntry;
+    }
+
+    /**
+     * Sets the current po entry
+     */
+    public void poEntry(PoEntry poEntry) {
+        this.poEntry.set(poEntry);
     }
 
     /**

@@ -25,19 +25,29 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import ooo.autopo.model.po.PoEntry;
+import ooo.autopo.model.ui.SearchTranslation;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.pdfsam.eventstudio.annotation.EventListener;
 
+import java.util.Comparator;
+
+import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
  * @author Andrea Vacondio
  */
 public class TranslationsTable extends TableView<PoEntry> {
 
+    TableColumn<PoEntry, String> translationColumn = new TableColumn<>(i18n().tr("Translation"));
+
     @Inject
     public TranslationsTable() {
         this.setEditable(false);
+        getStyleClass().add("translations-table");
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         getStyleClass().addAll(Styles.DENSE, Styles.STRIPED, Tweaks.EDGE_TO_EDGE);
@@ -65,11 +75,38 @@ public class TranslationsTable extends TableView<PoEntry> {
 
         var sourceColumn = new TableColumn<PoEntry, String>(i18n().tr("Source"));
         sourceColumn.setPrefWidth(250);
+        sourceColumn.setComparator(Comparator.naturalOrder());
         sourceColumn.setCellValueFactory(param -> param.getValue().untranslatedValue());
 
-        var translationColumn = new TableColumn<PoEntry, String>(i18n().tr("Translation"));
         translationColumn.setCellValueFactory(param -> param.getValue().translatedValue());
 
+        getSelectionModel().selectedItemProperty().subscribe((oldValue, newValue) -> app().runtimeState().poEntry(newValue));
+
         getColumns().addAll(warningColumn, sourceColumn, translationColumn);
+        getSortOrder().add(translationColumn);
+        eventStudio().addAnnotatedListeners(this);
+    }
+
+    void setItemsAndSort(ObservableList<PoEntry> items) {
+        setItems(items);
+        getSortOrder().add(translationColumn);
+        translationColumn.setSortType(TableColumn.SortType.ASCENDING);
+        sort();
+    }
+
+    @EventListener
+    public void onSearch(SearchTranslation text) {
+        if (isNotBlank(text.needle())) {
+            var start = getSelectionModel().getSelectedIndex() + 1;
+            for (int i = start; i < getItems().size() + start; i++) {
+                var index = i % getItems().size();
+                var item = getItems().get(index);
+                if (item.contains(text.needle())) {
+                    getSelectionModel().select(index);
+                    scrollTo(item);
+                    break;
+                }
+            }
+        }
     }
 }

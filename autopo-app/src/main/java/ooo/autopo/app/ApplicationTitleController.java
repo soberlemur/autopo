@@ -14,10 +14,16 @@ package ooo.autopo.app;
  */
 
 import javafx.stage.Stage;
+import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.ui.SetTitleRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.injector.Auto;
 
+import java.util.Locale;
+import java.util.Optional;
+
 import static ooo.autopo.app.context.ApplicationContext.APPLICATION_TITLE;
+import static ooo.autopo.app.context.ApplicationContext.app;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -33,7 +39,12 @@ public class ApplicationTitleController {
             if (isNotBlank(request.title())) {
                 primaryStage.setTitle(APPLICATION_TITLE + " - " + request.title());
             } else {
-                primaryStage.setTitle(APPLICATION_TITLE);
+                primaryStage.setTitle(Optional.ofNullable(app().currentPoFile())
+                                              .map(PoFile::locale)
+                                              .map(Locale::getDisplayName)
+                                              .map(StringUtils::capitalize)
+                                              .map(l -> APPLICATION_TITLE + " - " + l)
+                                              .orElse(APPLICATION_TITLE));
             }
         });
     }

@@ -2,7 +2,7 @@ package ooo.autopo.model.consistency;
 
 /*
  * This file is part of the Autopo project
- * Created 05/02/25
+ * Created 26/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -21,7 +21,7 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class SpanishQuestionMark implements ConsistencyValidator {
+public class SpanishExclamationMark implements ConsistencyValidator {
 
     private static final Set<String> INCLUDES = Set.of("es", "gl");
 
@@ -31,11 +31,11 @@ public class SpanishQuestionMark implements ConsistencyValidator {
         var lastTranslated = translated.charAt(translated.length() - 1);
         var firstTranslated = translated.charAt(0);
 
-        if (last == '?' && (lastTranslated != '?' || firstTranslated != '¿')) {
-            return i18n().tr("Translated string should be included in ¿ and ?");
+        if (last == '!' && (lastTranslated != '!' || firstTranslated != '¡')) {
+            return i18n().tr("Translated string should be included in ¡ and !");
         }
-        if (last != '?' && (lastTranslated == '?' || firstTranslated == '¿')) {
-            return i18n().tr("Translated string should not be included in ¿ and ?");
+        if (last != '!' && (lastTranslated == '!' || firstTranslated == '¡')) {
+            return i18n().tr("Translated string should not be included in ¡ and !");
         }
         return VALID;
     }

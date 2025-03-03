@@ -67,7 +67,7 @@ public class PoFile {
         this.catalog = catalog;
         this.entries().clear();
         this.catalog.stream().map(PoEntry::new).forEachOrdered(e -> {
-            this.entries().add(e);
+            this.addEntry(e);
             e.onLocaleUpdate(this.locale());
         });
     }

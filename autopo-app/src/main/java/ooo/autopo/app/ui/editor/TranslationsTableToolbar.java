@@ -14,16 +14,22 @@ package ooo.autopo.app.ui.editor;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.theme.Styles;
 import jakarta.inject.Inject;
+import javafx.beans.binding.Bindings;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import ooo.autopo.app.DebouncedStringProperty;
 import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.ui.SearchTranslation;
 import ooo.autopo.model.ui.TranslationsCountChanged;
 import ooo.autopo.model.ui.log.SaveLogRequest;
+import org.apache.commons.lang3.StringUtils;
+import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
@@ -38,22 +44,49 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 /**
  * @author Andrea Vacondio
  */
-public class TranslationsTableToolbar extends ToolBar {
+public class TranslationsTableToolbar extends HBox {
 
     private final Label status = new Label();
+    private final DebouncedStringProperty filterProperty = new DebouncedStringProperty();
 
     @Inject
     public TranslationsTableToolbar() {
-        this.getStyleClass().add("translations-toolbar");
+        this.getStyleClass().addAll("tool-bar", "translations-toolbar");
         var saveItem = new TranslationsTableToolbar.SaveButton();
-        var spacer = new Pane();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        saveItem.getStyleClass().addAll(Styles.SMALL);
+        saveItem.setDefaultButton(true);
+        saveItem.setDisable(true);
+        var search = new HBox();
+        search.setAlignment(Pos.CENTER);
+        HBox.setHgrow(search, Priority.ALWAYS);
+        var searchField = new CustomTextField();
+        searchField.getStyleClass().addAll("search-field");
+        searchField.setLeft(new FontIcon(FluentUiRegularMZ.SEARCH_20));
+        searchField.setPrefWidth(400);
+        searchField.setPromptText(i18n().tr("Search"));
+        searchField.getStyleClass().addAll(Styles.SMALL);
+        searchField.textProperty().subscribe(filterProperty::set);
+        searchField.setOnAction(e -> eventStudio().broadcast(new SearchTranslation(searchField.getText())));
+        filterProperty.subscribe((o, n) -> eventStudio().broadcast(new SearchTranslation(n)));
+       
+        var searchDismiss = new Button();
+        searchDismiss.getStyleClass().add("search-dismiss");
+        searchDismiss.setGraphic(new FontIcon(FluentUiRegularAL.DISMISS_16));
+        searchDismiss.getStyleClass().addAll(Styles.SMALL, Styles.FLAT);
+        searchDismiss.setFocusTraversable(true);
+        searchDismiss.visibleProperty()
+                     .bind(Bindings.createBooleanBinding(() -> StringUtils.isNotBlank(searchField.textProperty().get()), searchField.textProperty()));
+        searchDismiss.setOnAction(e -> searchField.setText(""));
+        searchField.setRight(searchDismiss);
+        search.getChildren().addAll(searchField);
         app().runtimeState().poFile().subscribe(poFile -> {
             if (isNull(poFile)) {
                 status.setText("");
+                searchField.setText("");
             }
         });
-        getItems().addAll(saveItem, spacer, status);
+
+        getChildren().addAll(saveItem, search, status);
         eventStudio().addAnnotatedListeners(this);
     }
 

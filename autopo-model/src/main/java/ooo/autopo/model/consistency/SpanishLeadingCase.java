@@ -2,7 +2,7 @@ package ooo.autopo.model.consistency;
 
 /*
  * This file is part of the Autopo project
- * Created 05/02/25
+ * Created 26/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -16,28 +16,32 @@ package ooo.autopo.model.consistency;
 
 import java.util.Set;
 
+import static java.lang.Character.isUpperCase;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * In spanish questions are inlcuded in ¿ and ?, exclamations in ¡ and ! so we have to verify the case of the secondo char, not the first
+ *
  * @author Andrea Vacondio
  */
-public class SpanishQuestionMark implements ConsistencyValidator {
+public class SpanishLeadingCase implements ConsistencyValidator {
 
     private static final Set<String> INCLUDES = Set.of("es", "gl");
 
     @Override
     public String validate(String original, String translated, String targetLanguage) {
-        var last = original.charAt(original.length() - 1);
-        var lastTranslated = translated.charAt(translated.length() - 1);
-        var firstTranslated = translated.charAt(0);
-
-        if (last == '?' && (lastTranslated != '?' || firstTranslated != '¿')) {
-            return i18n().tr("Translated string should be included in ¿ and ?");
-        }
-        if (last != '?' && (lastTranslated == '?' || firstTranslated == '¿')) {
-            return i18n().tr("Translated string should not be included in ¿ and ?");
+        if (isUpperCase(original.charAt(0)) ^ isUpperCase(getFirstTranslated(translated, original))) {
+            return i18n().tr("Inconsistent capitalization of the first letter between the original and translation");
         }
         return VALID;
+    }
+
+    private char getFirstTranslated(String translated, String original) {
+        var lastOriginal = original.charAt(original.length() - 1);
+        if (translated.length() > 1 && (lastOriginal == '?' || lastOriginal == '!')) {
+            return translated.charAt(1);
+        }
+        return translated.charAt(0);
     }
 
     @Override

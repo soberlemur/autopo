@@ -27,9 +27,38 @@
 }
 
 /**
+ * Search field
+ */
+.search-field.small {
+    -fx-padding: 1px 2px 1px 8.5714285714px;
+    -fx-font-size: 1em;
+}
+
+.search-field .search-dismiss:hover {
+    -fx-background-color: -color-button-border, -color-button-bg;
+    -fx-opacity: 0.7;
+}
+
+.search-field:right-node-visible .right-pane {
+    -fx-padding: 0 0 0 4px;
+}
+
+.search-field:left-node-visible .left-pane {
+    -fx-padding: 0 0 0 6px;
+}
+
+/**
  * Translations toolbar
  */
 .translations-toolbar {
+    -fx-alignment: center-left;
+    -fx-padding: 4px 10px;
+}
+
+.translation-edit-toolbar {
+    -fx-background-color: -color-border-muted, -color-bg-subtle;
+    -fx-background-insets: 0, 1px 0 1px 0;
+    -fx-alignment: center-left;
     -fx-padding: 4px 10px;
 }
 
@@ -98,4 +127,12 @@
  */
 .files-tree-view {
     -fx-padding: 0 2 0 0;
+}
+
+/**
+ * table
+ */
+.table-view.translations-table {
+    -color-cell-bg-selected: -color-accent-1;
+    -color-cell-bg-selected-focused: -color-accent-1;
 }

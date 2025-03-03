@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import ooo.autopo.app.ui.logs.ErrorLoggedEvent;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.ui.SetOverlayItem;
@@ -42,7 +43,7 @@ public class FooterBar extends HBox {
     public FooterBar() {
         this.getStyleClass().add("footer");
         var spacer = new Pane();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
         var logsButton = new Button();
         logsButton.setGraphic(new FontIcon(FluentUiRegularAL.DOCUMENT_ONE_PAGE_24));
         logsButton.getStyleClass().addAll(Styles.SMALL, Styles.FLAT);

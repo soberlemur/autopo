@@ -19,7 +19,6 @@ import com.soberlemur.potentilla.Header;
 import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.PoParser;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
-import javafx.application.Platform;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.io.IOEventType;
@@ -69,15 +68,13 @@ public class DefaultIOService implements IOService {
             if (isNull(locale)) {
                 Logger.warn(i18n().tr("Unable to find or detect a valid locale"));
             }
-            Platform.runLater(() -> {
-                poFile.catalog(catalog);
-                poFile.locale(locale);
-                poFile.moveStatusTo(LOADED);
-            });
+            poFile.catalog(catalog);
+            poFile.locale(locale);
+            poFile.moveStatusTo(LOADED);
             eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.LOADED, FileType.PO));
             Logger.info(i18n().tr("File {} loaded"), poFile.poFile().toString());
         } catch (IOException | ParseException e) {
-            Platform.runLater(() -> poFile.moveStatusTo(ERROR));
+            poFile.moveStatusTo(ERROR);
             throw e;
         }
     }
@@ -127,11 +124,11 @@ public class DefaultIOService implements IOService {
                 }
             });
 
-            Platform.runLater(() -> project.moveStatusTo(LOADED));
+            project.moveStatusTo(LOADED);
             eventStudio().broadcast(new IOEvent(project.location(), IOEventType.LOADED, FileType.OOO));
             Logger.info(i18n().tr("Project {} loaded"), projectDescriptorPath.toAbsolutePath().toString());
         } catch (IOException e) {
-            Platform.runLater(() -> project.moveStatusTo(ERROR));
+            project.moveStatusTo(ERROR);
             throw e;
         }
     }

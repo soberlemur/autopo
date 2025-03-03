@@ -14,11 +14,11 @@ package ooo.autopo.app;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.po.PoLoadRequest;
 import org.pdfsam.injector.Auto;
 
-import java.util.Optional;
-
+import static java.util.Optional.ofNullable;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -29,6 +29,11 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 public class PoLoadController {
 
     public PoLoadController() {
-        app().runtimeState().poFile().subscribe(p -> Optional.ofNullable(p).map(PoLoadRequest::new).ifPresent(eventStudio()::broadcast));
+        app().runtimeState()
+             .poFile()
+             .subscribe(p -> ofNullable(p)
+                     .filter(f -> f.status().getValue() == LoadingStatus.INITIAL)
+                     .map(PoLoadRequest::new)
+                     .ifPresent(eventStudio()::broadcast));
     }
 }

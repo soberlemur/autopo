@@ -30,6 +30,7 @@ public class EditorPane extends SplitPane {
     @Inject
     public EditorPane(TranslationsPane translationsPane, TranslationEditPane translationEditPane) {
         this.setOrientation(Orientation.VERTICAL);
+        this.setDividerPositions(0.75);
         this.getItems().addAll(translationsPane, translationEditPane);
     }
 }

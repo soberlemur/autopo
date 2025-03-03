@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
+            <artifactId>javafx-graphics</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>

@@ -14,10 +14,54 @@ package ooo.autopo.app.ui.editor;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.theme.Styles;
+import atlantafx.base.theme.Tweaks;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import java.util.Objects;
+
+import static java.util.Optional.ofNullable;
+import static javafx.beans.binding.Bindings.isNull;
+import static ooo.autopo.app.context.ApplicationContext.app;
+import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
  * @author Andrea Vacondio
  */
 public class TranslationEditPane extends VBox {
+
+    public TranslationEditPane() {
+        var sourceView = new TextArea();
+        sourceView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
+        sourceView.setWrapText(true);
+        sourceView.setEditable(false);
+        VBox.setVgrow(sourceView, Priority.ALWAYS);
+
+        var toolbar = new HBox();
+        toolbar.getStyleClass().add("translation-edit-toolbar");
+        var aiTranslateButton = new Button(i18n().tr("AI Translate"));
+        aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
+        aiTranslateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
+        toolbar.getChildren().add(aiTranslateButton);
+        var translationView = new TextArea();
+        translationView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
+        translationView.setWrapText(true);
+        VBox.setVgrow(translationView, Priority.ALWAYS);
+
+        getChildren().addAll(sourceView, toolbar, translationView);
+
+        app().runtimeState().poEntry().subscribe((oldEntry, newEntry) -> {
+            //let's remove the old binding
+            ofNullable(oldEntry).ifPresent(poEntry -> poEntry.translatedValue().unbind());
+            sourceView.setText(ofNullable(newEntry).map(entry -> entry.untranslatedValue().getValue()).orElse(""));
+            translationView.setText(ofNullable(newEntry).map(entry -> entry.translatedValue().getValue()).orElse(""));
+            if (Objects.nonNull(newEntry)) {
+                newEntry.translatedValue().bind(translationView.textProperty());
+            }
+        });
+    }
 }

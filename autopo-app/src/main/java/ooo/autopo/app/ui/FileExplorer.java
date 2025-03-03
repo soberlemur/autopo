@@ -17,11 +17,14 @@ package ooo.autopo.app.ui;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
 import jakarta.inject.Inject;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
@@ -34,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Subscription;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
@@ -70,14 +74,14 @@ public class FileExplorer extends BorderPane {
         eventStudio().addAnnotatedListeners(this);
 
         var expand = new Button();
-        expand.getStyleClass().addAll(Styles.SMALL);
         expand.setGraphic(new FontIcon(FluentUiFilledAL.ARROW_MAXIMIZE_20));
+        expand.getStyleClass().addAll(Styles.SMALL);
         expand.setOnAction(e -> traverseTreeItems(root, true));
         expand.setTooltip(new Tooltip(i18n().tr("Expand")));
 
         var collapse = new Button();
-        collapse.getStyleClass().addAll(Styles.SMALL);
         collapse.setGraphic(new FontIcon(FluentUiFilledAL.ARROW_MINIMIZE_20));
+        collapse.getStyleClass().addAll(Styles.SMALL);
         collapse.setOnAction(e -> traverseTreeItems(root, false));
         collapse.setTooltip(new Tooltip(i18n().tr("Collapse")));
 
@@ -85,7 +89,6 @@ public class FileExplorer extends BorderPane {
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
         var toolbar = new ToolBar(spacer, expand, collapse);
-        toolbar.getStyleClass().add("file-explorer-toolbar");
         this.setTop(toolbar);
 
         var rename = new MenuItem(i18n().tr("Rename project"));
@@ -145,10 +148,16 @@ public class FileExplorer extends BorderPane {
                 } else {
                     setText(item.name());
                     setGraphic(item.graphics());
+                    setContentDisplay(ContentDisplay.LEFT);
+                    setTextAlignment(TextAlignment.LEFT);
                     switch (item.type()) {
                     case PROJECT -> setContextMenu(renameProjectContextMenu);
                     case TEMPLATE -> setContextMenu(selectTemplateContextMenu);
-                    case PO, PO_PARENT -> setContextMenu(null);
+                    case PO_PARENT -> setContextMenu(null);
+                    case PO -> {
+                        setContextMenu(null);
+                        setContentDisplay(ContentDisplay.BOTTOM);
+                    }
                     }
                     setTooltip(ofNullable(item.tooltip()).filter(StringUtils::isNotBlank).map(Tooltip::new).orElse(null));
                     onDoubleClick = item.onDoubleClick();
@@ -190,15 +199,17 @@ public class FileExplorer extends BorderPane {
         this.root.getChildren().clear();
         final Subscription[] subscription = new Subscription[1];
         subscription[0] = request.project().status().subscribe(status -> {
-            if (status == LoadingStatus.LOADED) {
-                actualizeRootName();
-                root.getChildren().add(templateRootItem);
-                root.getChildren().add(translationsRootItem);
-                actualizeTemplate();
-                actualizeTranslations();
-                traverseTreeItems(root, true);
-                ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
-            }
+            Platform.runLater(() -> {
+                if (status == LoadingStatus.LOADED) {
+                    actualizeRootName();
+                    root.getChildren().add(templateRootItem);
+                    root.getChildren().add(translationsRootItem);
+                    actualizeTemplate();
+                    actualizeTranslations();
+                    traverseTreeItems(root, true);
+                    ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
+                }
+            });
         });
     }
 
@@ -222,16 +233,16 @@ public class FileExplorer extends BorderPane {
 
     private void actualizeTranslations() {
         translationsRootItem.getChildren().clear();
-        app().currentProject()
-             .translations()
-             .stream()
-             .map(t -> new TreeNode(NodeType.PO,
-                                    t.poFile().getFileName().toString(),
-                                    t.poFile().toAbsolutePath().toString(),
-                                    new FontIcon(FluentUiRegularAL.LOCAL_LANGUAGE_20),
-                                    () -> app().runtimeState().poFile(t)))
-             .map(TreeItem::new)
-             .forEach(translationsRootItem.getChildren()::add);
+        app().currentProject().translations().stream().map(t -> {
+            var progress = new ProgressBar(0.4);
+            progress.setPrefWidth(100);
+            progress.getStyleClass().add(Styles.SMALL);
+            return new TreeNode(NodeType.PO,
+                                t.poFile().getFileName().toString(),
+                                t.poFile().toAbsolutePath().toString(),
+                                progress,
+                                () -> app().runtimeState().poFile(t));
+        }).map(TreeItem::new).forEach(translationsRootItem.getChildren()::add);
     }
 
     public record TreeNode(NodeType type, String name, String tooltip, Node graphics, Runnable onDoubleClick) {

@@ -15,15 +15,18 @@ package ooo.autopo.app.ui.editor;
  */
 
 import jakarta.inject.Inject;
+import javafx.application.Platform;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Subscription;
 import ooo.autopo.model.LoadingStatus;
+import ooo.autopo.model.ui.SetStatusLabelRequest;
+import ooo.autopo.model.ui.SetTitleRequest;
 import ooo.autopo.model.ui.TranslationsCountChanged;
-import org.pdfsam.eventstudio.StaticStudio;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.app.context.ApplicationContext.app;
+import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
  * @author Andrea Vacondio
@@ -39,8 +42,12 @@ public class TranslationsPane extends BorderPane {
                 final Subscription[] subscription = new Subscription[1];
                 subscription[0] = poFile.status().subscribe(status -> {
                     if (status == LoadingStatus.LOADED) {
-                        translationsTable.setItems(poFile.entries());
-                        StaticStudio.eventStudio().broadcast(TranslationsCountChanged.INSTANCE);
+                        Platform.runLater(() -> {
+                            translationsTable.setItemsAndSort(poFile.entries());
+                            eventStudio().broadcast(TranslationsCountChanged.INSTANCE);
+                            eventStudio().broadcast(SetTitleRequest.SET_DEFAULT_TITLE_REQUEST);
+                            eventStudio().broadcast(new SetStatusLabelRequest(poFile.poFile().getFileName().toString()));
+                        });
                         ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
                     }
                     if (status == LoadingStatus.LOADED || status == LoadingStatus.ERROR) {
@@ -51,5 +58,6 @@ public class TranslationsPane extends BorderPane {
                 translationsTable.setItems(null);
             }
         });
+
     }
 }
