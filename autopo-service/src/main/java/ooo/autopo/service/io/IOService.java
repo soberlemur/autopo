@@ -29,7 +29,7 @@ public interface IOService {
 
     void load(Project project) throws IOException;
 
-    void save(PoFile poFile);
+    void save(PoFile poFile) throws IOException;
 
     void save(Project project) throws IOException;
 }

@@ -18,6 +18,7 @@ import com.soberlemur.potentilla.Catalog;
 import com.soberlemur.potentilla.Header;
 import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.PoParser;
+import com.soberlemur.potentilla.PoWriter;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.io.IOEvent;
@@ -45,7 +46,9 @@ import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.LoadingStatus.ERROR;
+import static ooo.autopo.model.LoadingStatus.INITIAL;
 import static ooo.autopo.model.LoadingStatus.LOADED;
+import static ooo.autopo.model.LoadingStatus.LOADING;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
@@ -61,22 +64,36 @@ public class DefaultIOService implements IOService {
 
     @Override
     public void load(PoFile poFile) throws IOException, ParseException {
-        Logger.debug(i18n().tr("Loading .po file {}"), poFile.poFile().toString());
-        try {
-            Catalog catalog = new PoParser().parseCatalog(poFile.poFile().toFile());
-            Locale locale = getLocale(catalog, poFile.poFile().getFileName().toString());
-            if (isNull(locale)) {
-                Logger.warn(i18n().tr("Unable to find or detect a valid locale"));
+        if (poFile.status(INITIAL, LOADING)) {
+            Logger.debug(i18n().tr("Loading .po file {}"), poFile.poFile().toString());
+            try {
+                Catalog catalog = new PoParser().parseCatalog(poFile.poFile().toFile());
+                Locale locale = getLocale(catalog, poFile.poFile().getFileName().toString());
+                if (isNull(locale)) {
+                    Logger.warn(i18n().tr("Unable to find or detect a valid locale"));
+                }
+                poFile.catalog(catalog);
+                poFile.locale(locale);
+                poFile.updatePercentageOfTranslation();
+                poFile.status(LOADED);
+                eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.LOADED, FileType.PO));
+                Logger.info(i18n().tr("File {} loaded"), poFile.poFile().toString());
+            } catch (IOException | ParseException e) {
+                poFile.status(ERROR);
+                throw e;
             }
-            poFile.catalog(catalog);
-            poFile.locale(locale);
-            poFile.moveStatusTo(LOADED);
-            eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.LOADED, FileType.PO));
-            Logger.info(i18n().tr("File {} loaded"), poFile.poFile().toString());
-        } catch (IOException | ParseException e) {
-            poFile.moveStatusTo(ERROR);
-            throw e;
+        } else {
+            Logger.trace("Skipping .po file {} with status ", poFile.poFile().toString(), poFile.status());
         }
+    }
+
+    @Override
+    public void save(PoFile poFile) throws IOException {
+        //TODO make sure to add the standard language header
+        Logger.debug(i18n().tr("Saving po file {}"), poFile.poFile().toAbsolutePath().toString());
+        new PoWriter().write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile()));
+        eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
+        Logger.info(i18n().tr("File {} saved"), poFile.poFile().toString());
     }
 
     @Override
@@ -96,9 +113,11 @@ public class DefaultIOService implements IOService {
             }
 
             Files.walkFileTree(project.location(), new SimpleFileVisitor<>() {
-                private final List<Path> excludes = ofNullable(project.getProperty(ProjectProperty.EXCLUDE))
-                        .stream()
-                        .flatMap(v -> Arrays.stream(v.split("\\|"))).map(project.location()::resolve).map(Path::normalize).toList();
+                private final List<Path> excludes = ofNullable(project.getProperty(ProjectProperty.EXCLUDE)).stream()
+                                                                                                            .flatMap(v -> Arrays.stream(v.split("\\|")))
+                                                                                                            .map(project.location()::resolve)
+                                                                                                            .map(Path::normalize)
+                                                                                                            .toList();
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
@@ -106,8 +125,8 @@ public class DefaultIOService implements IOService {
                         project.addTranslation(new PoFile(file));
                         Logger.trace("Found .po file '{}'", file.toString());
                     }
-                    if (FileType.POT.matches(file.getFileName().toString()) && isNull(project.getProperty(ProjectProperty.TEMPLATE_PATH))) {
-                        project.setProperty(ProjectProperty.TEMPLATE_PATH, project.location().relativize(file).toString());
+                    if (FileType.POT.matches(file.getFileName().toString()) && isNull(project.pot())) {
+                        project.pot(file);
                         Logger.debug(i18n().tr("Found template file '{}'"), project.getProperty(ProjectProperty.TEMPLATE_PATH));
                     }
 
@@ -124,11 +143,11 @@ public class DefaultIOService implements IOService {
                 }
             });
 
-            project.moveStatusTo(LOADED);
+            project.status(LOADED);
             eventStudio().broadcast(new IOEvent(project.location(), IOEventType.LOADED, FileType.OOO));
             Logger.info(i18n().tr("Project {} loaded"), projectDescriptorPath.toAbsolutePath().toString());
         } catch (IOException e) {
-            project.moveStatusTo(ERROR);
+            project.status(ERROR);
             throw e;
         }
     }
@@ -141,13 +160,6 @@ public class DefaultIOService implements IOService {
         eventStudio().broadcast(new IOEvent(projectDescriptorPath, IOEventType.SAVED, FileType.OOO));
         Logger.info(i18n().tr("File {} saved"), projectDescriptorPath.toAbsolutePath().toString());
 
-    }
-
-    @Override
-    public void save(PoFile poFile) {
-        //TODO make sure to add the standard language header
-        eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
-        Logger.info(i18n().tr("File {} loaded"), poFile.poFile().toString());
     }
 
     private Locale getLocale(Catalog catalog, String filename) {

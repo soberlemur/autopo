@@ -16,9 +16,12 @@ package ooo.autopo.service.io;
 
 import com.soberlemur.potentilla.catalog.parse.ParseException;
 import jakarta.inject.Inject;
+import javafx.application.Platform;
 import ooo.autopo.model.po.PoLoadRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
+import ooo.autopo.model.ui.SavePoRequest;
+import ooo.autopo.model.ui.TranslationsCountChanged;
 import ooo.autopo.service.ServiceExceptionHandler;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
@@ -41,7 +44,8 @@ public class IOController {
 
     private final IOService ioService;
     private ServiceExceptionHandler exceptionHandler = Logger::error;
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor(Thread.ofVirtual().name("io-thread-", 0).factory());
+    private final ExecutorService mainExecutor = Executors.newSingleThreadExecutor(Thread.ofPlatform().name("io-thread-", 0).factory());
+    private final ExecutorService backgroundExecutor = Executors.newFixedThreadPool(5, Thread.ofPlatform().name("po-loading-thread-", 0).factory());
 
     @Inject
     public IOController(IOService ioService) {
@@ -53,8 +57,7 @@ public class IOController {
     public void loadPo(PoLoadRequest request) {
         Logger.trace("PO load request received");
         requireNotNullArg(request.poFile(), "Cannot load a null poFile");
-        request.poFile().moveStatusTo(LOADING);
-        executorService.submit(() -> {
+        executor(request.background()).submit(() -> {
             try {
                 ioService.load(request.poFile());
             } catch (IOException | ParseException e) {
@@ -64,11 +67,27 @@ public class IOController {
     }
 
     @EventListener
+    public void savePo(SavePoRequest request) {
+        Logger.trace("Po save request received");
+        requireNotNullArg(request.poFile(), "Cannot save a null poFile");
+        request.poFile().modified(false);
+        mainExecutor.submit(() -> {
+            try {
+                ioService.save(request.poFile());
+                Platform.runLater(() -> eventStudio().broadcast(TranslationsCountChanged.INSTANCE));
+            } catch (IOException e) {
+                Platform.runLater(() -> request.poFile().modified(true));
+                exceptionHandler.accept(e, i18n().tr("An error occurred saving .po file to '{0}'", request.poFile().toString()));
+            }
+        });
+    }
+
+    @EventListener
     public void loadProject(ProjectLoadRequest request) {
         Logger.trace("Project load request received");
         requireNotNullArg(request.project(), "Cannot load a null project");
-        request.project().moveStatusTo(LOADING);
-        executorService.submit(() -> {
+        request.project().status(LOADING);
+        mainExecutor.submit(() -> {
             try {
                 ioService.load(request.project());
             } catch (IOException e) {
@@ -81,12 +100,19 @@ public class IOController {
     public void saveProject(SaveProjectRequest request) {
         Logger.trace("Project save request received");
         requireNotNullArg(request.project(), "Cannot save a null project");
-        executorService.submit(() -> {
+        mainExecutor.submit(() -> {
             try {
                 ioService.save(request.project());
             } catch (IOException e) {
                 exceptionHandler.accept(e, i18n().tr("An error occurred saving project to '{0}'", request.project().location().toAbsolutePath().toString()));
             }
         });
+    }
+
+    private ExecutorService executor(boolean background) {
+        if (background) {
+            return backgroundExecutor;
+        }
+        return mainExecutor;
     }
 }

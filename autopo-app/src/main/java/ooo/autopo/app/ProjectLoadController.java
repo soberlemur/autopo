@@ -14,11 +14,15 @@ package ooo.autopo.app;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import javafx.util.Subscription;
+import ooo.autopo.model.LoadingStatus;
+import ooo.autopo.model.po.PoLoadRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import org.pdfsam.injector.Auto;
 
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -29,6 +33,16 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 public class ProjectLoadController {
 
     public ProjectLoadController() {
-        app().runtimeState().project().subscribe(p -> Optional.ofNullable(p).map(ProjectLoadRequest::new).ifPresent(eventStudio()::broadcast));
+        app().runtimeState().project().subscribe(p -> Optional.ofNullable(p).map(ProjectLoadRequest::new).ifPresent(r -> {
+            eventStudio().broadcast(r);
+            final Subscription[] subscription = new Subscription[1];
+            subscription[0] = r.project().status().subscribe(status -> {
+                if (status == LoadingStatus.LOADED) {
+                    r.project().translations().stream().map(e -> new PoLoadRequest(e, true)).forEach(eventStudio()::broadcast);
+                    ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
+                }
+            });
+        }));
+
     }
 }

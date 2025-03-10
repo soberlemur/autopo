@@ -26,8 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
+import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -66,9 +66,13 @@ public class ApplicationRuntimeState {
      * Sets the current project
      */
     public void project(Project project) {
-        if (Objects.nonNull(project)) {
+        if (nonNull(project)) {
+            ofNullable(this.project.get()).ifPresent(p -> {
+                p.translations().forEach(PoFile::cancel);
+            });
             this.project.set(project);
             this.poFile.set(null);
+            this.poEntry.set(null);
         }
     }
 
@@ -83,7 +87,7 @@ public class ApplicationRuntimeState {
      * Sets the current .po file
      */
     public void poFile(PoFile poFile) {
-        if (Objects.nonNull(poFile)) {
+        if (nonNull(poFile)) {
             this.poFile.set(poFile);
             this.poEntry.set(null);
         }

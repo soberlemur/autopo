@@ -1,8 +1,8 @@
-package ooo.autopo.app.ui;
+package ooo.autopo.app.ui.explorer;
 
 /*
  * This file is part of the Autopo project
- * Created 14/02/25
+ * Created 06/03/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,10 +14,13 @@ package ooo.autopo.app.ui;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import javafx.scene.layout.VBox;
-
 /**
  * @author Andrea Vacondio
  */
-public class TranslationsPane extends VBox {
+public enum TreeNodeType {
+    PROJECT,
+    TEMPLATE,
+    TEMPLATE_PARENT,
+    PO_PARENT,
+    PO
 }

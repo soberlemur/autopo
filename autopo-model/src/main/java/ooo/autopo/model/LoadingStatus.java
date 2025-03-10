@@ -14,41 +14,13 @@ package ooo.autopo.model;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.sejda.commons.util.RequireUtils.require;
-
 /**
  * @author Andrea Vacondio
  */
 public enum LoadingStatus {
     ERROR,
     LOADED,
+    CANCELLED,
     LOADING,
     INITIAL;
-
-    static {
-        INITIAL.setValidDestinationStatus(LOADING, ERROR);
-        LOADING.setValidDestinationStatus(LOADED, ERROR);
-    }
-
-    private final Set<LoadingStatus> validNext = new HashSet<>();
-
-    private void setValidDestinationStatus(LoadingStatus... next) {
-        validNext.addAll(Arrays.asList(next));
-    }
-
-    /**
-     * Moves the current status to the destination one if allowed
-     *
-     * @param dest
-     * @return the destination status
-     */
-    public LoadingStatus moveTo(LoadingStatus dest) {
-        require(validNext.contains(dest),
-                () -> new IllegalStateException("Cannot move status from " + this + " to " + dest));
-        return dest;
-    }
 }

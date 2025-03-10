@@ -21,6 +21,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.Subscription;
 
 import java.util.Objects;
 
@@ -32,9 +33,11 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class TranslationEditPane extends VBox {
+public class TranslateEntryPanel extends VBox {
 
-    public TranslationEditPane() {
+    private Subscription entryModifiedSubscription;
+
+    public TranslateEntryPanel() {
         var sourceView = new TextArea();
         sourceView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
         sourceView.setWrapText(true);
@@ -46,10 +49,14 @@ public class TranslationEditPane extends VBox {
         var aiTranslateButton = new Button(i18n().tr("AI Translate"));
         aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
         aiTranslateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
-        toolbar.getChildren().add(aiTranslateButton);
+        var aiValidateButton = new Button(i18n().tr("AI Validate"));
+        aiValidateButton.getStyleClass().addAll(Styles.SMALL);
+        aiValidateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
+        toolbar.getChildren().addAll(aiTranslateButton, aiValidateButton);
         var translationView = new TextArea();
         translationView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
         translationView.setWrapText(true);
+        translationView.setEditable(false);
         VBox.setVgrow(translationView, Priority.ALWAYS);
 
         getChildren().addAll(sourceView, toolbar, translationView);
@@ -57,10 +64,16 @@ public class TranslationEditPane extends VBox {
         app().runtimeState().poEntry().subscribe((oldEntry, newEntry) -> {
             //let's remove the old binding
             ofNullable(oldEntry).ifPresent(poEntry -> poEntry.translatedValue().unbind());
+            ofNullable(entryModifiedSubscription).ifPresent(Subscription::unsubscribe);
             sourceView.setText(ofNullable(newEntry).map(entry -> entry.untranslatedValue().getValue()).orElse(""));
             translationView.setText(ofNullable(newEntry).map(entry -> entry.translatedValue().getValue()).orElse(""));
+            translationView.setEditable(false);
             if (Objects.nonNull(newEntry)) {
+                translationView.setEditable(true);
                 newEntry.translatedValue().bind(translationView.textProperty());
+                entryModifiedSubscription = translationView.textProperty().subscribe((o, n) -> {
+                    app().currentPoFile().modified(true);
+                });
             }
         });
     }

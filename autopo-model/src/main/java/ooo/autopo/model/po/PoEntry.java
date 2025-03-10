@@ -16,10 +16,7 @@ package ooo.autopo.model.po;
 
 import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.MessageKey;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,7 +28,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static java.util.Optional.ofNullable;
-import static javafx.util.Subscription.combine;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -39,7 +35,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class PoEntry {
 
-    private final SimpleBooleanProperty modified = new SimpleBooleanProperty();
     private final MessageKey key;
     private final Message message;
     private final SimpleStringProperty untranslatedValue = new SimpleStringProperty();
@@ -55,17 +50,6 @@ public class PoEntry {
         this.translatedValue.set(message.getMsgstr());
         this.untranslatedValue.set(message.getMsgId());
         this.comments.addAll(message.getComments());
-        var compositeSubscription = combine(this.translatedValue.subscribe((o, n) -> modified.set(true)), this.comments.subscribe(() -> modified.set(true)));
-        var oneTime = new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    compositeSubscription.unsubscribe();
-                    modified.removeListener(this);
-                }
-            }
-        };
-        modified.addListener(oneTime);
         this.translatedValue.subscribe((o, n) -> message.setMsgstr(n));
         //TODO listener for comments updating the message comments
     }
@@ -84,10 +68,6 @@ public class PoEntry {
 
     public ObservableList<String> comments() {
         return comments;
-    }
-
-    public ObservableBooleanValue modifiedProperty() {
-        return modified;
     }
 
     public boolean contains(String search) {

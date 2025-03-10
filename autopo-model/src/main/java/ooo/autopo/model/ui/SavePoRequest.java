@@ -1,8 +1,8 @@
-package ooo.autopo.model.po;
+package ooo.autopo.model.ui;
 
 /*
  * This file is part of the Autopo project
- * Created 05/02/25
+ * Created 07/03/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,19 +14,10 @@ package ooo.autopo.model.po;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
+import ooo.autopo.model.po.PoFile;
 
 /**
  * @author Andrea Vacondio
  */
-public record PoLoadRequest(PoFile poFile, boolean background) {
-
-    public PoLoadRequest {
-        requireNotNullArg(poFile, "Cannot load a null poFile");
-    }
-
-    public PoLoadRequest(PoFile poFile) {
-        this(poFile, false);
-    }
-
+public record SavePoRequest(PoFile poFile) {
 }

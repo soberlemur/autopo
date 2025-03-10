@@ -16,6 +16,7 @@ module ooo.autopo.app {
     exports ooo.autopo.app.ui;
     exports ooo.autopo.app.ui.editor;
     exports ooo.autopo.app.ui.logs;
+    exports ooo.autopo.app.ui.explorer;
 
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
@@ -46,6 +47,7 @@ module ooo.autopo.app {
     opens ooo.autopo.app.ui.editor to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.config to org.pdfsam.injector;
     opens ooo.autopo.app.ui.notification to org.pdfsam.injector, org.pdfsam.eventstudio;
+    opens ooo.autopo.app.ui.explorer to org.pdfsam.eventstudio, org.pdfsam.injector;
 
     uses ooo.autopo.theme.Theme;
 

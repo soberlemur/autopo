@@ -47,6 +47,7 @@ public class TranslationsPane extends BorderPane {
                             eventStudio().broadcast(TranslationsCountChanged.INSTANCE);
                             eventStudio().broadcast(SetTitleRequest.SET_DEFAULT_TITLE_REQUEST);
                             eventStudio().broadcast(new SetStatusLabelRequest(poFile.poFile().getFileName().toString()));
+                            poFile.modifiedProperty().subscribe(modified -> eventStudio().broadcast(SetTitleRequest.SET_DEFAULT_TITLE_REQUEST));
                         });
                         ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
                     }

@@ -17,6 +17,7 @@ package ooo.autopo.app.ui;
 import jakarta.inject.Inject;
 import javafx.scene.control.SplitPane;
 import ooo.autopo.app.ui.editor.EditorContainer;
+import ooo.autopo.app.ui.explorer.FileExplorer;
 
 /**
  * @author Andrea Vacondio

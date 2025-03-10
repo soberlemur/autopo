@@ -18,6 +18,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.po.PotFile;
 
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -34,6 +35,7 @@ public class Project {
 
     private final Path location;
     private final Properties properties = new Properties();
+    private PotFile pot;
     private final SimpleObjectProperty<LoadingStatus> status = new SimpleObjectProperty<>(LoadingStatus.INITIAL);
     private final SortedSet<PoFile> translations = new TreeSet<>(Comparator.comparing(PoFile::poFile));
 
@@ -55,9 +57,9 @@ public class Project {
     /**
      * Moves to the given loading status
      */
-    public void moveStatusTo(LoadingStatus newStatus) {
+    public void status(LoadingStatus newStatus) {
         requireNonNull(newStatus);
-        status.set(status.getValue().moveTo(newStatus));
+        status.set(newStatus);
     }
 
     public ObservableObjectValue<LoadingStatus> status() {
@@ -78,5 +80,14 @@ public class Project {
 
     public void addTranslation(PoFile poFile) {
         this.translations.add(poFile);
+    }
+
+    public void pot(Path pot) {
+        setProperty(ProjectProperty.TEMPLATE_PATH, location().relativize(pot).toString());
+        this.pot = new PotFile(pot);
+    }
+
+    public PotFile pot() {
+        return this.pot;
     }
 }

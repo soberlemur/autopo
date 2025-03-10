@@ -20,10 +20,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.injector.Auto;
 
 import java.util.Locale;
-import java.util.Optional;
 
+import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
 import static ooo.autopo.app.context.ApplicationContext.APPLICATION_TITLE;
 import static ooo.autopo.app.context.ApplicationContext.app;
+import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -39,12 +41,15 @@ public class ApplicationTitleController {
             if (isNotBlank(request.title())) {
                 primaryStage.setTitle(APPLICATION_TITLE + " - " + request.title());
             } else {
-                primaryStage.setTitle(Optional.ofNullable(app().currentPoFile())
-                                              .map(PoFile::locale)
-                                              .map(Locale::getDisplayName)
-                                              .map(StringUtils::capitalize)
-                                              .map(l -> APPLICATION_TITLE + " - " + l)
-                                              .orElse(APPLICATION_TITLE));
+                var title = ofNullable(app().currentPoFile()).map(PoFile::locale)
+                                                             .map(Locale::getDisplayName)
+                                                             .map(StringUtils::capitalize)
+                                                             .map(l -> APPLICATION_TITLE + " - " + l)
+                                                             .orElse(APPLICATION_TITLE);
+                if (nonNull(app().currentPoFile()) && app().currentPoFile().modifiedProperty().get()) {
+                    title = title + " (" + i18n().tr("modificato") + ")";
+                }
+                primaryStage.setTitle(title);
             }
         });
     }

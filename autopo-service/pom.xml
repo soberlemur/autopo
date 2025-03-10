@@ -61,5 +61,9 @@
             <groupId>org.pdfsam</groupId>
             <artifactId>pdfsam-persistence</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+        </dependency>
     </dependencies>
 </project>

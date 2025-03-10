@@ -28,4 +28,5 @@ module ooo.autopo.service {
     requires org.tinylog.api;
     requires org.pdfsam.persistence;
     requires org.sejda.commons;
+    requires javafx.graphics;
 }

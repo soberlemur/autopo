@@ -17,7 +17,7 @@ package ooo.autopo.app.ui.editor;
 import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.theme.Styles;
 import jakarta.inject.Inject;
-import javafx.beans.binding.Bindings;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,17 +25,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ooo.autopo.app.DebouncedStringProperty;
 import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.ui.SavePoRequest;
 import ooo.autopo.model.ui.SearchTranslation;
 import ooo.autopo.model.ui.TranslationsCountChanged;
-import ooo.autopo.model.ui.log.SaveLogRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
+import static javafx.beans.binding.Bindings.not;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -55,6 +57,13 @@ public class TranslationsTableToolbar extends HBox {
         var saveItem = new TranslationsTableToolbar.SaveButton();
         saveItem.getStyleClass().addAll(Styles.SMALL);
         saveItem.setDefaultButton(true);
+        app().runtimeState().poFile().subscribe(poFile -> {
+            saveItem.disableProperty().unbind();
+            saveItem.setDisable(isNull(poFile));
+            if (nonNull(poFile)) {
+                saveItem.disableProperty().bind(not(poFile.modifiedProperty()));
+            }
+        });
         saveItem.setDisable(true);
         var search = new HBox();
         search.setAlignment(Pos.CENTER);
@@ -68,14 +77,13 @@ public class TranslationsTableToolbar extends HBox {
         searchField.textProperty().subscribe(filterProperty::set);
         searchField.setOnAction(e -> eventStudio().broadcast(new SearchTranslation(searchField.getText())));
         filterProperty.subscribe((o, n) -> eventStudio().broadcast(new SearchTranslation(n)));
-       
+
         var searchDismiss = new Button();
         searchDismiss.getStyleClass().add("search-dismiss");
         searchDismiss.setGraphic(new FontIcon(FluentUiRegularAL.DISMISS_16));
         searchDismiss.getStyleClass().addAll(Styles.SMALL, Styles.FLAT);
         searchDismiss.setFocusTraversable(true);
-        searchDismiss.visibleProperty()
-                     .bind(Bindings.createBooleanBinding(() -> StringUtils.isNotBlank(searchField.textProperty().get()), searchField.textProperty()));
+        searchDismiss.visibleProperty().bind(createBooleanBinding(() -> isNotBlank(searchField.textProperty().get()), searchField.textProperty()));
         searchDismiss.setOnAction(e -> searchField.setText(""));
         searchField.setRight(searchDismiss);
         search.getChildren().addAll(searchField);
@@ -92,7 +100,7 @@ public class TranslationsTableToolbar extends HBox {
 
     @EventListener
     public void onTranslationsChanged(TranslationsCountChanged e) {
-        ofNullable(app().currentPoFile()).map(PoFile::entries).ifPresentOrElse(po -> {
+        var text = ofNullable(app().currentPoFile()).map(PoFile::entries).map(po -> {
             int entries = 0;
             int translated = 0;
             for (var entry : po) {
@@ -101,9 +109,10 @@ public class TranslationsTableToolbar extends HBox {
                     translated++;
                 }
             }
-            status.setText(i18n().tr("Translated {0} out of {1}", Integer.toString(translated), Integer.toString(entries)));
+            return i18n().tr("Translated {0} out of {1}", Integer.toString(translated), Integer.toString(entries));
 
-        }, () -> status.setText(""));
+        }).orElse("");
+        Platform.runLater(() -> status.setText(text));
     }
 
     static class SaveButton extends Button {
@@ -111,8 +120,7 @@ public class TranslationsTableToolbar extends HBox {
             setText(i18n().tr("_Save"));
             setGraphic(new FontIcon(FluentUiRegularMZ.SAVE_20));
             getStyleClass().addAll(Styles.SMALL);
-            //TODO
-            setOnAction(e -> eventStudio().broadcast(new SaveLogRequest()));
+            setOnAction(e -> eventStudio().broadcast(new SavePoRequest(app().currentPoFile())));
         }
     }
 }

@@ -28,7 +28,7 @@ public class EditorPane extends SplitPane {
     private PoFile poFile;
 
     @Inject
-    public EditorPane(TranslationsPane translationsPane, TranslationEditPane translationEditPane) {
+    public EditorPane(TranslationsPane translationsPane, TranslateEntryPanel translationEditPane) {
         this.setOrientation(Orientation.VERTICAL);
         this.setDividerPositions(0.75);
         this.getItems().addAll(translationsPane, translationEditPane);
