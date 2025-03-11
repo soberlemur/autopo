@@ -25,6 +25,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import ooo.autopo.model.po.PoEntry;
+import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.ui.SearchTranslation;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -108,5 +109,11 @@ public class TranslationsTable extends TableView<PoEntry> {
                 }
             }
         }
+    }
+
+    @EventListener(priority = Integer.MIN_VALUE)
+    public void onPoUpdate(PoUpdateRequest request) {
+        getSelectionModel().clearSelection();
+        app().runtimeState().poEntry(null);
     }
 }

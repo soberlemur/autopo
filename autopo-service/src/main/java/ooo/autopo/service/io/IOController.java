@@ -18,9 +18,11 @@ import com.soberlemur.potentilla.catalog.parse.ParseException;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
 import ooo.autopo.model.po.PoLoadRequest;
+import ooo.autopo.model.po.PoSaveRequest;
+import ooo.autopo.model.po.PoUpdateRequest;
+import ooo.autopo.model.po.PotLoadRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
-import ooo.autopo.model.ui.SavePoRequest;
 import ooo.autopo.model.ui.TranslationsCountChanged;
 import ooo.autopo.service.ServiceExceptionHandler;
 import org.pdfsam.eventstudio.annotation.EventListener;
@@ -55,7 +57,7 @@ public class IOController {
 
     @EventListener
     public void loadPo(PoLoadRequest request) {
-        Logger.trace("PO load request received");
+        Logger.trace("Po load request received");
         requireNotNullArg(request.poFile(), "Cannot load a null poFile");
         executor(request.background()).submit(() -> {
             try {
@@ -67,7 +69,33 @@ public class IOController {
     }
 
     @EventListener
-    public void savePo(SavePoRequest request) {
+    public void loadPot(PotLoadRequest request) {
+        Logger.trace("Pot load request received");
+        requireNotNullArg(request.potFile(), "Cannot load a null poFile");
+        executor(true).submit(() -> {
+            try {
+                ioService.load(request.potFile());
+            } catch (IOException | ParseException e) {
+                exceptionHandler.accept(e, i18n().tr("An error occurred loading .pot file '{0}'", request.potFile().toString()));
+            }
+        });
+    }
+
+    @EventListener
+    public void updatePo(PoUpdateRequest request) {
+        Logger.trace("Po update load request received");
+        executor(true).submit(() -> {
+            try {
+                ioService.updatePoFromTemplate(request.poFile(), request.potFile());
+                Platform.runLater(() -> eventStudio().broadcast(TranslationsCountChanged.INSTANCE));
+            } catch (IOException | ParseException e) {
+                exceptionHandler.accept(e, i18n().tr("An error occurred updating .po file '{0}'", request.poFile().toString()));
+            }
+        });
+    }
+
+    @EventListener
+    public void savePo(PoSaveRequest request) {
         Logger.trace("Po save request received");
         requireNotNullArg(request.poFile(), "Cannot save a null poFile");
         request.poFile().modified(false);

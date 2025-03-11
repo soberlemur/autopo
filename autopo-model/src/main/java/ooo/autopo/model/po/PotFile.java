@@ -16,7 +16,7 @@ package ooo.autopo.model.po;
 
 import com.soberlemur.potentilla.Catalog;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ObservableObjectValue;
 import ooo.autopo.model.LoadingStatus;
 
 import java.nio.file.Path;
@@ -79,15 +79,11 @@ public class PotFile {
         return false;
     }
 
-    public ObservableValue<LoadingStatus> status() {
+    public ObservableObjectValue<LoadingStatus> status() {
         return this.status;
     }
 
-    public void cancel() {
-        this.atomicState.set(LoadingStatus.CANCELLED);
-    }
-
-    public boolean isCancelled() {
-        return this.atomicState.get() == LoadingStatus.CANCELLED;
+    public boolean isLoaded() {
+        return this.atomicState.get() == LoadingStatus.LOADED;
     }
 }

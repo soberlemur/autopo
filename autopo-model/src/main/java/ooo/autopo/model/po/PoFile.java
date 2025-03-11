@@ -74,7 +74,7 @@ public class PoFile {
         requireNonNull(catalog);
         this.catalog = catalog;
         this.entries().clear();
-        this.catalog.stream().map(PoEntry::new).forEachOrdered(e -> {
+        this.catalog.stream().filter(e -> !e.isObsolete()).map(PoEntry::new).forEachOrdered(e -> {
             this.addEntry(e);
             e.onLocaleUpdate(this.locale());
         });
@@ -130,8 +130,8 @@ public class PoFile {
         this.atomicState.set(LoadingStatus.CANCELLED);
     }
 
-    public boolean isCancelled() {
-        return this.atomicState.get() == LoadingStatus.CANCELLED;
+    public boolean isLoaded() {
+        return this.atomicState.get() == LoadingStatus.LOADED;
     }
 
     public ObservableBooleanValue modifiedProperty() {
@@ -143,7 +143,7 @@ public class PoFile {
     }
 
     public void updateFromTemplate(PotFile pot) {
-        //TODO require not modified
+        //TODO require not modified?
         this.catalog.updateFromTemplate(pot.catalog());
         //refresh the catalog
         this.catalog(this.catalog);

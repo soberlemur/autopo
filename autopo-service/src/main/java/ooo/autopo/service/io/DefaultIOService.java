@@ -24,6 +24,7 @@ import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.io.IOEventType;
 import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.po.PotFile;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
 import ooo.autopo.service.ai.AIService;
@@ -50,6 +51,7 @@ import static ooo.autopo.model.LoadingStatus.INITIAL;
 import static ooo.autopo.model.LoadingStatus.LOADED;
 import static ooo.autopo.model.LoadingStatus.LOADING;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
+import static org.sejda.commons.util.RequireUtils.requireIOCondition;
 
 /**
  * @author Andrea Vacondio
@@ -84,6 +86,36 @@ public class DefaultIOService implements IOService {
             }
         } else {
             Logger.trace("Skipping .po file {} with status ", poFile.poFile().toString(), poFile.status());
+        }
+    }
+
+    @Override
+    public void updatePoFromTemplate(PoFile poFile, PotFile potFile) throws IOException {
+        requireIOCondition(poFile.isLoaded(), "Po file is in an invalid state");
+        requireIOCondition(potFile.isLoaded(), "Template is in an invalid state");
+        Logger.debug(i18n().tr("Updating po file {} from template {}"), poFile.poFile().toString(), potFile.potFile().toString());
+        poFile.updateFromTemplate(potFile);
+        Logger.info(i18n().tr("Po file {} updated"), poFile.poFile().toString());
+        save(poFile);
+        poFile.updatePercentageOfTranslation();
+    }
+
+    @Override
+    public void load(PotFile potFile) throws IOException, ParseException {
+        if (potFile.status(INITIAL, LOADING)) {
+            Logger.debug(i18n().tr("Loading .pot file {}"), potFile.potFile().toString());
+            try {
+                Catalog catalog = new PoParser().parseCatalog(potFile.potFile().toFile());
+                potFile.catalog(catalog);
+                potFile.status(LOADED);
+                eventStudio().broadcast(new IOEvent(potFile.potFile(), IOEventType.LOADED, FileType.POT));
+                Logger.info(i18n().tr("File {} loaded"), potFile.potFile().toString());
+            } catch (IOException | ParseException e) {
+                potFile.status(ERROR);
+                throw e;
+            }
+        } else {
+            Logger.trace("Skipping .pot file {} with status ", potFile.potFile().toString(), potFile.status());
         }
     }
 
@@ -125,7 +157,7 @@ public class DefaultIOService implements IOService {
                         project.addTranslation(new PoFile(file));
                         Logger.trace("Found .po file '{}'", file.toString());
                     }
-                    if (FileType.POT.matches(file.getFileName().toString()) && isNull(project.pot())) {
+                    if (FileType.POT.matches(file.getFileName().toString()) && isNull(project.pot().get())) {
                         project.pot(file);
                         Logger.debug(i18n().tr("Found template file '{}'"), project.getProperty(ProjectProperty.TEMPLATE_PATH));
                     }

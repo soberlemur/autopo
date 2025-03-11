@@ -17,11 +17,13 @@ package ooo.autopo.app;
 import javafx.util.Subscription;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.po.PoLoadRequest;
+import ooo.autopo.model.po.PotLoadRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import org.pdfsam.injector.Auto;
 
 import java.util.Optional;
 
+import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
@@ -39,6 +41,11 @@ public class ProjectLoadController {
             subscription[0] = r.project().status().subscribe(status -> {
                 if (status == LoadingStatus.LOADED) {
                     r.project().translations().stream().map(e -> new PoLoadRequest(e, true)).forEach(eventStudio()::broadcast);
+                    r.project().pot().subscribe(pot -> {
+                        if (nonNull(pot)) {
+                            eventStudio().broadcast(new PotLoadRequest(p.pot().get()));
+                        }
+                    });
                     ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
                 }
             });

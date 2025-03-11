@@ -1,8 +1,8 @@
-package ooo.autopo.model.ui;
+package ooo.autopo.model.po;
 
 /*
  * This file is part of the Autopo project
- * Created 07/03/25
+ * Created 10/03/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,10 +14,8 @@ package ooo.autopo.model.ui;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import ooo.autopo.model.po.PoFile;
-
 /**
  * @author Andrea Vacondio
  */
-public record SavePoRequest(PoFile poFile) {
+public record PoUpdateRequest(PoFile poFile, PotFile potFile) {
 }

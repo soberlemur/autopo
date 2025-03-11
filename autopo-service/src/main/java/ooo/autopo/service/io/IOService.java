@@ -16,6 +16,7 @@ package ooo.autopo.service.io;
 
 import com.soberlemur.potentilla.catalog.parse.ParseException;
 import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.po.PotFile;
 import ooo.autopo.model.project.Project;
 
 import java.io.IOException;
@@ -24,10 +25,13 @@ import java.io.IOException;
  * @author Andrea Vacondio
  */
 public interface IOService {
+    void load(Project project) throws IOException;
+
+    void load(PotFile pot) throws IOException;
 
     void load(PoFile poFile) throws IOException, ParseException;
 
-    void load(Project project) throws IOException;
+    void updatePoFromTemplate(PoFile poFile, PotFile potFile) throws IOException;
 
     void save(PoFile poFile) throws IOException;
 

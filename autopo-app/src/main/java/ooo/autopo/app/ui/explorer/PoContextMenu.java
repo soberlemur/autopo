@@ -17,7 +17,7 @@ package ooo.autopo.app.ui.explorer;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import ooo.autopo.model.po.PoFile;
-import ooo.autopo.model.ui.SavePoRequest;
+import ooo.autopo.model.po.PoSaveRequest;
 
 import static javafx.beans.binding.Bindings.not;
 import static ooo.autopo.app.context.ApplicationContext.app;
@@ -37,7 +37,7 @@ public class PoContextMenu extends ContextMenu {
 
         var savePo = new MenuItem(i18n().tr("Save"));
         savePo.disableProperty().bind(not(poFile.modifiedProperty()));
-        savePo.setOnAction(e -> eventStudio().broadcast(new SavePoRequest(poFile)));
+        savePo.setOnAction(e -> eventStudio().broadcast(new PoSaveRequest(poFile)));
         this.getItems().addAll(editPo, savePo);
     }
 }

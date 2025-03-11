@@ -208,9 +208,9 @@ public class FileExplorer extends BorderPane {
     }
 
     private void actualizeTemplate() {
-        if (nonNull(app().currentProject().pot())) {
+        if (nonNull(app().currentProject().pot().get())) {
             templateRootItem.getChildren().clear();
-            templateRootItem.getChildren().add(new TreeItem<>(TreeNode.ofPot(app().currentProject().pot(), this::selectTemplate)));
+            templateRootItem.getChildren().add(new TreeItem<>(TreeNode.ofPot(app().currentProject().pot().get(), this::selectTemplate)));
         }
     }
 

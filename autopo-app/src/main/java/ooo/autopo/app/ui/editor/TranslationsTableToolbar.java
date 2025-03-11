@@ -24,8 +24,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ooo.autopo.app.DebouncedStringProperty;
+import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.po.PoFile;
-import ooo.autopo.model.ui.SavePoRequest;
+import ooo.autopo.model.po.PoSaveRequest;
+import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.ui.SearchTranslation;
 import ooo.autopo.model.ui.TranslationsCountChanged;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
@@ -36,8 +38,11 @@ import org.pdfsam.eventstudio.annotation.EventListener;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
+import static javafx.beans.binding.Bindings.and;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
+import static javafx.beans.binding.Bindings.isNotNull;
 import static javafx.beans.binding.Bindings.not;
+import static javafx.beans.binding.Bindings.notEqual;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -54,17 +59,24 @@ public class TranslationsTableToolbar extends HBox {
     @Inject
     public TranslationsTableToolbar() {
         this.getStyleClass().addAll("tool-bar", "translations-toolbar");
-        var saveItem = new TranslationsTableToolbar.SaveButton();
-        saveItem.getStyleClass().addAll(Styles.SMALL);
-        saveItem.setDefaultButton(true);
+        var saveButton = new TranslationsTableToolbar.SaveButton();
         app().runtimeState().poFile().subscribe(poFile -> {
-            saveItem.disableProperty().unbind();
-            saveItem.setDisable(isNull(poFile));
+            saveButton.disableProperty().unbind();
+            saveButton.setDisable(isNull(poFile));
             if (nonNull(poFile)) {
-                saveItem.disableProperty().bind(not(poFile.modifiedProperty()));
+                saveButton.disableProperty().bind(not(poFile.modifiedProperty()));
             }
         });
-        saveItem.setDisable(true);
+
+        var updateButton = new TranslationsTableToolbar.UpdateButton();
+        app().runtimeState().project().subscribe(project -> {
+            if (nonNull(project)) {
+                project.pot().subscribe((o, n) -> {
+                    updateButton.disableProperty().bind(and(isNotNull(app().runtimeState().poFile()), notEqual(n.status(), LoadingStatus.LOADED)));
+                });
+            }
+        });
+
         var search = new HBox();
         search.setAlignment(Pos.CENTER);
         HBox.setHgrow(search, Priority.ALWAYS);
@@ -94,7 +106,7 @@ public class TranslationsTableToolbar extends HBox {
             }
         });
 
-        getChildren().addAll(saveItem, search, status);
+        getChildren().addAll(saveButton, updateButton, search, status);
         eventStudio().addAnnotatedListeners(this);
     }
 
@@ -120,7 +132,19 @@ public class TranslationsTableToolbar extends HBox {
             setText(i18n().tr("_Save"));
             setGraphic(new FontIcon(FluentUiRegularMZ.SAVE_20));
             getStyleClass().addAll(Styles.SMALL);
-            setOnAction(e -> eventStudio().broadcast(new SavePoRequest(app().currentPoFile())));
+            setDefaultButton(true);
+            getStyleClass().addAll(Styles.SMALL);
+            setOnAction(e -> eventStudio().broadcast(new PoSaveRequest(app().currentPoFile())));
+        }
+    }
+
+    static class UpdateButton extends Button {
+        public UpdateButton() {
+            setText(i18n().tr("_Update from pot"));
+            getStyleClass().addAll(Styles.SMALL);
+            setDisable(true);
+            getStyleClass().addAll(Styles.SMALL);
+            setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentPoFile(), app().currentProject().pot().get())));
         }
     }
 }

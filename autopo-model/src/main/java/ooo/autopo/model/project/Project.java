@@ -35,7 +35,7 @@ public class Project {
 
     private final Path location;
     private final Properties properties = new Properties();
-    private PotFile pot;
+    private final SimpleObjectProperty<PotFile> pot = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<LoadingStatus> status = new SimpleObjectProperty<>(LoadingStatus.INITIAL);
     private final SortedSet<PoFile> translations = new TreeSet<>(Comparator.comparing(PoFile::poFile));
 
@@ -84,10 +84,10 @@ public class Project {
 
     public void pot(Path pot) {
         setProperty(ProjectProperty.TEMPLATE_PATH, location().relativize(pot).toString());
-        this.pot = new PotFile(pot);
+        this.pot.set(new PotFile(pot));
     }
 
-    public PotFile pot() {
+    public ObservableObjectValue<PotFile> pot() {
         return this.pot;
     }
 }
