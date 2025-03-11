@@ -96,7 +96,7 @@ public class TreeNode {
 
     public static TreeNode ofPo(PoFile poFile, Runnable onDoubleClickAction, ContextMenu contextMenu) {
         var progress = new ProgressBar(0);
-        poFile.translationPercentage().subscribe((o, n) -> {
+        poFile.translationPercentage().subscribe(n -> {
             Platform.runLater(() -> progress.setProgress(n.doubleValue()));
         });
         progress.getStyleClass().add(Styles.MEDIUM);
