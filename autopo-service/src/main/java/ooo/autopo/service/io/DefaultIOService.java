@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.tinylog.Logger;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -125,7 +126,8 @@ public class DefaultIOService implements IOService {
         if (!poFile.catalog().header().contains(Header.LANGUAGE)) {
             poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale()));
         }
-        new PoWriter().write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile()));
+        poFile.catalog().header().setValue(Header.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        new PoWriter().write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile(), StandardCharsets.UTF_8));
         eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
         Logger.info(i18n().tr("File {} saved"), poFile.poFile().toString());
     }
