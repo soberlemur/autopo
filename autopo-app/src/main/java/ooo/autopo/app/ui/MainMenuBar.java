@@ -26,6 +26,7 @@ import javafx.scene.input.KeyCombination;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.project.Project;
+import ooo.autopo.model.project.RenameProjectRequest;
 import ooo.autopo.model.ui.SetOverlayItem;
 import ooo.autopo.service.project.RecentsService;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static java.util.Optional.ofNullable;
+import static javafx.beans.binding.Bindings.isNull;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.io.FileType.OOO;
@@ -56,7 +58,7 @@ public class MainMenuBar extends MenuBar {
         exit.setId("exitMenuItem");
         exit.setOnAction(e -> Platform.exit());
 
-        var projects = new Menu(i18n().tr("_Projects"));
+        var projects = new Menu(i18n().tr("_Project"));
         projects.setId("projectsMenuItem");
         var open = new MenuItem(i18n().tr("_Open"));
         open.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
@@ -68,6 +70,11 @@ public class MainMenuBar extends MenuBar {
                                                                                 .ifPresent(app().runtimeState()::project);
         });
 
+        var rename = new MenuItem(i18n().tr("_Rename"));
+        rename.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
+        rename.setOnAction(e -> eventStudio().broadcast(RenameProjectRequest.INSTANCE));
+        rename.disableProperty().bind(isNull(app().runtimeState().project()));
+
         recent = new Menu(i18n().tr("Recen_ts"));
         recent.setId("recentsMenuItem");
         populateRecents();
@@ -78,7 +85,7 @@ public class MainMenuBar extends MenuBar {
         });
         clear.setId("clearWorkspaces");
 
-        projects.getItems().addAll(open, new SeparatorMenuItem(), recent, clear);
+        projects.getItems().addAll(open, rename, new SeparatorMenuItem(), recent, clear);
 
         var fileMenu = new Menu(i18n().tr("File"));
         fileMenu.getItems().addAll(projects, new SeparatorMenuItem(), exit);

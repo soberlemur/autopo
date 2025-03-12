@@ -41,6 +41,7 @@ import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.ProjectProperty;
+import ooo.autopo.model.project.RenameProjectRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
@@ -89,19 +90,7 @@ public class FileExplorer extends BorderPane {
         this.setTop(toolbar);
 
         var rename = new MenuItem(i18n().tr("Rename project"));
-        rename.setOnAction(e -> {
-            var dialog = new RenameProjectDialog(root.getValue().displayTextProperty().get());
-            dialog.initOwner(getScene().getWindow());
-            dialog.showAndWait().ifPresent(name -> {
-                if (StringUtils.isNotBlank(name)) {
-                    ofNullable(app().currentProject()).ifPresent(p -> {
-                        p.setProperty(ProjectProperty.NAME, name);
-                        actualizeRootName();
-                        eventStudio().broadcast(new SaveProjectRequest(p));
-                    });
-                }
-            });
-        });
+        rename.setOnAction(e -> onRenameRequest(RenameProjectRequest.INSTANCE));
         var renameProjectContextMenu = new ContextMenu(rename);
 
         var selectTemplate = new MenuItem(i18n().tr("Select template"));
@@ -198,6 +187,21 @@ public class FileExplorer extends BorderPane {
                     actualizeTranslations();
                     traverseTreeItems(root, true);
                     ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
+                });
+            }
+        });
+    }
+
+    @EventListener
+    public void onRenameRequest(RenameProjectRequest request) {
+        var dialog = new RenameProjectDialog(root.getValue().displayTextProperty().get());
+        dialog.initOwner(getScene().getWindow());
+        dialog.showAndWait().ifPresent(name -> {
+            if (StringUtils.isNotBlank(name)) {
+                ofNullable(app().currentProject()).ifPresent(p -> {
+                    p.setProperty(ProjectProperty.NAME, name);
+                    actualizeRootName();
+                    eventStudio().broadcast(new SaveProjectRequest(p));
                 });
             }
         });
