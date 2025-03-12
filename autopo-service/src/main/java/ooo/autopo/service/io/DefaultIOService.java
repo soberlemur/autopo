@@ -43,13 +43,13 @@ import java.util.List;
 import java.util.Locale;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.LoadingStatus.ERROR;
 import static ooo.autopo.model.LoadingStatus.INITIAL;
 import static ooo.autopo.model.LoadingStatus.LOADED;
 import static ooo.autopo.model.LoadingStatus.LOADING;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 import static org.sejda.commons.util.RequireUtils.requireIOCondition;
 
@@ -121,8 +121,10 @@ public class DefaultIOService implements IOService {
 
     @Override
     public void save(PoFile poFile) throws IOException {
-        //TODO make sure to add the standard language header
         Logger.debug(i18n().tr("Saving po file {}"), poFile.poFile().toAbsolutePath().toString());
+        if (!poFile.catalog().header().contains(Header.LANGUAGE)) {
+            poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale()));
+        }
         new PoWriter().write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile()));
         eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
         Logger.info(i18n().tr("File {} saved"), poFile.poFile().toString());
@@ -224,7 +226,7 @@ public class DefaultIOService implements IOService {
     }
 
     private Locale localeFromString(String languageHeader) {
-        if (nonNull(languageHeader) && !languageHeader.isEmpty()) {
+        if (isNotBlank(languageHeader)) {
             Logger.debug(i18n().tr("Trying to guess locale from '{}'"), languageHeader);
             var headerFragments = languageHeader.split("[@_]");
             if (headerFragments.length > 0) {
@@ -244,5 +246,18 @@ public class DefaultIOService implements IOService {
             }
         }
         return null;
+    }
+
+    private String localeHeaderFromLocale(Locale locale) {
+        String languageTag = locale.getLanguage();
+
+        if (isNotBlank(locale.getCountry())) {
+            languageTag += "_" + locale.getCountry().toUpperCase();
+        }
+
+        if (isNotBlank(locale.getVariant())) {
+            languageTag += "@" + locale.getVariant().toLowerCase();
+        }
+        return languageTag;
     }
 }
