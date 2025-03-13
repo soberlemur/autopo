@@ -24,6 +24,8 @@ import javafx.util.Subscription;
 import ooo.autopo.model.consistency.ConsistencyValidator;
 import org.sejda.commons.util.RequireUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -39,7 +41,10 @@ public class PoEntry {
     private final Message message;
     private final SimpleStringProperty untranslatedValue = new SimpleStringProperty();
     private final SimpleStringProperty translatedValue = new SimpleStringProperty();
-    private final ObservableList<String> comments = FXCollections.observableArrayList();
+    private final List<String> comments = new ArrayList<>();
+    private final List<String> formats = new ArrayList<>();
+    private final List<String> extractedComments = new ArrayList<>();
+    private final List<String> sourceReferences = new ArrayList<>();
     private final ObservableList<String> warnings = FXCollections.observableArrayList();
     private Subscription warningsUpdaterSubscription;
 
@@ -50,6 +55,9 @@ public class PoEntry {
         this.translatedValue.set(message.getMsgstr());
         this.untranslatedValue.set(message.getMsgId());
         this.comments.addAll(message.getComments());
+        this.formats.addAll(message.getFormats());
+        this.extractedComments.addAll(message.getExtractedComments());
+        this.sourceReferences.addAll(message.getSourceReferences());
         this.translatedValue.subscribe((o, n) -> message.setMsgstr(n));
         //TODO listener for comments updating the message comments
     }
@@ -66,8 +74,20 @@ public class PoEntry {
         return translatedValue;
     }
 
-    public ObservableList<String> comments() {
+    public List<String> comments() {
         return comments;
+    }
+
+    public List<String> extractedComments() {
+        return extractedComments;
+    }
+
+    public List<String> sourceReferences() {
+        return sourceReferences;
+    }
+
+    public List<String> formats() {
+        return formats;
     }
 
     public boolean contains(String search) {

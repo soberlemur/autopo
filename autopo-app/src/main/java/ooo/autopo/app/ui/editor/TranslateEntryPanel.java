@@ -16,12 +16,18 @@ package ooo.autopo.app.ui.editor;
 
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.util.Subscription;
+import ooo.autopo.app.ui.Style;
 
 import java.util.Objects;
 
@@ -33,11 +39,15 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class TranslateEntryPanel extends VBox {
+public class TranslateEntryPanel extends SplitPane {
 
     private Subscription entryModifiedSubscription;
 
     public TranslateEntryPanel() {
+        this.setOrientation(Orientation.HORIZONTAL);
+        this.setDividerPositions(0.90);
+
+        var entriesPanel = new VBox();
         var sourceView = new TextArea();
         sourceView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
         sourceView.setWrapText(true);
@@ -59,7 +69,15 @@ public class TranslateEntryPanel extends VBox {
         translationView.setEditable(false);
         VBox.setVgrow(translationView, Priority.ALWAYS);
 
-        getChildren().addAll(sourceView, toolbar, translationView);
+        entriesPanel.getChildren().addAll(sourceView, toolbar, translationView);
+
+        var commentsFlow = new VBox();
+        commentsFlow.getStyleClass().addAll(Style.CONTAINER.css());
+        var commentsScroll = new ScrollPane(commentsFlow);
+        commentsScroll.setFitToWidth(true);
+        commentsScroll.setFitToHeight(true);
+
+        this.getItems().addAll(entriesPanel, commentsScroll);
 
         app().runtimeState().poEntry().subscribe((oldEntry, newEntry) -> {
             //let's remove the old binding
@@ -68,13 +86,32 @@ public class TranslateEntryPanel extends VBox {
             sourceView.setText(ofNullable(newEntry).map(entry -> entry.untranslatedValue().getValue()).orElse(""));
             translationView.setText(ofNullable(newEntry).map(entry -> entry.translatedValue().getValue()).orElse(""));
             translationView.setEditable(false);
+            commentsFlow.getChildren().clear();
             if (Objects.nonNull(newEntry)) {
                 translationView.setEditable(true);
                 newEntry.translatedValue().bind(translationView.textProperty());
-                entryModifiedSubscription = translationView.textProperty().subscribe((o, n) -> {
-                    app().currentPoFile().modified(true);
-                });
+                entryModifiedSubscription = translationView.textProperty().subscribe((o, n) -> app().currentPoFile().modified(true));
+
+                commentsFlow.getChildren().add(createSection(i18n().tr("Comments"), newEntry.comments()));
+                commentsFlow.getChildren().add(createSection(i18n().tr("Extracted comments"), newEntry.comments()));
+                commentsFlow.getChildren().add(createSection(i18n().tr("Formats"), newEntry.formats()));
+                commentsFlow.getChildren().add(createSection(i18n().tr("Source reference"), newEntry.comments()));
             }
         });
+    }
+
+    private static TextFlow createSection(String title, Iterable<String> items) {
+        var section = new TextFlow();
+
+        var titleText = new Text(title + "\n");
+        titleText.getStyleClass().add(Styles.TEXT_CAPTION);
+        section.getChildren().add(titleText);
+
+        for (String item : items) {
+            Text itemText = new Text(item + "\n");
+            section.getChildren().add(itemText);
+        }
+
+        return section;
     }
 }
