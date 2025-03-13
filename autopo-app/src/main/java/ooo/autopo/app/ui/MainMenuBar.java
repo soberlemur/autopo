@@ -16,6 +16,7 @@ package ooo.autopo.app.ui;
 
 import jakarta.inject.Inject;
 import javafx.application.Platform;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -34,6 +35,7 @@ import org.pdfsam.eventstudio.annotation.EventListener;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 
 import static java.util.Optional.ofNullable;
 import static javafx.beans.binding.Bindings.isNull;
@@ -63,11 +65,21 @@ public class MainMenuBar extends MenuBar {
         var open = new MenuItem(i18n().tr("_Open"));
         open.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
         open.setOnAction(e -> {
-            var directoryChooser = Choosers.directoryChooser(i18n().tr("Select the project directory"));
+            var translations = ofNullable(app().currentProject()).map(Project::translations).orElse(Collections.emptySortedSet());
+            var hasModified = translations.stream().anyMatch(poFile -> poFile.modifiedProperty().get());
+            var openChooser = true;
+            if (hasModified) {
+                var dialog = new DiscardModifiedPoFilesConfirmationDialog();
+                dialog.initOwner(getScene().getWindow());
+                openChooser = dialog.showAndWait().filter(b -> b.getButtonData() == ButtonBar.ButtonData.YES).isPresent();
+            }
+            if (openChooser) {
+                var directoryChooser = Choosers.directoryChooser(i18n().tr("Select the project directory"));
 
-            ofNullable(directoryChooser.showDialog(this.getScene().getWindow())).filter(Files::isDirectory)
-                                                                                .map(Project::new)
-                                                                                .ifPresent(app().runtimeState()::project);
+                ofNullable(directoryChooser.showDialog(this.getScene().getWindow())).filter(Files::isDirectory)
+                                                                                    .map(Project::new)
+                                                                                    .ifPresent(app().runtimeState()::project);
+            }
         });
 
         var rename = new MenuItem(i18n().tr("_Rename"));
@@ -126,7 +138,20 @@ public class MainMenuBar extends MenuBar {
 
     MenuItem recentProjectMenuItem(String path) {
         var item = new MenuItem(StringUtils.abbreviate(path, path.length(), 60));
-        item.setOnAction(a -> app().runtimeState().project(new Project(Paths.get(path))));
+        item.setOnAction(a -> {
+            var translations = ofNullable(app().currentProject()).map(Project::translations).orElse(Collections.emptySortedSet());
+            var hasModified = translations.stream().anyMatch(poFile -> poFile.modifiedProperty().get());
+            var openChooser = true;
+            if (hasModified) {
+                var dialog = new DiscardModifiedPoFilesConfirmationDialog();
+                dialog.initOwner(getScene().getWindow());
+                openChooser = dialog.showAndWait().filter(b -> b.getButtonData() == ButtonBar.ButtonData.YES).isPresent();
+            }
+            if (openChooser) {
+                app().runtimeState().project(new Project(Paths.get(path)));
+            }
+
+        });
         item.setMnemonicParsing(false);
         return item;
     }
