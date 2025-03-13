@@ -15,12 +15,14 @@ package ooo.autopo.model.po;
  */
 
 import com.soberlemur.potentilla.Catalog;
+import com.soberlemur.potentilla.Message;
+import com.soberlemur.potentilla.MessageKey;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import ooo.autopo.model.LoadingStatus;
@@ -32,6 +34,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
+import static org.sejda.commons.util.RequireUtils.requireState;
 
 /**
  * @author Andrea Vacondio
@@ -99,6 +102,20 @@ public class PoFile {
     }
 
     /**
+     * Clears the obsolete messages from the catalog. No need to check the entries collection since we dont add obsolete entries there.
+     */
+    public boolean clearObsolete() {
+        requireState(isLoaded(), "Cannot clear obsolete messages from a non loaded po file");
+        var obsolete = catalog.stream().filter(Message::isObsolete).map(MessageKey::new).toList();
+        if (!obsolete.isEmpty()) {
+            obsolete.forEach(catalog::remove);
+            this.modified(true);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Moves to the given loading status
      */
     public void status(LoadingStatus newStatus) {
@@ -122,7 +139,7 @@ public class PoFile {
         return false;
     }
 
-    public ObservableValue<LoadingStatus> status() {
+    public ObservableObjectValue<LoadingStatus> status() {
         return this.status;
     }
 

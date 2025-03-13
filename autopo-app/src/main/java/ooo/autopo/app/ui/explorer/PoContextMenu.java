@@ -16,10 +16,13 @@ package ooo.autopo.app.ui.explorer;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PoSaveRequest;
+import ooo.autopo.model.ui.SetStatusLabelRequest;
 
 import static javafx.beans.binding.Bindings.not;
+import static javafx.beans.binding.Bindings.notEqual;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
@@ -38,6 +41,17 @@ public class PoContextMenu extends ContextMenu {
         var savePo = new MenuItem(i18n().tr("Save"));
         savePo.disableProperty().bind(not(poFile.modifiedProperty()));
         savePo.setOnAction(e -> eventStudio().broadcast(new PoSaveRequest(poFile)));
-        this.getItems().addAll(editPo, savePo);
+
+        var clearObsolete = new MenuItem(i18n().tr("Remove obsolete entries"));
+        clearObsolete.setOnAction(e -> {
+            var message = i18n().tr("No obsolete entries to remove");
+            if (poFile.clearObsolete()) {
+                message = i18n().tr("Obsolete entries removed");
+            }
+            eventStudio().broadcast(new SetStatusLabelRequest(message));
+        });
+        clearObsolete.disableProperty().bind(notEqual(poFile.status(), LoadingStatus.LOADED));
+
+        this.getItems().addAll(editPo, savePo, clearObsolete);
     }
 }
