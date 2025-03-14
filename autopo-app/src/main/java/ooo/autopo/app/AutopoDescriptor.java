@@ -14,6 +14,9 @@ package ooo.autopo.app;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import ooo.autopo.model.AppDescriptor;
+import ooo.autopo.model.AppDescriptorProperty;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -23,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 /**
  * @author Andrea Vacondio
  */
-public class AutopoDescriptor {
+public class AutopoDescriptor implements AppDescriptor {
     private final Properties properties = new Properties();
 
     public AutopoDescriptor() throws IOException {
@@ -32,11 +35,11 @@ public class AutopoDescriptor {
         }
     }
 
-    public String property(AutopoDescriptorProperty prop, String defaultValue) {
+    public String property(AppDescriptorProperty prop, String defaultValue) {
         return properties.getProperty(prop.prop, defaultValue);
     }
 
-    public String property(AutopoDescriptorProperty prop) {
+    public String property(AppDescriptorProperty prop) {
         return properties.getProperty(prop.prop, EMPTY);
     }
 }

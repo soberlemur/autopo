@@ -16,6 +16,7 @@ package ooo.autopo.app.config;
 
 import jakarta.inject.Named;
 import ooo.autopo.app.NativeOpenUrlController;
+import ooo.autopo.model.AppDescriptor;
 import ooo.autopo.model.ui.StageStatus;
 import ooo.autopo.service.ai.AIService;
 import ooo.autopo.service.ai.DefaultAIService;
@@ -39,8 +40,8 @@ import org.pdfsam.persistence.EntityRepository;
 
 public class ServicesConfig {
     @Provides
-    IOService io(DefaultAIService aiService) {
-        return new DefaultIOService(aiService);
+    IOService io(DefaultAIService aiService, AppDescriptor descriptor) {
+        return new DefaultIOService(aiService, descriptor);
     }
 
     @Provides

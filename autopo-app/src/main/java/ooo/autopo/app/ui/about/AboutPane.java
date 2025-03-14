@@ -21,9 +21,9 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import ooo.autopo.app.AutopoDescriptor;
 import ooo.autopo.app.ui.Style;
 import ooo.autopo.app.ui.components.UrlButton;
+import ooo.autopo.model.AppDescriptor;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.fluentui.FluentUiFilledMZ;
@@ -33,20 +33,20 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.Arrays;
 
-import static ooo.autopo.app.AutopoDescriptorProperty.COPYRIGHT;
-import static ooo.autopo.app.AutopoDescriptorProperty.DONATE_URL;
-import static ooo.autopo.app.AutopoDescriptorProperty.HOME_LABEL;
-import static ooo.autopo.app.AutopoDescriptorProperty.HOME_URL;
-import static ooo.autopo.app.AutopoDescriptorProperty.LICENSE_NAME;
-import static ooo.autopo.app.AutopoDescriptorProperty.LICENSE_URL;
-import static ooo.autopo.app.AutopoDescriptorProperty.NAME;
-import static ooo.autopo.app.AutopoDescriptorProperty.SCM_URL;
-import static ooo.autopo.app.AutopoDescriptorProperty.SUPPORT_URL;
-import static ooo.autopo.app.AutopoDescriptorProperty.TRACKER_URL;
-import static ooo.autopo.app.AutopoDescriptorProperty.VENDOR_URL;
-import static ooo.autopo.app.AutopoDescriptorProperty.VERSION;
 import static ooo.autopo.app.io.ObjectCollectionWriter.writeContent;
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static ooo.autopo.model.AppDescriptorProperty.COPYRIGHT;
+import static ooo.autopo.model.AppDescriptorProperty.DONATE_URL;
+import static ooo.autopo.model.AppDescriptorProperty.HOME_LABEL;
+import static ooo.autopo.model.AppDescriptorProperty.HOME_URL;
+import static ooo.autopo.model.AppDescriptorProperty.LICENSE_NAME;
+import static ooo.autopo.model.AppDescriptorProperty.LICENSE_URL;
+import static ooo.autopo.model.AppDescriptorProperty.NAME;
+import static ooo.autopo.model.AppDescriptorProperty.SCM_URL;
+import static ooo.autopo.model.AppDescriptorProperty.SUPPORT_URL;
+import static ooo.autopo.model.AppDescriptorProperty.TRACKER_URL;
+import static ooo.autopo.model.AppDescriptorProperty.VENDOR_URL;
+import static ooo.autopo.model.AppDescriptorProperty.VERSION;
 
 /**
  * @author Andrea Vacondio
@@ -54,7 +54,7 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 public class AboutPane extends HBox {
 
     @Inject
-    public AboutPane(AutopoDescriptor descriptor) {
+    public AboutPane(AppDescriptor descriptor) {
         getStyleClass().addAll("about-panel", "spaced-container");
         var left = new VBox();
         left.getStyleClass().add("section");

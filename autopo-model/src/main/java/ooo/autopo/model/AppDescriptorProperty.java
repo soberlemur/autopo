@@ -1,4 +1,4 @@
-package ooo.autopo.app;
+package ooo.autopo.model;
 
 /*
  * This file is part of the Autopo project
@@ -17,7 +17,7 @@ package ooo.autopo.app;
 /**
  * @author Andrea Vacondio
  */
-public enum AutopoDescriptorProperty {
+public enum AppDescriptorProperty {
     NAME("ooo.autopo.name"),
     HOME_URL("ooo.autopo.home.url"),
     HOME_LABEL("ooo.autopo.home.label"),
@@ -32,7 +32,7 @@ public enum AutopoDescriptorProperty {
     DONATE_URL("ooo.autopo.donate.url");
     public final String prop;
 
-    AutopoDescriptorProperty(String prop) {
+    AppDescriptorProperty(String prop) {
         this.prop = prop;
     }
 }

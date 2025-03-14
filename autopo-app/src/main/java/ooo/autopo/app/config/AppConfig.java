@@ -27,6 +27,7 @@ import ooo.autopo.app.ui.about.AboutOverlayItem;
 import ooo.autopo.app.ui.logs.LogsOverlayItem;
 import ooo.autopo.app.ui.notification.NotificationsController;
 import ooo.autopo.app.ui.settings.SettingsOverlayItem;
+import ooo.autopo.model.AppDescriptor;
 import org.pdfsam.injector.Components;
 import org.pdfsam.injector.Provides;
 
@@ -52,7 +53,7 @@ public class AppConfig {
     }
 
     @Provides
-    public AutopoDescriptor descriptor() throws IOException {
+    public AppDescriptor descriptor() throws IOException {
         return new AutopoDescriptor();
     }
 

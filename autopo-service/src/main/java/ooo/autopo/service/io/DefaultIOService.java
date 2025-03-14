@@ -20,6 +20,8 @@ import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.PoParser;
 import com.soberlemur.potentilla.PoWriter;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
+import ooo.autopo.model.AppDescriptor;
+import ooo.autopo.model.AppDescriptorProperty;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.io.IOEventType;
@@ -60,9 +62,11 @@ import static org.sejda.commons.util.RequireUtils.requireIOCondition;
 public class DefaultIOService implements IOService {
 
     private final AIService aiService;
+    private final AppDescriptor descriptor;
 
-    public DefaultIOService(AIService aiService) {
+    public DefaultIOService(AIService aiService, AppDescriptor descriptor) {
         this.aiService = aiService;
+        this.descriptor = descriptor;
     }
 
     @Override
@@ -127,6 +131,9 @@ public class DefaultIOService implements IOService {
             poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale()));
         }
         poFile.catalog().header().setValue(Header.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        poFile.catalog()
+              .header()
+              .setValue("X-Generator", descriptor.property(AppDescriptorProperty.NAME) + " v" + descriptor.property(AppDescriptorProperty.VERSION));
         new PoWriter().write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile(), StandardCharsets.UTF_8));
         eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
         Logger.info(i18n().tr("File {} saved"), poFile.poFile().toString());
