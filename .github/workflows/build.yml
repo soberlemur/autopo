@@ -27,4 +27,9 @@ jobs:
         run: brew install gettext
 
       - name: Build with Maven
+        if: matrix.os == 'macos-latest'
         run: mvn --batch-mode --update-snapshots verify
+
+      - name: Build with Maven
+        if: matrix.os == 'ubuntu-latest'
+        run: xvfb-run mvn -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw --batch-mode --update-snapshots verify
