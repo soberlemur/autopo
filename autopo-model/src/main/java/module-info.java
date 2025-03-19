@@ -18,6 +18,7 @@ module ooo.autopo.model {
     exports ooo.autopo.model.lifecycle;
     exports ooo.autopo.model.ui;
     exports ooo.autopo.model.io;
+    exports ooo.autopo.model.ai;
     exports ooo.autopo.model.notification;
     exports ooo.autopo.model.ui.log;
 
@@ -27,9 +28,11 @@ module ooo.autopo.model {
     requires org.pdfsam.eventstudio;
     requires org.apache.commons.lang3;
     requires javafx.graphics;
+    requires javafx.controls;
     requires org.kordamp.ikonli.fluentui;
     requires org.kordamp.ikonli.javafx;
     requires org.apache.commons.io;
+    requires langchain4j.core;
     opens ooo.autopo.model.ui to com.fasterxml.jackson.databind;
 
 }

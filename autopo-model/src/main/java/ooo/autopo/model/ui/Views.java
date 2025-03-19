@@ -1,4 +1,4 @@
-package ooo.autopo.app.ui.components;
+package ooo.autopo.model.ui;
 
 /*
  * This file is part of the Autopo project

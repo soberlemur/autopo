@@ -219,7 +219,7 @@ public class DefaultIOService implements IOService {
                         Logger.debug(i18n().tr("Trying to guess locale from file content with AI"));
                         var concat = new StringBuilder();
                         for (Message message : catalog) {
-                            ofNullable(message.getMsgstr()).filter(StringUtils::isNotBlank).ifPresent(concat::append);
+                            ofNullable(message.getMsgstr()).filter(StringUtils::isNotBlank).map(s -> "\"" + s + "\" ").ifPresent(concat::append);
                             if (concat.length() > 300) {
                                 break;
                             }

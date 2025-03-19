@@ -13,6 +13,7 @@ package ooo.autopo.app.ui.about;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.theme.Styles;
 import jakarta.inject.Inject;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -56,22 +57,25 @@ public class AboutPane extends HBox {
     @Inject
     public AboutPane(AppDescriptor descriptor) {
         getStyleClass().addAll("about-panel", "spaced-container");
-        var left = new VBox();
-        left.getStyleClass().add("section");
+        var left = new VBox(Style.DEFAULT_SPACING);
+        var appSection = new VBox(Style.DEFAULT_SPACING);
+        appSection.getStyleClass().add("section");
         addSectionTitle(descriptor.property(NAME, "Autopo"), left);
-        left.getChildren().addAll(new Label(String.format("ver. %s", descriptor.property(VERSION))));
-        addHyperlink(null, descriptor.property(VENDOR_URL), descriptor.property(COPYRIGHT), left);
-        addHyperlink(null, descriptor.property(LICENSE_URL), descriptor.property(LICENSE_NAME), left);
-        addHyperlink(FluentUiFilledAL.HOME_20, descriptor.property(HOME_URL), descriptor.property(HOME_LABEL), left);
+        appSection.getChildren().addAll(new Label(String.format("ver. %s", descriptor.property(VERSION))));
+        addHyperlink(null, descriptor.property(VENDOR_URL), descriptor.property(COPYRIGHT), appSection);
+        addHyperlink(null, descriptor.property(LICENSE_URL), descriptor.property(LICENSE_NAME), appSection);
+        addHyperlink(FluentUiFilledAL.HOME_20, descriptor.property(HOME_URL), descriptor.property(HOME_LABEL), appSection);
+        left.getChildren().add(appSection);
 
         addSectionTitle(i18n().tr("Environment"), left);
+        var envSection = new VBox(Style.DEFAULT_SPACING);
+        envSection.getStyleClass().add("section");
         var runtime = new Label(String.format("%s %s", System.getProperty("java.runtime.name"), System.getProperty("java.runtime.version")));
         var vendor = new Label(String.format(i18n().tr("Vendor: %s"), System.getProperty("java.vendor")));
         var runtimePath = new Label(String.format(i18n().tr("Java runtime path: %s"), System.getProperty("java.home")));
         var fx = new Label(String.format(i18n().tr("JavaFX runtime version: %s"), System.getProperty("javafx.runtime.version")));
         Button copyButton = new Button(i18n().tr("Copy to clipboard"));
         copyButton.setGraphic(FontIcon.of(FluentUiRegularAL.COPY_20));
-        copyButton.getStyleClass().addAll(Style.BUTTON.css());
         copyButton.setId("copyEnvDetails");
         copyButton.setOnAction(a -> {
             ClipboardContent content = new ClipboardContent();
@@ -83,19 +87,24 @@ public class AboutPane extends HBox {
                                        fx.getText())).to(content);
             Clipboard.getSystemClipboard().setContent(content);
         });
-        left.getChildren().addAll(runtime, vendor, runtimePath, fx, copyButton);
-        VBox right = new VBox(6);
+        envSection.getChildren().addAll(runtime, vendor, runtimePath, fx, copyButton);
+        left.getChildren().add(envSection);
+
+        var right = new VBox(Style.DEFAULT_SPACING);
         addSectionTitle(i18n().tr("Support"), right);
-        addHyperlink(FluentUiRegularAL.BUG_20, descriptor.property(TRACKER_URL), i18n().tr("Bug and feature requests"), right);
-        addHyperlink(FluentUiFilledMZ.QUESTION_CIRCLE_20, descriptor.property(SUPPORT_URL), i18n().tr("Support"), right);
-        addHyperlink(FluentUiFilledAL.CODE_20, descriptor.property(SCM_URL), i18n().tr("Fork me on GitHub"), right);
-        addHyperlink(FluentUiRegularMZ.MONEY_20, descriptor.property(DONATE_URL), i18n().tr("Donate"), right);
+        var supportSection = new VBox(Style.DEFAULT_SPACING);
+        supportSection.getStyleClass().add("section");
+        addHyperlink(FluentUiRegularAL.BUG_20, descriptor.property(TRACKER_URL), i18n().tr("Bug and feature requests"), supportSection);
+        addHyperlink(FluentUiFilledMZ.QUESTION_CIRCLE_20, descriptor.property(SUPPORT_URL), i18n().tr("Support"), supportSection);
+        addHyperlink(FluentUiFilledAL.CODE_20, descriptor.property(SCM_URL), i18n().tr("Fork me on GitHub"), supportSection);
+        addHyperlink(FluentUiRegularMZ.MONEY_20, descriptor.property(DONATE_URL), i18n().tr("Donate"), supportSection);
+        right.getChildren().add(supportSection);
         getChildren().addAll(left, right);
     }
 
     private void addSectionTitle(String title, Pane pane) {
         Label label = new Label(title);
-        label.getStyleClass().add("section-title");
+        label.getStyleClass().add(Styles.TITLE_3);
         pane.getChildren().add(label);
     }
 

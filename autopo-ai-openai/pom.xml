@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <description>Service layer for Autopo</description>
+    <description>Autopo Open AI model provider</description>
     <parent>
         <groupId>ooo.autopo</groupId>
         <artifactId>autopo-parent</artifactId>
@@ -10,9 +10,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>autopo-service</artifactId>
+    <artifactId>autopo-ai-openai</artifactId>
     <packaging>jar</packaging>
-    <name>Autopo service</name>
+    <name>Autopo Open AI model provider</name>
 
     <build>
         <plugins>
@@ -22,11 +22,13 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>ooo.autopo.service</Automatic-Module-Name>
+                            <Automatic-Module-Name>ooo.autopo.ai.openai</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
 
@@ -37,25 +39,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>ooo.autopo</groupId>
-            <artifactId>autopo-i18n</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.pdfsam</groupId>
             <artifactId>eventstudio</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.pdfsam</groupId>
-            <artifactId>pdfsam-injector</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.inject</groupId>
-            <artifactId>jakarta.inject-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.soberlemur</groupId>
-            <artifactId>potentilla</artifactId>
         </dependency>
         <dependency>
             <groupId>org.pdfsam</groupId>
@@ -63,11 +48,13 @@
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
+            <artifactId>javafx-controls</artifactId>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j</artifactId>
+            <artifactId>langchain4j-open-ai</artifactId>
+            <version>${langchain.version}</version>
         </dependency>
     </dependencies>
+
 </project>

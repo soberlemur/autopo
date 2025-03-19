@@ -30,8 +30,8 @@ import ooo.autopo.model.ui.ComboItem;
 import java.util.Comparator;
 import java.util.Locale;
 
-import static ooo.autopo.app.ui.components.Views.helpIcon;
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static ooo.autopo.model.ui.Views.helpIcon;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
@@ -39,20 +39,18 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  *
  * @author Andrea Vacondio
  */
-class SettingsAppearencePane extends GridPane {
+class GeneralSettingsPane extends GridPane {
 
     @Inject
-    public SettingsAppearencePane(@Named("localeCombo") PreferenceComboBox<ComboItem<String>> localeCombo,
-            @Named("themeCombo") PreferenceComboBox<ComboItem<String>> themeCombo,
-            @Named("fontSizeCombo") PreferenceComboBox<ComboItem<String>> fontSizeCombo) {
+    public GeneralSettingsPane(@Named("localeCombo") PreferenceComboBox<ComboItem<String>> localeCombo,
+            @Named("themeCombo") PreferenceComboBox<ComboItem<String>> themeCombo, @Named("fontSizeCombo") PreferenceComboBox<ComboItem<String>> fontSizeCombo,
+            @Named("defaultAiCombo") PreferenceComboBox<ComboItem<String>> defaultAiCombo) {
         this.getStyleClass().add("settings-panel");
         add(new Label(i18n().tr("Language:")), 0, 0);
-        i18n().getSupported().stream().map(ComboItem::fromLocale).sorted(Comparator.comparing(ComboItem::description))
-              .forEach(localeCombo.getItems()::add);
+        i18n().getSupported().stream().map(ComboItem::fromLocale).sorted(Comparator.comparing(ComboItem::description)).forEach(localeCombo.getItems()::add);
 
         localeCombo.setValue(ComboItem.fromLocale(Locale.getDefault()));
-        localeCombo.valueProperty().addListener(
-                (observable, oldValue, newValue) -> eventStudio().broadcast(new SetLocaleRequest(newValue.key())));
+        localeCombo.valueProperty().addListener((observable, oldValue, newValue) -> eventStudio().broadcast(new SetLocaleRequest(newValue.key())));
         localeCombo.setMaxWidth(Double.POSITIVE_INFINITY);
         setFillWidth(localeCombo, true);
         add(localeCombo, 1, 0);
@@ -69,6 +67,12 @@ class SettingsAppearencePane extends GridPane {
         setFillWidth(fontSizeCombo, true);
         add(fontSizeCombo, 1, 2);
         add(helpIcon(i18n().tr("Set the application font size")), 2, 2);
+
+        add(new Label(i18n().tr("Default AI provider:")), 0, 3);
+        defaultAiCombo.setMaxWidth(Double.POSITIVE_INFINITY);
+        setFillWidth(defaultAiCombo, true);
+        add(defaultAiCombo, 1, 3);
+        add(helpIcon(i18n().tr("Set the default AI provider")), 2, 3);
 
         getStyleClass().addAll(Style.CONTAINER.css());
         getStyleClass().addAll(Style.GRID.css());

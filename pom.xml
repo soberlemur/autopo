@@ -56,6 +56,7 @@
         <jackson.version>2.18.3</jackson.version>
         <atlantafx.version>2.0.1</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
+        <langchain.version>1.0.0-beta2</langchain.version>
     </properties>
 
     <distributionManagement>
@@ -68,6 +69,15 @@
             <url>https://maven.pkg.github.com/soberlemur/maven-packages</url>
         </repository>
     </distributionManagement>
+
+    <modules>
+        <module>autopo-app</module>
+        <module>autopo-i18n</module>
+        <module>autopo-service</module>
+        <module>autopo-model</module>
+        <module>autopo-themes</module>
+        <module>autopo-ai-openai</module>
+    </modules>
 
     <profiles>
         <profile>
@@ -184,14 +194,6 @@
             </dependencies>
         </profile>
     </profiles>
-
-    <modules>
-        <module>autopo-app</module>
-        <module>autopo-i18n</module>
-        <module>autopo-service</module>
-        <module>autopo-model</module>
-        <module>autopo-themes</module>
-    </modules>
 
     <build>
         <plugins>
@@ -398,6 +400,16 @@
                 <groupId>io.github.mkpaz</groupId>
                 <artifactId>atlantafx-base</artifactId>
                 <version>${atlantafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j</artifactId>
+                <version>${langchain.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-core</artifactId>
+                <version>${langchain.version}</version>
             </dependency>
             <!-- test -->
             <dependency>

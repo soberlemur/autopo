@@ -38,6 +38,5 @@ public class PreferenceComboBox<T extends ComboItem<?>> extends ComboBox<T> {
             context.persistentSettings().set(property, newValue.key().toString());
             Logger.trace("Preference {} set to {}", property, newValue.key());
         });
-        this.getStyleClass().add("cmb-box");
     }
 }

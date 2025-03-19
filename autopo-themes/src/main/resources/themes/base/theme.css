@@ -1,15 +1,12 @@
 .spaced-container {
     -fx-border-width: 0.0;
     -fx-padding: 1.166666em;
-    -fx-spacing: 2.5em;
+    -fx-spacing: 3em;
 }
 
-.section-title {
-    -fx-font-size: 1.333333em;
-    -fx-padding: 1.333333em 0.0 0.0 0.0;
-    -fx-font-weight: bold;
+.section {
+    -fx-padding: 0 0 2em 0;
 }
-
 
 .autopo-container {
     -fx-border-width: 0.0;
@@ -65,17 +62,9 @@
 /**
  * About panel
  */
-.about-panel {
-    -fx-padding: 1.5em;
-}
-
-.about-panel .label, .about-panel .hyperlink {
+.about-panel .section .label, .about-panel .section .hyperlink {
     -fx-font-size: 1.166666em;
     -fx-padding: 0;
-}
-
-.about-panel .section {
-    -fx-spacing: 6;
 }
 
 /**
@@ -135,4 +124,8 @@
 .table-view.translations-table {
     -color-cell-bg-selected: -color-accent-1;
     -color-cell-bg-selected-focused: -color-accent-1;
+}
+
+.ai-tab {
+    -fx-padding: 10px;
 }

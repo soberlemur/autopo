@@ -29,4 +29,5 @@ module ooo.autopo.service {
     requires org.pdfsam.persistence;
     requires org.sejda.commons;
     requires javafx.graphics;
+    requires langchain4j;
 }

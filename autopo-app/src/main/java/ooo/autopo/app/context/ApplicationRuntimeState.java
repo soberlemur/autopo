@@ -17,6 +17,7 @@ package ooo.autopo.app.context;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
+import ooo.autopo.model.ai.AiModelDescriptor;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.project.Project;
@@ -26,9 +27,14 @@ import org.apache.commons.lang3.StringUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
+import static java.util.function.Function.identity;
 
 /**
  * @author Andrea Vacondio
@@ -40,6 +46,14 @@ public class ApplicationRuntimeState {
     private final SimpleObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<PoFile> poFile = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<PoEntry> poEntry = new SimpleObjectProperty<>();
+    private final Map<String, AiModelDescriptor> aiModels;
+
+    ApplicationRuntimeState() {
+        aiModels = ServiceLoader.load(AiModelDescriptor.class)
+                                .stream()
+                                .map(java.util.ServiceLoader.Provider::get)
+                                .collect(Collectors.toMap(AiModelDescriptor::id, identity()));
+    }
 
     /**
      * @return the current theme
@@ -133,4 +147,12 @@ public class ApplicationRuntimeState {
     public ObservableValue<Path> workingPath() {
         return workingPath;
     }
+
+    /**
+     * @return the available models
+     */
+    public Collection<AiModelDescriptor> aiModels() {
+        return aiModels.values();
+    }
+
 }

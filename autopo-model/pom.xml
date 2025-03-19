@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
+            <artifactId>javafx-controls</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
@@ -63,6 +63,10 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-core</artifactId>
         </dependency>
     </dependencies>
 </project>

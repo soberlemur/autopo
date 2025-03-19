@@ -65,6 +65,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-ai-openai</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-impl</artifactId>
             <scope>compile</scope>

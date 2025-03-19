@@ -18,26 +18,28 @@ module ooo.autopo.app {
     exports ooo.autopo.app.ui.logs;
     exports ooo.autopo.app.ui.explorer;
 
-    requires net.synedra.validatorfx;
-    requires org.kordamp.ikonli.javafx;
+    requires atlantafx.base;
     requires com.fasterxml.jackson.datatype.jdk8;
     requires com.fasterxml.jackson.datatype.jsr310;
-    requires ooo.autopo.service;
-    requires org.pdfsam.injector;
     requires jakarta.inject;
+    requires java.desktop;
+    requires net.synedra.validatorfx;
+    requires ooo.autopo.ai.openai;
+    requires ooo.autopo.i18n;
+    requires ooo.autopo.model;
+    requires ooo.autopo.service;
+    requires ooo.autopo.themes;
+    requires org.apache.commons.lang3;
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.fluentui;
+    requires org.kordamp.ikonli.javafx;
+    requires org.pdfsam.eventstudio;
+    requires org.pdfsam.injector;
     requires org.pdfsam.persistence;
     requires org.sejda.commons;
-    requires org.apache.commons.lang3;
-    requires org.pdfsam.eventstudio;
-    requires java.desktop;
-    requires org.kordamp.ikonli.fluentui;
-    requires org.kordamp.ikonli.core;
-    requires ooo.autopo.themes;
-    requires ooo.autopo.i18n;
-    requires org.tinylog.impl;
-    requires org.tinylog.api;
     requires org.slf4j;
-    requires atlantafx.base;
+    requires org.tinylog.api;
+    requires org.tinylog.impl;
 
     opens ooo.autopo.app to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.ui to org.pdfsam.injector, org.pdfsam.eventstudio;
@@ -50,6 +52,7 @@ module ooo.autopo.app {
     opens ooo.autopo.app.ui.explorer to org.pdfsam.eventstudio, org.pdfsam.injector;
 
     uses ooo.autopo.theme.Theme;
+    uses ooo.autopo.model.ai.AiModelDescriptor;
 
     provides org.tinylog.writers.Writer with ooo.autopo.app.ui.logs.BroadcastingWriter;
 }
