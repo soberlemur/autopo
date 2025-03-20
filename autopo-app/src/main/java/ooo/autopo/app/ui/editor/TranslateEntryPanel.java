@@ -58,6 +58,7 @@ public class TranslateEntryPanel extends SplitPane {
         toolbar.getStyleClass().add("translation-edit-toolbar");
         var aiTranslateButton = new Button(i18n().tr("AI Translate"));
         aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
+        //TODO handle the case where poFile has no locale
         aiTranslateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
         var aiValidateButton = new Button(i18n().tr("AI Validate"));
         aiValidateButton.getStyleClass().addAll(Styles.SMALL);

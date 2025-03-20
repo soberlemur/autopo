@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.LoadingStatus.ERROR;
@@ -127,7 +128,7 @@ public class DefaultIOService implements IOService {
     @Override
     public void save(PoFile poFile) throws IOException {
         Logger.debug(i18n().tr("Saving po file {}"), poFile.poFile().toAbsolutePath().toString());
-        if (!poFile.catalog().header().contains(Header.LANGUAGE)) {
+        if (!poFile.catalog().header().contains(Header.LANGUAGE) && nonNull(poFile.locale())) {
             poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale()));
         }
         poFile.catalog().header().setValue(Header.CONTENT_TYPE, "text/plain; charset=UTF-8");
