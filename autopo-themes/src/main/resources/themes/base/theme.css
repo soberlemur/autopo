@@ -49,7 +49,6 @@
  */
 .translations-toolbar {
     -fx-alignment: center-left;
-    -fx-padding: 4px 10px;
 }
 
 .translation-edit-toolbar {
@@ -128,4 +127,15 @@
 
 .ai-tab {
     -fx-padding: 10px;
+}
+
+/**
+* Toolbar
+ */
+.tool-bar {
+    -fx-padding: 4px 10px;
+}
+
+.tool-bar .button.small {
+    -fx-font-size: 0.9em;
 }

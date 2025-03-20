@@ -19,6 +19,7 @@ import atlantafx.base.theme.Styles;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -95,6 +96,7 @@ public class TranslationsTableToolbar extends HBox {
         searchDismiss.setGraphic(new FontIcon(FluentUiRegularAL.DISMISS_16));
         searchDismiss.getStyleClass().addAll(Styles.SMALL, Styles.FLAT);
         searchDismiss.setFocusTraversable(true);
+        searchDismiss.setCursor(Cursor.DEFAULT);
         searchDismiss.visibleProperty().bind(createBooleanBinding(() -> isNotBlank(searchField.textProperty().get()), searchField.textProperty()));
         searchDismiss.setOnAction(e -> searchField.setText(""));
         searchField.setRight(searchDismiss);
@@ -140,6 +142,7 @@ public class TranslationsTableToolbar extends HBox {
     static class UpdateButton extends Button {
         public UpdateButton() {
             setText(i18n().tr("_Update from pot"));
+            setGraphic(new FontIcon(FluentUiRegularAL.ARROW_SYNC_24));
             getStyleClass().addAll(Styles.SMALL);
             setDisable(true);
             setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentPoFile(), app().currentProject().pot().get())));
