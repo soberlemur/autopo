@@ -36,13 +36,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Subscription;
 import ooo.autopo.app.io.Choosers;
-import ooo.autopo.app.ui.RenameProjectDialog;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.project.ProjectLoadRequest;
-import ooo.autopo.model.project.ProjectProperty;
-import ooo.autopo.model.project.RenameProjectRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
+import ooo.autopo.model.ui.SetOverlayItem;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -89,9 +87,9 @@ public class FileExplorer extends BorderPane {
         var toolbar = new ToolBar(spacer, expand, collapse);
         this.setTop(toolbar);
 
-        var rename = new MenuItem(i18n().tr("Rename project"));
-        rename.setOnAction(e -> onRenameRequest(RenameProjectRequest.INSTANCE));
-        var renameProjectContextMenu = new ContextMenu(rename);
+        var editProject = new MenuItem(i18n().tr("Edit project"));
+        editProject.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("PROJECT_SETTINGS")));
+        var renameProjectContextMenu = new ContextMenu(editProject);
 
         var selectTemplate = new MenuItem(i18n().tr("Select template"));
         selectTemplate.setAccelerator(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
@@ -193,18 +191,8 @@ public class FileExplorer extends BorderPane {
     }
 
     @EventListener
-    public void onRenameRequest(RenameProjectRequest request) {
-        var dialog = new RenameProjectDialog(root.getValue().displayTextProperty().get());
-        dialog.initOwner(getScene().getWindow());
-        dialog.showAndWait().ifPresent(name -> {
-            if (StringUtils.isNotBlank(name)) {
-                ofNullable(app().currentProject()).ifPresent(p -> {
-                    p.setProperty(ProjectProperty.NAME, name);
-                    actualizeRootName();
-                    eventStudio().broadcast(new SaveProjectRequest(p));
-                });
-            }
-        });
+    public void onSaveProject(SaveProjectRequest request) {
+        actualizeRootName();
     }
 
     private void actualizeRootName() {

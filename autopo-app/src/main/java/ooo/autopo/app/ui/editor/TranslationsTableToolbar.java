@@ -133,7 +133,6 @@ public class TranslationsTableToolbar extends HBox {
             setGraphic(new FontIcon(FluentUiRegularMZ.SAVE_20));
             getStyleClass().addAll(Styles.SMALL);
             setDefaultButton(true);
-            getStyleClass().addAll(Styles.SMALL);
             setOnAction(e -> eventStudio().broadcast(new PoSaveRequest(app().currentPoFile())));
         }
     }
@@ -143,7 +142,6 @@ public class TranslationsTableToolbar extends HBox {
             setText(i18n().tr("_Update from pot"));
             getStyleClass().addAll(Styles.SMALL);
             setDisable(true);
-            getStyleClass().addAll(Styles.SMALL);
             setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentPoFile(), app().currentProject().pot().get())));
         }
     }

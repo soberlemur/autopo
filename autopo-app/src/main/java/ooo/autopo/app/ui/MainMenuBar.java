@@ -27,7 +27,6 @@ import javafx.scene.input.KeyCombination;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.project.Project;
-import ooo.autopo.model.project.RenameProjectRequest;
 import ooo.autopo.model.ui.SetOverlayItem;
 import ooo.autopo.service.project.RecentsService;
 import org.apache.commons.lang3.StringUtils;
@@ -82,10 +81,10 @@ public class MainMenuBar extends MenuBar {
             }
         });
 
-        var rename = new MenuItem(i18n().tr("_Rename"));
-        rename.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
-        rename.setOnAction(e -> eventStudio().broadcast(RenameProjectRequest.INSTANCE));
-        rename.disableProperty().bind(isNull(app().runtimeState().project()));
+        var editProject = new MenuItem(i18n().tr("_Edit project"));
+        editProject.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
+        editProject.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("PROJECT_SETTINGS")));
+        editProject.disableProperty().bind(isNull(app().runtimeState().project()));
 
         recent = new Menu(i18n().tr("Recen_ts"));
         recent.setId("recentsMenuItem");
@@ -97,7 +96,7 @@ public class MainMenuBar extends MenuBar {
         });
         clear.setId("clearWorkspaces");
 
-        projects.getItems().addAll(open, rename, new SeparatorMenuItem(), recent, clear);
+        projects.getItems().addAll(open, editProject, new SeparatorMenuItem(), recent, clear);
 
         var fileMenu = new Menu(i18n().tr("File"));
         fileMenu.getItems().addAll(projects, new SeparatorMenuItem(), exit);

@@ -77,7 +77,7 @@
 /**
  * Settings panel
  */
-.settings-panel {
+.settings-panel, .project-settings-panel {
     -fx-hgap: 1em;
     -fx-vgap: 1em;
 }

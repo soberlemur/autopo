@@ -26,6 +26,7 @@ import ooo.autopo.app.ui.OverlayItem;
 import ooo.autopo.app.ui.about.AboutOverlayItem;
 import ooo.autopo.app.ui.logs.LogsOverlayItem;
 import ooo.autopo.app.ui.notification.NotificationsController;
+import ooo.autopo.app.ui.project.ProjectSettingsOverlay;
 import ooo.autopo.app.ui.settings.SettingsOverlayItem;
 import ooo.autopo.model.AppDescriptor;
 import org.pdfsam.injector.Components;
@@ -60,6 +61,6 @@ public class AppConfig {
     @Provides
     @Named("overlays")
     public List<OverlayItem> overlays() {
-        return List.of(new AboutOverlayItem(), new SettingsOverlayItem(), new LogsOverlayItem());
+        return List.of(new AboutOverlayItem(), new SettingsOverlayItem(), new LogsOverlayItem(), new ProjectSettingsOverlay());
     }
 }

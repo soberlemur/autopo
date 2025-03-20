@@ -15,6 +15,7 @@ module ooo.autopo.app {
     exports ooo.autopo.app;
     exports ooo.autopo.app.ui;
     exports ooo.autopo.app.ui.editor;
+    exports ooo.autopo.app.ui.project;
     exports ooo.autopo.app.ui.logs;
     exports ooo.autopo.app.ui.explorer;
 
@@ -50,6 +51,7 @@ module ooo.autopo.app {
     opens ooo.autopo.app.config to org.pdfsam.injector;
     opens ooo.autopo.app.ui.notification to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.ui.explorer to org.pdfsam.eventstudio, org.pdfsam.injector;
+    opens ooo.autopo.app.ui.project to org.pdfsam.injector;
 
     uses ooo.autopo.theme.Theme;
     uses ooo.autopo.model.ai.AiModelDescriptor;
