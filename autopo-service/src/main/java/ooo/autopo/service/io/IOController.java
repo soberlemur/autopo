@@ -17,6 +17,7 @@ package ooo.autopo.service.io;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
+import ooo.autopo.model.lifecycle.ShutdownEvent;
 import ooo.autopo.model.po.PoLoadRequest;
 import ooo.autopo.model.po.PoSaveRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
@@ -142,5 +143,11 @@ public class IOController {
             return backgroundExecutor;
         }
         return mainExecutor;
+    }
+
+    @EventListener
+    public void onShutdown(ShutdownEvent event) {
+        backgroundExecutor.shutdownNow();
+        mainExecutor.shutdownNow();
     }
 }
