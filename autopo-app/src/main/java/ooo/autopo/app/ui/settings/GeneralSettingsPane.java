@@ -44,7 +44,8 @@ class GeneralSettingsPane extends GridPane {
     @Inject
     public GeneralSettingsPane(@Named("localeCombo") PreferenceComboBox<ComboItem<String>> localeCombo,
             @Named("themeCombo") PreferenceComboBox<ComboItem<String>> themeCombo, @Named("fontSizeCombo") PreferenceComboBox<ComboItem<String>> fontSizeCombo,
-            @Named("defaultAiCombo") PreferenceComboBox<ComboItem<String>> defaultAiCombo) {
+            @Named("defaultAiCombo") PreferenceComboBox<ComboItem<String>> defaultAiCombo,
+            @Named("validationAiCombo") PreferenceComboBox<ComboItem<String>> validationAiCombo) {
         this.getStyleClass().add("settings-panel");
         add(new Label(i18n().tr("Language:")), 0, 0);
         i18n().getSupported().stream().map(ComboItem::fromLocale).sorted(Comparator.comparing(ComboItem::description)).forEach(localeCombo.getItems()::add);
@@ -68,11 +69,17 @@ class GeneralSettingsPane extends GridPane {
         add(fontSizeCombo, 1, 2);
         add(helpIcon(i18n().tr("Set the application font size")), 2, 2);
 
-        add(new Label(i18n().tr("Default AI provider:")), 0, 3);
+        add(new Label(i18n().tr("Translations AI provider:")), 0, 3);
         defaultAiCombo.setMaxWidth(Double.POSITIVE_INFINITY);
         setFillWidth(defaultAiCombo, true);
         add(defaultAiCombo, 1, 3);
-        add(helpIcon(i18n().tr("Set the default AI provider")), 2, 3);
+        add(helpIcon(i18n().tr("Set the AI provider for translations")), 2, 3);
+
+        add(new Label(i18n().tr("Validations AI provider:")), 0, 4);
+        validationAiCombo.setMaxWidth(Double.POSITIVE_INFINITY);
+        setFillWidth(validationAiCombo, true);
+        add(validationAiCombo, 1, 4);
+        add(helpIcon(i18n().tr("Set the AI provider used for validation")), 2, 4);
 
         getStyleClass().addAll(Style.CONTAINER.css());
         getStyleClass().addAll(Style.GRID.css());

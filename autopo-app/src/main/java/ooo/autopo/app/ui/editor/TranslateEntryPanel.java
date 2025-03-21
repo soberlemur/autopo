@@ -77,10 +77,17 @@ public class TranslateEntryPanel extends SplitPane {
             if (isNull(app().currentPoFile().locale())) {
                 eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("The project must have a target locale to translate to")));
             } else {
-                eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
-                                                               app().currentPoEntry(),
-                                                               app().currentAIModelDescriptor().get(),
-                                                               app().currentProject().getProperty(ProjectProperty.DESCRIPTION)));
+                var model = app().translationAIModelDescriptor();
+                if (model.isPresent()) {
+                    eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
+                                                                   app().currentPoEntry(),
+                                                                   model.get(),
+                                                                   app().currentProject().getProperty(ProjectProperty.DESCRIPTION)));
+                } else {
+                    eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("Unable to find a usable translation AI model")));
+
+                }
+
             }
         });
 

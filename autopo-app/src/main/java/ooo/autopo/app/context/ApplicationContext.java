@@ -106,8 +106,22 @@ public class ApplicationContext implements Closeable {
         return runtimeState().poEntry().getValue();
     }
 
-    public Optional<AIModelDescriptor> currentAIModelDescriptor() {
-        var defaultModel = persistentSettings().get(StringPersistentProperty.AI_MODEL).filter(StringUtils::isNotBlank).orElse(null);
+    /**
+     * @return the translation model currently configured for translations
+     */
+    public Optional<AIModelDescriptor> translationAIModelDescriptor() {
+        return currentAIModelDescriptor(StringPersistentProperty.AI_MODEL);
+    }
+
+    /**
+     * @return the translation model currently configured for validation
+     */
+    public Optional<AIModelDescriptor> validationAIModelDescriptor() {
+        return currentAIModelDescriptor(StringPersistentProperty.VALIDATION_AI_MODEL);
+    }
+
+    private Optional<AIModelDescriptor> currentAIModelDescriptor(StringPersistentProperty property) {
+        var defaultModel = persistentSettings().get(property).filter(StringUtils::isNotBlank).orElse(null);
         if (nonNull(defaultModel)) {
             return runtimeState().aiModels().stream().filter(aiModelDescriptor -> defaultModel.equals(aiModelDescriptor.id())).findFirst();
         }

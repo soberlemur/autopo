@@ -34,6 +34,7 @@ import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.app.context.StringPersistentProperty.AI_MODEL;
 import static ooo.autopo.app.context.StringPersistentProperty.FONT_SIZE;
 import static ooo.autopo.app.context.StringPersistentProperty.THEME;
+import static ooo.autopo.app.context.StringPersistentProperty.VALIDATION_AI_MODEL;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.ui.ComboItem.keyWithEmptyValue;
 
@@ -97,6 +98,22 @@ public class PreferencesConfig {
              .forEachOrdered(defaultAiCombo.getItems()::add);
         defaultAiCombo.setValue(keyWithEmptyValue(app().persistentSettings().get(AI_MODEL).orElse("")));
         return defaultAiCombo;
+    }
+
+    @Provides
+    @Named("validationAiCombo")
+    public PreferenceComboBox<ComboItem<String>> validationAiCombo() {
+        PreferenceComboBox<ComboItem<String>> validationAiCombo = new PreferenceComboBox<>(VALIDATION_AI_MODEL);
+        validationAiCombo.setId("validationAiCombo");
+        validationAiCombo.getItems().add(new ComboItem<>("", i18n().tr("First available")));
+        app().runtimeState()
+             .aiModels()
+             .stream()
+             .sorted(Comparator.comparing(AIModelDescriptor::name))
+             .map(d -> new ComboItem<>(d.id(), d.name()))
+             .forEachOrdered(validationAiCombo.getItems()::add);
+        validationAiCombo.setValue(keyWithEmptyValue(app().persistentSettings().get(VALIDATION_AI_MODEL).orElse("")));
+        return validationAiCombo;
     }
 
     @Provides

@@ -28,7 +28,8 @@ public enum StringPersistentProperty implements PersistentProperty<String> {
     LOCALE(() -> System.getProperty(LOCALE_PROP)),
     THEME(() -> System.getProperty(THEME_PROP)),
     FONT_SIZE(() -> ""),
-    AI_MODEL(() -> "");;
+    AI_MODEL(() -> ""),
+    VALIDATION_AI_MODEL(() -> "");
 
     private final Supplier<String> defaultSupplier;
 
