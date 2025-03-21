@@ -23,6 +23,7 @@ module ooo.autopo.model {
     exports ooo.autopo.model.ui.log;
 
     requires transitive com.soberlemur.potentilla;
+    requires transitive atlantafx.base;
     requires ooo.autopo.i18n;
     requires org.sejda.commons;
     requires org.pdfsam.eventstudio;

@@ -24,8 +24,8 @@ module ooo.autopo.ai.gemini {
     requires org.tinylog.api;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.fluentui;
-    requires javafx.controls;
     requires org.apache.commons.lang3;
+    requires atlantafx.base;
 
     provides AIModelDescriptor with ooo.autopo.ai.gemini.GeminiAiModelDescriptor;
 }

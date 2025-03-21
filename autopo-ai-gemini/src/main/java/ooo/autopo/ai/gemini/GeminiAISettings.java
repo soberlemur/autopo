@@ -17,9 +17,9 @@ package ooo.autopo.ai.gemini;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import ooo.autopo.model.ui.ApiKeyTextField;
 import ooo.autopo.model.ui.ComboItem;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -53,9 +53,7 @@ public class GeminiAISettings extends GridPane {
         add(helpIcon(i18n().tr("AI Model to use")), 2, 0);
 
         add(new Label(i18n().tr("API key:")), 0, 1);
-        var apiField = new TextField();
-        apiField.setMinWidth(300);
-        apiField.setPromptText("API KEY");
+        var apiField = new ApiKeyTextField();
         ofNullable(repo.getString(GeminiAIPersistentProperty.API_KEY.key(), (String) null)).ifPresent(apiField::setText);
         apiField.textProperty().subscribe((o, n) -> repo.saveString(GeminiAIPersistentProperty.API_KEY.key(), n));
         setFillWidth(apiField, true);
