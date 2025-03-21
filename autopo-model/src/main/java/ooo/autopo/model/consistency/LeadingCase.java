@@ -38,7 +38,9 @@ class LeadingCase implements ConsistencyValidator {
                                                        "de",
                                                        "es",
                                                        "gl",
-                                                       "he");
+                                                       "he",
+                                                       "ckb",
+                                                       "kmr");
 
     @Override
     public String validate(String original, String translated, String targetLanguage) {
