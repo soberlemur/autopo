@@ -20,7 +20,7 @@ import javafx.scene.layout.Pane;
 /**
  * @author Andrea Vacondio
  */
-public interface AiModelDescriptor {
+public interface AIModelDescriptor {
 
     String id();
 

@@ -14,8 +14,11 @@ package ooo.autopo.app.ui.editor;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.controls.ModalPane;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
+import jakarta.inject.Inject;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -28,6 +31,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Subscription;
 import ooo.autopo.app.ui.Style;
+import ooo.autopo.model.ai.TranslationRequest;
+import ooo.autopo.model.project.ProjectProperty;
 
 import java.util.Objects;
 
@@ -35,6 +40,7 @@ import static java.util.Optional.ofNullable;
 import static javafx.beans.binding.Bindings.isNull;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
  * @author Andrea Vacondio
@@ -43,7 +49,8 @@ public class TranslateEntryPanel extends SplitPane {
 
     private Subscription entryModifiedSubscription;
 
-    public TranslateEntryPanel() {
+    @Inject
+    public TranslateEntryPanel(ModalPane modalPane) {
         this.setOrientation(Orientation.HORIZONTAL);
         this.setDividerPositions(0.90);
 
@@ -60,6 +67,20 @@ public class TranslateEntryPanel extends SplitPane {
         aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
         //TODO handle the case where poFile has no locale
         aiTranslateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
+        var dialog = new TranslatingDialog();
+        aiTranslateButton.setOnAction(e -> {
+            modalPane.show(dialog);
+            var request = new TranslationRequest(app().currentPoFile(),
+                                                 app().currentPoEntry(),
+                                                 app().currentAIModelDescriptor().get(),
+                                                 app().currentProject().getProperty(ProjectProperty.DESCRIPTION));
+            request.complete().subscribe((o, n) -> {
+                if (n) {
+                    Platform.runLater(modalPane::hide);
+                }
+            });
+            eventStudio().broadcast(request);
+        });
         var aiValidateButton = new Button(i18n().tr("AI Validate"));
         aiValidateButton.getStyleClass().addAll(Styles.SMALL);
         aiValidateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
@@ -82,7 +103,7 @@ public class TranslateEntryPanel extends SplitPane {
 
         app().runtimeState().poEntry().subscribe((oldEntry, newEntry) -> {
             //let's remove the old binding
-            ofNullable(oldEntry).ifPresent(poEntry -> poEntry.translatedValue().unbind());
+            ofNullable(oldEntry).ifPresent(poEntry -> poEntry.translatedValue().unbindBidirectional(translationView.textProperty()));
             ofNullable(entryModifiedSubscription).ifPresent(Subscription::unsubscribe);
             sourceView.setText(ofNullable(newEntry).map(entry -> entry.untranslatedValue().getValue()).orElse(""));
             translationView.setText(ofNullable(newEntry).map(entry -> entry.translatedValue().getValue()).orElse(""));
@@ -90,7 +111,7 @@ public class TranslateEntryPanel extends SplitPane {
             commentsFlow.getChildren().clear();
             if (Objects.nonNull(newEntry)) {
                 translationView.setEditable(true);
-                newEntry.translatedValue().bind(translationView.textProperty());
+                newEntry.translatedValue().bindBidirectional(translationView.textProperty());
                 entryModifiedSubscription = translationView.textProperty().subscribe((o, n) -> app().currentPoFile().modified(true));
 
                 commentsFlow.getChildren().add(createSection(i18n().tr("Comments"), newEntry.comments()));

@@ -17,7 +17,7 @@ package ooo.autopo.app.context;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
-import ooo.autopo.model.ai.AiModelDescriptor;
+import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.project.Project;
@@ -46,13 +46,13 @@ public class ApplicationRuntimeState {
     private final SimpleObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<PoFile> poFile = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<PoEntry> poEntry = new SimpleObjectProperty<>();
-    private final Map<String, AiModelDescriptor> aiModels;
+    private final Map<String, AIModelDescriptor> aiModels;
 
     ApplicationRuntimeState() {
-        aiModels = ServiceLoader.load(AiModelDescriptor.class)
+        aiModels = ServiceLoader.load(AIModelDescriptor.class)
                                 .stream()
                                 .map(java.util.ServiceLoader.Provider::get)
-                                .collect(Collectors.toMap(AiModelDescriptor::id, identity()));
+                                .collect(Collectors.toMap(AIModelDescriptor::id, identity()));
     }
 
     /**
@@ -151,8 +151,7 @@ public class ApplicationRuntimeState {
     /**
      * @return the available models
      */
-    public Collection<AiModelDescriptor> aiModels() {
+    public Collection<AIModelDescriptor> aiModels() {
         return aiModels.values();
     }
-
 }

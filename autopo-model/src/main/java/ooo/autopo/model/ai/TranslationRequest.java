@@ -1,8 +1,8 @@
-package ooo.autopo.service.ai;
+package ooo.autopo.model.ai;
 
 /*
  * This file is part of the Autopo project
- * Created 13/02/25
+ * Created 20/03/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,20 +14,17 @@ package ooo.autopo.service.ai;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import dev.langchain4j.service.Result;
-import ooo.autopo.model.ai.AIModelDescriptor;
+import javafx.beans.property.SimpleBooleanProperty;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 
 /**
  * @author Andrea Vacondio
  */
-public interface AIService {
-
-    /**
-     * Given an input String in some unknown locale, it tried to return the languageTag as defined in the {@link java.util.Locale#forLanguageTag(String)}
-     */
-    String languageTagFor(String string);
-
-    Result<String> translate(PoFile poFile, PoEntry entry, AIModelDescriptor aiModelDescriptor, String projectDescription);
+public record TranslationRequest(PoFile poFile, PoEntry poEntry, AIModelDescriptor descriptor, String projectDescription, SimpleBooleanProperty complete) {
+    public TranslationRequest(PoFile poFile, PoEntry poEntry, AIModelDescriptor descriptor, String projectDescription) {
+        this(poFile, poEntry, descriptor, projectDescription, new SimpleBooleanProperty(false));
+    }
 }
+
+

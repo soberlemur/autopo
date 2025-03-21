@@ -29,6 +29,7 @@ import ooo.autopo.app.ui.notification.NotificationsController;
 import ooo.autopo.app.ui.project.ProjectSettingsOverlay;
 import ooo.autopo.app.ui.settings.SettingsOverlayItem;
 import ooo.autopo.model.AppDescriptor;
+import ooo.autopo.service.ServiceExceptionHandler;
 import org.pdfsam.injector.Components;
 import org.pdfsam.injector.Provides;
 
@@ -39,7 +40,7 @@ import java.util.List;
  * @author Andrea Vacondio
  */
 @Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class, AppContentController.class,
-        AppServiceExceptionHandler.class, ProjectLoadController.class, PoLoadController.class })
+        ProjectLoadController.class, PoLoadController.class })
 public class AppConfig {
 
     private final HostServices services;
@@ -62,5 +63,10 @@ public class AppConfig {
     @Named("overlays")
     public List<OverlayItem> overlays() {
         return List.of(new AboutOverlayItem(), new SettingsOverlayItem(), new LogsOverlayItem(), new ProjectSettingsOverlay());
+    }
+
+    @Provides
+    public ServiceExceptionHandler exceptionHandler() {
+        return new AppServiceExceptionHandler();
     }
 }

@@ -14,6 +14,7 @@ package ooo.autopo.app;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import atlantafx.base.controls.ModalPane;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -118,8 +119,10 @@ public class AutopoApp extends Application {
     private Scene initScene() {
         var rootStackPane = app().instance(RootStack.class);
         var notifications = app().instance(NotificationsContainer.class);
+        var modal = app().instance(ModalPane.class);
+        modal.setPersistent(true);
         StackPane.setAlignment(notifications, Pos.BOTTOM_RIGHT);
-        rootStackPane.getChildren().addAll(app().instance(AppContainer.class), notifications);
+        rootStackPane.getChildren().addAll(app().instance(AppContainer.class), notifications, modal);
         var mainScene = new Scene(rootStackPane);
         initTheme(mainScene);
         mainScene.getAccelerators().put(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN), Platform::exit);

@@ -21,7 +21,7 @@ import javafx.util.Subscription;
 import ooo.autopo.app.context.StringPersistentProperty;
 import ooo.autopo.app.ui.Themes;
 import ooo.autopo.app.ui.components.preferences.PreferenceComboBox;
-import ooo.autopo.model.ai.AiModelDescriptor;
+import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.ui.ComboItem;
 import org.pdfsam.injector.Provides;
 
@@ -92,7 +92,7 @@ public class PreferencesConfig {
         app().runtimeState()
              .aiModels()
              .stream()
-             .sorted(Comparator.comparing(AiModelDescriptor::name))
+             .sorted(Comparator.comparing(AIModelDescriptor::name))
              .map(d -> new ComboItem<>(d.id(), d.name()))
              .forEachOrdered(defaultAiCombo.getItems()::add);
         defaultAiCombo.setValue(keyWithEmptyValue(app().persistentSettings().get(AI_MODEL).orElse("")));
@@ -107,7 +107,7 @@ public class PreferencesConfig {
         app().runtimeState()
              .aiModels()
              .stream()
-             .sorted(Comparator.comparing(AiModelDescriptor::name))
+             .sorted(Comparator.comparing(AIModelDescriptor::name))
              .map(d -> new Tab(d.name(), d.settingsPane()))
              .forEachOrdered(aiPane.getTabs()::add);
         aiPane.getTabs().forEach(tab -> tab.setClosable(false));

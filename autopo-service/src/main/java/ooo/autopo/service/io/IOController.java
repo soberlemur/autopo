@@ -46,13 +46,14 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 public class IOController {
 
     private final IOService ioService;
-    private ServiceExceptionHandler exceptionHandler = Logger::error;
+    private final ServiceExceptionHandler exceptionHandler;
     private final ExecutorService mainExecutor = Executors.newSingleThreadExecutor(Thread.ofPlatform().name("io-thread-", 0).factory());
     private final ExecutorService backgroundExecutor = Executors.newFixedThreadPool(5, Thread.ofPlatform().name("po-loading-thread-", 0).factory());
 
     @Inject
-    public IOController(IOService ioService) {
+    public IOController(IOService ioService, ServiceExceptionHandler exceptionHandler) {
         this.ioService = ioService;
+        this.exceptionHandler = exceptionHandler;
         eventStudio().addAnnotatedListeners(this);
     }
 

@@ -18,6 +18,7 @@ import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.project.Project;
@@ -30,6 +31,7 @@ import java.io.Closeable;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
 import static ooo.autopo.app.context.StringPersistentProperty.FONT_SIZE;
 
@@ -104,6 +106,14 @@ public class ApplicationContext implements Closeable {
         return runtimeState().poEntry().getValue();
     }
 
+    public Optional<AIModelDescriptor> currentAIModelDescriptor() {
+        var defaultModel = persistentSettings().get(StringPersistentProperty.AI_MODEL).filter(StringUtils::isNotBlank).orElse(null);
+        if (nonNull(defaultModel)) {
+            return runtimeState().aiModels().stream().filter(aiModelDescriptor -> defaultModel.equals(aiModelDescriptor.id())).findFirst();
+        }
+        return runtimeState().aiModels().stream().filter(AIModelDescriptor::isUsable).findFirst();
+    }
+
     /**
      * Register the given scene to application context to listen to theme changes and other events
      *
@@ -111,7 +121,7 @@ public class ApplicationContext implements Closeable {
      */
     public void registerScene(Scene scene) {
         this.runtimeState().theme().subscribe(t -> {
-            if (Objects.nonNull(t)) {
+            if (nonNull(t)) {
                 Platform.runLater(() -> {
                     Application.setUserAgentStylesheet(t.getUserAgentStylesheet());
                     scene.getStylesheets().setAll(t.stylesheets());

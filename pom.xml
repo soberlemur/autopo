@@ -77,6 +77,7 @@
         <module>autopo-model</module>
         <module>autopo-themes</module>
         <module>autopo-ai-openai</module>
+        <module>autopo-ai-gemini</module>
     </modules>
 
     <profiles>

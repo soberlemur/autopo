@@ -17,7 +17,6 @@ package ooo.autopo.app;
 import ooo.autopo.model.notification.AddNotificationRequest;
 import ooo.autopo.model.notification.NotificationType;
 import ooo.autopo.service.ServiceExceptionHandler;
-import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
 
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
@@ -25,7 +24,6 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 /**
  * @author Andrea Vacondio
  */
-@Auto
 public class AppServiceExceptionHandler implements ServiceExceptionHandler {
 
     @Override

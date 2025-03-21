@@ -24,7 +24,5 @@ module ooo.autopo.themes {
     requires atlantafx.base;
     provides ooo.autopo.theme.Theme with ooo.autopo.theme.PrimerLight, ooo.autopo.theme.PrimerDark, ooo.autopo.theme.CupertinoLight, ooo.autopo.theme.CupertinoDark, ooo.autopo.theme.NordLight, ooo.autopo.theme.NordDark, ooo.autopo.theme.Dracula;
 
-    opens themes.light;
-    opens themes.dark;
     opens themes.base;
 }

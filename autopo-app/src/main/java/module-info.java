@@ -1,3 +1,5 @@
+import ooo.autopo.model.ai.AIModelDescriptor;
+
 /*
  * This file is part of the Autopo project
  * Created 14/02/25
@@ -54,7 +56,7 @@ module ooo.autopo.app {
     opens ooo.autopo.app.ui.project to org.pdfsam.injector;
 
     uses ooo.autopo.theme.Theme;
-    uses ooo.autopo.model.ai.AiModelDescriptor;
+    uses AIModelDescriptor;
 
     provides org.tinylog.writers.Writer with ooo.autopo.app.ui.logs.BroadcastingWriter;
 }

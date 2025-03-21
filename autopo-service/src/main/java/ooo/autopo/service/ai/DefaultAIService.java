@@ -14,6 +14,15 @@ package ooo.autopo.service.ai;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import dev.langchain4j.service.AiServices;
+import dev.langchain4j.service.Result;
+import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.po.PoEntry;
+import ooo.autopo.model.po.PoFile;
+import org.tinylog.Logger;
+
+import java.util.Locale;
+
 /**
  * @author Andrea Vacondio
  */
@@ -21,5 +30,17 @@ public class DefaultAIService implements AIService {
     @Override
     public String languageTagFor(String string) {
         return "";
+    }
+
+    @Override
+    public Result<String> translate(PoFile poFile, PoEntry entry, AIModelDescriptor aiModelDescriptor, String projectDescription) {
+        Logger.debug("Translating using AI model {}", aiModelDescriptor.name());
+        TranslateWithAI aiService = AiServices.create(TranslateWithAI.class, aiModelDescriptor.model());
+
+        return aiService.translate(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH),
+                                   poFile.locale().getDisplayLanguage(Locale.ENGLISH),
+                                   entry.untranslatedValue().getValue(),
+                                   projectDescription);
+
     }
 }

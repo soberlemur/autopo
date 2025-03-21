@@ -1,4 +1,4 @@
-package ooo.autopo.ai.openai;
+package ooo.autopo.ai.gemini;
 
 /*
  * This file is part of the Autopo project
@@ -15,8 +15,7 @@ package ooo.autopo.ai.openai;
  */
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.openai.OpenAiChatModelName;
+import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import org.pdfsam.persistence.PreferencesRepository;
@@ -26,9 +25,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Andrea Vacondio
  */
-public class OpenAiModelDescriptor implements AIModelDescriptor {
-    static final String MODEL_ID = "OPENAI";
-    private final PreferencesRepository repo = new PreferencesRepository("/ooo/autopo/ai/settings/openai");
+public class GeminiAiModelDescriptor implements AIModelDescriptor {
+    static final String MODEL_ID = "GEMINI";
+    private final PreferencesRepository repo = new PreferencesRepository("/ooo/autopo/ai/settings/gemini");
 
     @Override
     public String id() {
@@ -37,22 +36,22 @@ public class OpenAiModelDescriptor implements AIModelDescriptor {
 
     @Override
     public String name() {
-        return "OpenAI";
+        return "Google Gemini";
     }
 
     @Override
     public Pane settingsPane() {
-        return new OpenAISettings(repo);
+        return new GeminiAISettings(repo);
     }
 
     @Override
     public ChatLanguageModel model() {
         if (isUsable()) {
-            return OpenAiChatModel.builder()
-                    .apiKey(repo.getString(OpenAIPersistentProperty.API_KEY.key(), ""))
+            return GoogleAiGeminiChatModel.builder()
+                    .apiKey(repo.getString(GeminiAIPersistentProperty.API_KEY.key(), ""))
                     .temperature(0.2)
-                    .logRequests(true)
-                    .modelName(OpenAiChatModelName.valueOf(repo.getString(OpenAIPersistentProperty.MODEL_NAME.key(), "")))
+                    .logRequestsAndResponses(true)
+                    .modelName(repo.getString(GeminiAIPersistentProperty.MODEL_NAME.key(), "gemini-2.0-flash"))
                     .build();
         }
         return null;
@@ -60,7 +59,6 @@ public class OpenAiModelDescriptor implements AIModelDescriptor {
 
     @Override
     public boolean isUsable() {
-        return isNotBlank(repo.getString(OpenAIPersistentProperty.MODEL_NAME.key(),
-                                         (String) null)) && isNotBlank(repo.getString(OpenAIPersistentProperty.API_KEY.key(), (String) null));
+        return isNotBlank(repo.getString(GeminiAIPersistentProperty.API_KEY.key(), ""));
     }
 }

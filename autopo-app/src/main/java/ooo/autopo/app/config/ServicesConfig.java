@@ -18,6 +18,7 @@ import jakarta.inject.Named;
 import ooo.autopo.app.NativeOpenUrlController;
 import ooo.autopo.model.AppDescriptor;
 import ooo.autopo.model.ui.StageStatus;
+import ooo.autopo.service.ai.AIController;
 import ooo.autopo.service.ai.AIService;
 import ooo.autopo.service.ai.DefaultAIService;
 import ooo.autopo.service.io.DefaultIOService;
@@ -36,7 +37,7 @@ import org.pdfsam.persistence.EntityRepository;
 /**
  * @author Andrea Vacondio
  */
-@Components({ IOController.class, StageServiceController.class, NativeOpenUrlController.class, RecentsProjectsController.class })
+@Components({ IOController.class, StageServiceController.class, NativeOpenUrlController.class, RecentsProjectsController.class, AIController.class })
 
 public class ServicesConfig {
     @Provides

@@ -13,12 +13,12 @@ import ooo.autopo.model.ai.AIModelDescriptor;
  * without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
-module ooo.autopo.ai.openai {
-    exports ooo.autopo.ai.openai;
+module ooo.autopo.ai.gemini {
+    exports ooo.autopo.ai.gemini;
 
     requires ooo.autopo.model;
     requires langchain4j.core;
-    requires langchain4j.open.ai;
+    requires langchain4j.google.ai.gemini;
     requires ooo.autopo.i18n;
     requires org.pdfsam.persistence;
     requires org.tinylog.api;
@@ -27,5 +27,5 @@ module ooo.autopo.ai.openai {
     requires javafx.controls;
     requires org.apache.commons.lang3;
 
-    provides AIModelDescriptor with ooo.autopo.ai.openai.OpenAiModelDescriptor;
+    provides AIModelDescriptor with ooo.autopo.ai.gemini.GeminiAiModelDescriptor;
 }

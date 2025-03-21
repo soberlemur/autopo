@@ -14,6 +14,7 @@ package ooo.autopo.app.ui.notification;
  */
 
 import jakarta.inject.Inject;
+import javafx.application.Platform;
 import ooo.autopo.model.notification.AddNotificationRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
@@ -36,6 +37,6 @@ public class NotificationsController {
 
     @EventListener
     public void onAddRequest(AddNotificationRequest event) {
-        container.addNotification(event.message(), event.type());
+        Platform.runLater(() -> container.addNotification(event.message(), event.type()));
     }
 }
