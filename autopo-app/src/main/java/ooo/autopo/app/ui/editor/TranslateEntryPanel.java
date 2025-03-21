@@ -14,11 +14,9 @@ package ooo.autopo.app.ui.editor;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import atlantafx.base.controls.ModalPane;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
 import jakarta.inject.Inject;
-import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -32,14 +30,17 @@ import javafx.scene.text.TextFlow;
 import javafx.util.Subscription;
 import ooo.autopo.app.ui.Style;
 import ooo.autopo.model.ai.TranslationRequest;
+import ooo.autopo.model.notification.AddNotificationRequest;
+import ooo.autopo.model.notification.NotificationType;
 import ooo.autopo.model.project.ProjectProperty;
 
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
-import static javafx.beans.binding.Bindings.isNull;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
@@ -50,7 +51,7 @@ public class TranslateEntryPanel extends SplitPane {
     private Subscription entryModifiedSubscription;
 
     @Inject
-    public TranslateEntryPanel(ModalPane modalPane) {
+    public TranslateEntryPanel() {
         this.setOrientation(Orientation.HORIZONTAL);
         this.setDividerPositions(0.90);
 
@@ -62,28 +63,31 @@ public class TranslateEntryPanel extends SplitPane {
         VBox.setVgrow(sourceView, Priority.ALWAYS);
 
         var toolbar = new HBox();
-        toolbar.getStyleClass().add("translation-edit-toolbar");
+        toolbar.getStyleClass().addAll("tool-bar", "translation-edit-toolbar");
         var aiTranslateButton = new Button(i18n().tr("AI Translate"));
         aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
-        //TODO handle the case where poFile has no locale
-        aiTranslateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
-        var dialog = new TranslatingDialog();
+        app().runtimeState().poEntry().subscribe(e -> aiTranslateButton.setDisable(isNull(e) || isNull(app().currentPoFile().locale())));
+
         aiTranslateButton.setOnAction(e -> {
-            modalPane.show(dialog);
-            var request = new TranslationRequest(app().currentPoFile(),
-                                                 app().currentPoEntry(),
-                                                 app().currentAIModelDescriptor().get(),
-                                                 app().currentProject().getProperty(ProjectProperty.DESCRIPTION));
-            request.complete().subscribe((o, n) -> {
-                if (n) {
-                    Platform.runLater(modalPane::hide);
-                }
-            });
-            eventStudio().broadcast(request);
+            if (isBlank(app().currentProject().getProperty(ProjectProperty.DESCRIPTION))) {
+                eventStudio().broadcast(new AddNotificationRequest(NotificationType.WARN,
+                                                                   i18n().tr(
+                                                                           "Add a project description to give the AI model more context and improve translations accuracy")));
+            }
+            if (isNull(app().currentPoFile().locale())) {
+                eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("The project must have a target locale to translate to")));
+            } else {
+                eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
+                                                               app().currentPoEntry(),
+                                                               app().currentAIModelDescriptor().get(),
+                                                               app().currentProject().getProperty(ProjectProperty.DESCRIPTION)));
+            }
         });
+
         var aiValidateButton = new Button(i18n().tr("AI Validate"));
         aiValidateButton.getStyleClass().addAll(Styles.SMALL);
-        aiValidateButton.disableProperty().bind(isNull(app().runtimeState().poEntry()));
+        aiValidateButton.disableProperty().bind(aiTranslateButton.disableProperty());
+
         toolbar.getChildren().addAll(aiTranslateButton, aiValidateButton);
         var translationView = new TextArea();
         translationView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
