@@ -55,7 +55,7 @@ public class GeminiAISettings extends GridPane {
         add(new Label(i18n().tr("API key:")), 0, 1);
         var apiField = new ApiKeyTextField();
         ofNullable(repo.getString(GeminiAIPersistentProperty.API_KEY.key(), (String) null)).ifPresent(apiField::setText);
-        apiField.textProperty().subscribe((o, n) -> repo.saveString(GeminiAIPersistentProperty.API_KEY.key(), n));
+        apiField.passwordProperty().subscribe((o, n) -> repo.saveString(GeminiAIPersistentProperty.API_KEY.key(), n));
         setFillWidth(apiField, true);
         add(apiField, 1, 1, 2, 1);
 
