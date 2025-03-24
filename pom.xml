@@ -78,6 +78,7 @@
         <module>autopo-themes</module>
         <module>autopo-ai-openai</module>
         <module>autopo-ai-gemini</module>
+<module>autopo-ai-anthropic</module>
     </modules>
 
     <profiles>

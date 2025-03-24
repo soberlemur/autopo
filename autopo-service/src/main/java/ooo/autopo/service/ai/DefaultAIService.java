@@ -34,7 +34,7 @@ public class DefaultAIService implements AIService {
 
     @Override
     public Result<String> translate(PoFile poFile, PoEntry entry, AIModelDescriptor aiModelDescriptor, String projectDescription) {
-        Logger.debug("Translating using AI model {}", aiModelDescriptor.name());
+        Logger.info("Translating using AI model {}", aiModelDescriptor.name());
         TranslateWithAI aiService = AiServices.create(TranslateWithAI.class, aiModelDescriptor.model());
 
         return aiService.translate(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH),

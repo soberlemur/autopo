@@ -38,7 +38,7 @@ public class GeminiAISettings extends GridPane {
         this.getStyleClass().addAll("ai-tab", "settings-panel");
         add(new Label(i18n().tr("Model:")), 0, 0);
         var modelCombo = new ComboBox<ComboItem<String>>();
-        modelCombo.setId("openAiModelCombo");
+        modelCombo.setId("geminiAiModelCombo");
         modelCombo.getItems().add(new ComboItem<>("gemini-2.0-flash", "Gemini 2.0 Flash"));
         modelCombo.getItems().add(new ComboItem<>("gemini-1.5-flash", "Gemini 1.5 Flash"));
         modelCombo.getItems().add(new ComboItem<>("gemini-1.5-pro", "Gemini 1.5 Pro"));
