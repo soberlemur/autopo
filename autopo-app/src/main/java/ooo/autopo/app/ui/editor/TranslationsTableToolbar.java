@@ -145,7 +145,7 @@ public class TranslationsTableToolbar extends HBox {
             setGraphic(new FontIcon(FluentUiRegularAL.ARROW_SYNC_24));
             getStyleClass().addAll(Styles.SMALL);
             setDisable(true);
-            setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentPoFile(), app().currentProject().pot().get())));
+            setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentProject().pot().get(), app().currentPoFile())));
         }
     }
 }

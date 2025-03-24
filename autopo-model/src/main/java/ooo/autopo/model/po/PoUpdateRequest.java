@@ -16,11 +16,19 @@ package ooo.autopo.model.po;
 
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @author Andrea Vacondio
  */
-public record PoUpdateRequest(PoFile poFile, PotFile potFile, SimpleBooleanProperty complete) {
-    public PoUpdateRequest(PoFile poFile, PotFile potFile) {
-        this(poFile, potFile, new SimpleBooleanProperty(false));
+public record PoUpdateRequest(PotFile potFile, Collection<PoFile> poFiles, SimpleBooleanProperty complete) {
+
+    public PoUpdateRequest(PotFile potFile, Collection<PoFile> poFiles) {
+        this(potFile, poFiles, new SimpleBooleanProperty(false));
+    }
+
+    public PoUpdateRequest(PotFile potFile, PoFile poFile) {
+        this(potFile, List.of(poFile), new SimpleBooleanProperty(false));
     }
 }

@@ -97,13 +97,16 @@ public class DefaultIOService implements IOService {
 
     @Override
     public void updatePoFromTemplate(PoFile poFile, PotFile potFile) throws IOException {
-        requireIOCondition(poFile.isLoaded(), "Po file is in an invalid state");
         requireIOCondition(potFile.isLoaded(), "Template is in an invalid state");
-        Logger.debug(i18n().tr("Updating po file {} from template {}"), poFile.poFile().toString(), potFile.potFile().toString());
-        poFile.updateFromTemplate(potFile);
-        Logger.info(i18n().tr("Po file {} updated"), poFile.poFile().toString());
-        save(poFile);
-        poFile.updatePercentageOfTranslation();
+        if (poFile.isLoaded()) {
+            Logger.debug(i18n().tr("Updating po file {} from template {}"), poFile.poFile().toString(), potFile.potFile().toString());
+            poFile.updateFromTemplate(potFile);
+            Logger.info(i18n().tr("Po file {} updated"), poFile.poFile().toString());
+            save(poFile);
+            poFile.updatePercentageOfTranslation();
+        } else {
+            Logger.error(i18n().tr("Cannot update file {} because it is not loaded yet"), poFile.poFile().getFileName().toString());
+        }
     }
 
     @Override

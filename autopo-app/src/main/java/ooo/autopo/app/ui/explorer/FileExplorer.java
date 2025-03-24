@@ -39,6 +39,7 @@ import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.po.PoAddRequest;
+import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
 import ooo.autopo.model.ui.SetOverlayItem;
@@ -102,18 +103,25 @@ public class FileExplorer extends BorderPane {
         var addTranslation = new MenuItem(i18n().tr("Add translation"));
         addTranslation.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
         addTranslation.setOnAction(e -> eventStudio().broadcast(new PoAddRequest()));
+
+        var updateAll = new MenuItem(i18n().tr("Update all from pot"));
+        updateAll.setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentProject().pot().get(), app().currentProject().translations())));
+
         app().runtimeState().project().subscribe(project -> {
             addTranslation.disableProperty().unbind();
+            updateAll.disableProperty().unbind();
             addTranslation.setDisable(true);
+            updateAll.setDisable(true);
             if (nonNull(project)) {
                 project.pot().subscribe(pot -> {
                     if (nonNull(pot)) {
                         addTranslation.disableProperty().bind(notEqual(pot.status(), LoadingStatus.LOADED));
+                        updateAll.disableProperty().bind(notEqual(pot.status(), LoadingStatus.LOADED));
                     }
                 });
             }
         });
-        var addTranslationContextMenu = new ContextMenu(addTranslation);
+        var addTranslationContextMenu = new ContextMenu(addTranslation, updateAll);
 
         var treeView = getTreeNodeTreeView(selectTemplateContextMenu, editProjectContextMenu, addTranslationContextMenu);
         treeView.getStyleClass().addAll(Styles.DENSE, Tweaks.ALT_ICON, Tweaks.EDGE_TO_EDGE, "files-tree-view");

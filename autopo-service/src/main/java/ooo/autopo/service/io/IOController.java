@@ -87,13 +87,17 @@ public class IOController {
     public void updatePo(PoUpdateRequest request) {
         Logger.trace("Po update load request received");
         executor(true).submit(() -> {
-            try {
-                ioService.updatePoFromTemplate(request.poFile(), request.potFile());
-                Platform.runLater(() -> eventStudio().broadcast(TranslationsCountChanged.INSTANCE));
-            } catch (IOException | ParseException e) {
-                exceptionHandler.accept(e, i18n().tr("An error occurred updating .po file '{0}'", request.poFile().toString()));
+            for (var po : request.poFiles()) {
+                try {
+                    ioService.updatePoFromTemplate(po, request.potFile());
+                } catch (IOException e) {
+                    exceptionHandler.accept(e, i18n().tr("An error occurred updating .po file '{0}'", po.toString()));
+                }
             }
-            Platform.runLater(() -> request.complete().set(true));
+            Platform.runLater(() -> {
+                eventStudio().broadcast(TranslationsCountChanged.INSTANCE);
+                request.complete().set(true);
+            });
         });
     }
 
