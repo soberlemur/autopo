@@ -128,14 +128,17 @@ public class DefaultIOService implements IOService {
     @Override
     public void save(PoFile poFile) throws IOException {
         Logger.debug(i18n().tr("Saving po file {}"), poFile.poFile().toAbsolutePath().toString());
-        if (!poFile.catalog().header().contains(Header.LANGUAGE) && nonNull(poFile.locale())) {
-            poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale()));
+        if (nonNull(poFile.catalog().header())) {
+            if (!poFile.catalog().header().contains(Header.LANGUAGE) && nonNull(poFile.locale())) {
+                poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale()));
+            }
+            poFile.catalog().header().setValue(Header.CONTENT_TYPE, "text/plain; charset=UTF-8");
+            poFile.catalog()
+                  .header()
+                  .setValue("X-Generator", descriptor.property(AppDescriptorProperty.NAME) + " v" + descriptor.property(AppDescriptorProperty.VERSION));
+            poFile.catalog().header().updateRevisionDate();
         }
-        poFile.catalog().header().setValue(Header.CONTENT_TYPE, "text/plain; charset=UTF-8");
-        poFile.catalog()
-              .header()
-              .setValue("X-Generator", descriptor.property(AppDescriptorProperty.NAME) + " v" + descriptor.property(AppDescriptorProperty.VERSION));
-        new PoWriter().write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile(), StandardCharsets.UTF_8));
+        new PoWriter().withAddHeaderIfMissing().withCharset(StandardCharsets.UTF_8).write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile()));
         eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
         Logger.info(i18n().tr("File {} saved"), poFile.poFile().toString());
     }
