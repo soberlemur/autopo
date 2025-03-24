@@ -38,6 +38,7 @@ import javafx.util.Subscription;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.FileType;
+import ooo.autopo.model.po.PoAddRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
 import ooo.autopo.model.ui.SetOverlayItem;
@@ -51,6 +52,7 @@ import java.util.Optional;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
+import static javafx.beans.binding.Bindings.notEqual;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
@@ -88,20 +90,38 @@ public class FileExplorer extends BorderPane {
         this.setTop(toolbar);
 
         var editProject = new MenuItem(i18n().tr("Edit project"));
+        editProject.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
         editProject.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("PROJECT_SETTINGS")));
-        var renameProjectContextMenu = new ContextMenu(editProject);
+        var editProjectContextMenu = new ContextMenu(editProject);
 
         var selectTemplate = new MenuItem(i18n().tr("Select template"));
         selectTemplate.setAccelerator(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
         selectTemplate.setOnAction(e -> selectTemplate());
         var selectTemplateContextMenu = new ContextMenu(selectTemplate);
 
-        var treeView = getTreeNodeTreeView(selectTemplateContextMenu, renameProjectContextMenu);
+        var addTranslation = new MenuItem(i18n().tr("Add translation"));
+        addTranslation.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
+        addTranslation.setOnAction(e -> eventStudio().broadcast(new PoAddRequest()));
+        app().runtimeState().project().subscribe(project -> {
+            addTranslation.disableProperty().unbind();
+            addTranslation.setDisable(true);
+            if (nonNull(project)) {
+                project.pot().subscribe(pot -> {
+                    if (nonNull(pot)) {
+                        addTranslation.disableProperty().bind(notEqual(pot.status(), LoadingStatus.LOADED));
+                    }
+                });
+            }
+        });
+        var addTranslationContextMenu = new ContextMenu(addTranslation);
+
+        var treeView = getTreeNodeTreeView(selectTemplateContextMenu, editProjectContextMenu, addTranslationContextMenu);
         treeView.getStyleClass().addAll(Styles.DENSE, Tweaks.ALT_ICON, Tweaks.EDGE_TO_EDGE, "files-tree-view");
         this.setCenter(treeView);
     }
 
-    private TreeView<TreeNode> getTreeNodeTreeView(ContextMenu selectTemplateContextMenu, ContextMenu renameProjectContextMenu) {
+    private TreeView<TreeNode> getTreeNodeTreeView(ContextMenu selectTemplateContextMenu, ContextMenu renameProjectContextMenu,
+            ContextMenu addTranslationContextMenu) {
 
         var treeView = new TreeView<>(root);
         treeView.setCellFactory(tv -> new TreeCell<>() {
@@ -133,7 +153,7 @@ public class FileExplorer extends BorderPane {
                     switch (item.type()) {
                     case PROJECT -> setContextMenu(renameProjectContextMenu);
                     case TEMPLATE -> setContextMenu(selectTemplateContextMenu);
-                    case PO_PARENT -> setContextMenu(null);
+                    case PO_PARENT -> setContextMenu(addTranslationContextMenu);
                     case PO -> item.contextMenu().ifPresent(this::setContextMenu);
                     }
                     setTooltip(ofNullable(item.tooltip()).filter(StringUtils::isNotBlank).map(Tooltip::new).orElse(null));

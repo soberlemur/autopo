@@ -2,7 +2,7 @@ package ooo.autopo.app.ui.editor;
 
 /*
  * This file is part of the Autopo project
- * Created 20/03/25
+ * Created 24/03/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -26,15 +26,16 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class TranslatingDialog extends VBox {
+public class PoUpdatingDialog
+        extends VBox {
 
-    public TranslatingDialog() {
+    public PoUpdatingDialog() {
         getStyleClass().add("autopo-dialog");
         setSpacing(10);
         setAlignment(Pos.CENTER);
         setMinSize(350, 200);
         setMaxSize(350, 200);
-        var label = new Label(i18n().tr("Translating..."), new FontIcon(FluentUiRegularAL.BOT_24));
+        var label = new Label(i18n().tr("Updating..."), new FontIcon(FluentUiRegularAL.ARROW_SYNC_24));
         var progress = new ProgressBar();
         progress.setPrefWidth(200);
         getChildren().addAll(label, progress);

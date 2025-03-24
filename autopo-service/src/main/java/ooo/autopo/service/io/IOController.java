@@ -93,6 +93,7 @@ public class IOController {
             } catch (IOException | ParseException e) {
                 exceptionHandler.accept(e, i18n().tr("An error occurred updating .po file '{0}'", request.poFile().toString()));
             }
+            Platform.runLater(() -> request.complete().set(true));
         });
     }
 

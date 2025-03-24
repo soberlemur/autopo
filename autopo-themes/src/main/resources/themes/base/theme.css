@@ -139,3 +139,7 @@
 .tool-bar .button.small {
     -fx-font-size: 0.9em;
 }
+
+.autopo-dialog {
+    -fx-background-color: -color-bg-default;
+}

@@ -17,10 +17,14 @@ package ooo.autopo.app;
 import atlantafx.base.controls.ModalPane;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
+import ooo.autopo.app.ui.editor.PoUpdatingDialog;
 import ooo.autopo.app.ui.editor.TranslatingDialog;
 import ooo.autopo.model.ai.TranslationRequest;
+import ooo.autopo.model.po.PoUpdateRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
+
+import java.util.Optional;
 
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -31,7 +35,8 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 public class ModalPaneController {
 
     private final ModalPane modalPane;
-    private final TranslatingDialog translatingDialog = new TranslatingDialog();
+    private TranslatingDialog translatingDialog;
+    private PoUpdatingDialog updatingDialog;
 
     @Inject
     public ModalPaneController(ModalPane modalPane) {
@@ -39,9 +44,21 @@ public class ModalPaneController {
         eventStudio().addAnnotatedListeners(this);
     }
 
-    @EventListener
+    @EventListener(priority = Integer.MIN_VALUE)
     public void onTranslationRequest(TranslationRequest request) {
+        translatingDialog = Optional.ofNullable(translatingDialog).orElseGet(TranslatingDialog::new);
         modalPane.show(translatingDialog);
+        request.complete().subscribe((o, n) -> {
+            if (n) {
+                Platform.runLater(() -> modalPane.hide(true));
+            }
+        });
+    }
+
+    @EventListener(priority = Integer.MIN_VALUE)
+    public void onUpdateRequest(PoUpdateRequest request) {
+        updatingDialog = Optional.ofNullable(updatingDialog).orElseGet(PoUpdatingDialog::new);
+        modalPane.show(updatingDialog);
         request.complete().subscribe((o, n) -> {
             if (n) {
                 Platform.runLater(() -> modalPane.hide(true));
