@@ -69,7 +69,8 @@ public class TranslateEntryPanel extends SplitPane {
         app().runtimeState().poEntry().subscribe(e -> aiTranslateButton.setDisable(isNull(e) || isNull(app().currentPoFile().locale())));
 
         aiTranslateButton.setOnAction(e -> {
-            if (isBlank(app().currentProject().getProperty(ProjectProperty.DESCRIPTION))) {
+            var description = ofNullable(app().currentProject().getProperty(ProjectProperty.DESCRIPTION)).orElse("");
+            if (isBlank(description)) {
                 eventStudio().broadcast(new AddNotificationRequest(NotificationType.WARN,
                                                                    i18n().tr(
                                                                            "Add a project description to give the AI model more context and improve translations accuracy")));
@@ -79,10 +80,7 @@ public class TranslateEntryPanel extends SplitPane {
             } else {
                 var model = app().translationAIModelDescriptor();
                 if (model.isPresent()) {
-                    eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
-                                                                   app().currentPoEntry(),
-                                                                   model.get(),
-                                                                   app().currentProject().getProperty(ProjectProperty.DESCRIPTION)));
+                    eventStudio().broadcast(new TranslationRequest(app().currentPoFile(), app().currentPoEntry(), model.get(), description));
                 } else {
                     eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("Unable to find a usable translation AI model")));
 

@@ -47,6 +47,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
+import org.tinylog.Logger;
 
 import java.nio.file.Files;
 import java.util.Optional;
@@ -121,7 +122,19 @@ public class FileExplorer extends BorderPane {
                 });
             }
         });
-        var addTranslationContextMenu = new ContextMenu(addTranslation, updateAll);
+
+        var clearObsolete = new MenuItem(i18n().tr("Remove obsolete entries from every .po file"));
+        clearObsolete.setOnAction(e -> {
+            for (var po : app().currentProject().translations()) {
+                if (po.isLoaded()) {
+                    po.clearObsolete();
+                } else {
+                    Logger.warn("Cannot remove obsolete entries from {} because it is not loaded yet", po.poFile().getFileName().toString());
+                }
+            }
+        });
+
+        var addTranslationContextMenu = new ContextMenu(addTranslation, updateAll, clearObsolete);
 
         var treeView = getTreeNodeTreeView(selectTemplateContextMenu, editProjectContextMenu, addTranslationContextMenu);
         treeView.getStyleClass().addAll(Styles.DENSE, Tweaks.ALT_ICON, Tweaks.EDGE_TO_EDGE, "files-tree-view");
