@@ -72,9 +72,18 @@ public class TranslationsTableToolbar extends HBox {
         var updateButton = new TranslationsTableToolbar.UpdateButton();
         app().runtimeState().project().subscribe(project -> {
             if (nonNull(project)) {
-                project.pot().subscribe((o, n) -> {
-                    updateButton.disableProperty().bind(and(isNotNull(app().runtimeState().poFile()), notEqual(n.status(), LoadingStatus.LOADED)));
-                });
+                project.pot()
+                       .subscribe((o, n) -> updateButton.disableProperty()
+                                                        .bind(and(isNotNull(app().runtimeState().poFile()), notEqual(n.status(), LoadingStatus.LOADED))));
+            }
+        });
+
+        var batchTranslateButton = new TranslationsTableToolbar.TranslateButton();
+        app().runtimeState().poFile().subscribe(poFile -> {
+            batchTranslateButton.disableProperty().unbind();
+            batchTranslateButton.setDisable(true);
+            if (nonNull(poFile)) {
+                batchTranslateButton.disableProperty().bind(notEqual(poFile.status(), LoadingStatus.LOADED));
             }
         });
 
@@ -108,7 +117,7 @@ public class TranslationsTableToolbar extends HBox {
             }
         });
 
-        getChildren().addAll(saveButton, updateButton, search, status);
+        getChildren().addAll(saveButton, updateButton, batchTranslateButton, search, status);
         eventStudio().addAnnotatedListeners(this);
     }
 
@@ -143,6 +152,16 @@ public class TranslationsTableToolbar extends HBox {
         public UpdateButton() {
             setText(i18n().tr("_Update from pot"));
             setGraphic(new FontIcon(FluentUiRegularAL.ARROW_SYNC_24));
+            getStyleClass().addAll(Styles.SMALL);
+            setDisable(true);
+            setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentProject().pot().get(), app().currentPoFile())));
+        }
+    }
+
+    static class TranslateButton extends Button {
+        public TranslateButton() {
+            setText(i18n().tr("_Batch AI translation"));
+            setGraphic(new FontIcon(FluentUiRegularAL.BOT_24));
             getStyleClass().addAll(Styles.SMALL);
             setDisable(true);
             setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentProject().pot().get(), app().currentPoFile())));

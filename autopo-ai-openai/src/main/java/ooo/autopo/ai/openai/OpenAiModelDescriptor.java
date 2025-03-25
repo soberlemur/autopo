@@ -49,9 +49,14 @@ public class OpenAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatLanguageModel model() {
         if (isUsable()) {
+            var temperature = 0.2d;
+            var temperatureIntValue = repo.getInt(OpenAIPersistentProperty.TEMPERATURE.key(), -1);
+            if (temperatureIntValue >= 0) {
+                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+            }
             return OpenAiChatModel.builder()
                     .apiKey(repo.getString(OpenAIPersistentProperty.API_KEY.key(), ""))
-                    .temperature(0.2)
+                    .temperature(temperature)
                     .logRequests(true)
                     .modelName(OpenAiChatModelName.valueOf(repo.getString(OpenAIPersistentProperty.MODEL_NAME.key(), GPT_4.name())))
                     .build();

@@ -19,7 +19,8 @@ package ooo.autopo.ai.gemini;
  */
 public enum GeminiAIPersistentProperty {
     API_KEY,
-    MODEL_NAME;
+    MODEL_NAME,
+    TEMPERATURE;
 
     public String key() {
         return this.name().toLowerCase();

@@ -47,9 +47,14 @@ public class GeminiAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatLanguageModel model() {
         if (isUsable()) {
+            var temperature = 0.2d;
+            var temperatureIntValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);
+            if (temperatureIntValue >= 0) {
+                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+            }
             return GoogleAiGeminiChatModel.builder()
                     .apiKey(repo.getString(GeminiAIPersistentProperty.API_KEY.key(), ""))
-                    .temperature(0.2)
+                    .temperature(temperature)
                     .logRequestsAndResponses(true)
                     .modelName(repo.getString(GeminiAIPersistentProperty.MODEL_NAME.key(), "gemini-2.0-flash"))
                     .build();

@@ -49,10 +49,15 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatLanguageModel model() {
         if (isUsable()) {
+            var temperature = 0.2d;
+            var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
+            if (temperatureIntValue >= 0) {
+                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+            }
             return AnthropicChatModel.builder()
                     .apiKey(repo.getString(AnthropicAIPersistentProperty.API_KEY.key(), ""))
                     .modelName(AnthropicChatModelName.valueOf(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_3_5_HAIKU_20241022.name())))
-                    .temperature(0.2)
+                    .temperature(temperature)
                     .logRequests(true)
                     .logResponses(true)
                     .build();
