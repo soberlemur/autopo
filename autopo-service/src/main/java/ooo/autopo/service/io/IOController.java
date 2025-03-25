@@ -65,7 +65,7 @@ public class IOController {
         requireNotNullArg(request.poFile(), "Cannot load a null poFile");
         executor(request.background()).submit(() -> {
             try {
-                ioService.load(request.poFile());
+                ioService.load(request.poFile(), request.descriptor());
             } catch (IOException | ParseException e) {
                 exceptionHandler.accept(e, i18n().tr("An error occurred loading .po file '{0}'", request.poFile().toString()));
             }

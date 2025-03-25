@@ -25,9 +25,9 @@ import ooo.autopo.model.po.PoFile;
 public interface AIService {
 
     /**
-     * Given an input String in some unknown locale, it tried to return the languageTag as defined in the {@link java.util.Locale#forLanguageTag(String)}
+     * Given an input String in some unknown locale, it tries to return the languageTag as defined in the {@link java.util.Locale#forLanguageTag(String)}
      */
-    String languageTagFor(String string);
+    Result<String> languageTagFor(AIModelDescriptor aiModelDescriptor, String string);
 
     Result<String> translate(PoFile poFile, PoEntry entry, AIModelDescriptor aiModelDescriptor, String projectDescription);
 }

@@ -28,8 +28,10 @@ import java.util.Locale;
  */
 public class DefaultAIService implements AIService {
     @Override
-    public String languageTagFor(String string) {
-        return "";
+    public Result<String> languageTagFor(AIModelDescriptor aiModelDescriptor, String string) {
+        Logger.info("Identifying locale using AI model {}", aiModelDescriptor.name());
+        LocaleWithAI localeIdentifier = AiServices.create(LocaleWithAI.class, aiModelDescriptor.model());
+        return localeIdentifier.languageTagFor(string);
     }
 
     @Override

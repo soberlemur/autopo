@@ -20,8 +20,10 @@ import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.PoParser;
 import com.soberlemur.potentilla.PoWriter;
 import com.soberlemur.potentilla.catalog.parse.ParseException;
+import dev.langchain4j.service.Result;
 import ooo.autopo.model.AppDescriptor;
 import ooo.autopo.model.AppDescriptorProperty;
+import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.io.FileType;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.io.IOEventType;
@@ -30,6 +32,7 @@ import ooo.autopo.model.po.PotFile;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
 import ooo.autopo.service.ai.AIService;
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tinylog.Logger;
 
@@ -71,12 +74,12 @@ public class DefaultIOService implements IOService {
     }
 
     @Override
-    public void load(PoFile poFile) throws IOException, ParseException {
+    public void load(PoFile poFile, AIModelDescriptor descriptor) throws IOException, ParseException {
         if (poFile.status(INITIAL, LOADING)) {
             Logger.debug(i18n().tr("Loading .po file {}"), poFile.poFile().toString());
             try {
                 Catalog catalog = new PoParser().parseCatalog(poFile.poFile().toFile());
-                Locale locale = getLocale(catalog, poFile.poFile().getFileName().toString());
+                Locale locale = getLocale(catalog, poFile.poFile().getFileName().toString(), descriptor);
                 if (isNull(locale)) {
                     Logger.warn(i18n().tr("Unable to find or detect a valid locale"));
                 }
@@ -212,17 +215,17 @@ public class DefaultIOService implements IOService {
 
     }
 
-    private Locale getLocale(Catalog catalog, String filename) {
-        var locale = localeFromString(ofNullable(catalog.header()).map(h -> h.getValue(Header.LANGUAGE)).orElse(null));
+    private Locale getLocale(Catalog catalog, String filename, AIModelDescriptor descriptor) {
+        var locale = localeFromHeader(ofNullable(catalog.header()).map(h -> h.getValue(Header.LANGUAGE)).orElse(null));
         if (isNull(locale)) {
             // we do what POEdit does, try looking for non-standard Qt extension
-            locale = localeFromString(ofNullable(catalog.header()).map(h -> h.getValue("X-Language")).orElse(null));
+            locale = localeFromHeader(ofNullable(catalog.header()).map(h -> h.getValue("X-Language")).orElse(null));
             if (isNull(locale)) {
-                locale = localeFromString(ofNullable(catalog.header()).map(h -> h.getValue("X-Poedit-Language")).orElse(null));
+                locale = localeFromHeader(ofNullable(catalog.header()).map(h -> h.getValue("X-Poedit-Language")).orElse(null));
                 if (isNull(locale)) {
                     Logger.debug(i18n().tr("Trying to guess locale from filename '{}'"), filename);
-                    locale = localeFromString(StringUtils.removeEndIgnoreCase(filename, ".po"));
-                    if (isNull(locale)) {
+                    locale = localeFromTag(StringUtils.removeEndIgnoreCase(filename, ".po"));
+                    if (isNull(locale) && nonNull(descriptor)) {
                         Logger.debug(i18n().tr("Trying to guess locale from file content with AI"));
                         var concat = new StringBuilder();
                         for (Message message : catalog) {
@@ -231,9 +234,7 @@ public class DefaultIOService implements IOService {
                                 break;
                             }
                         }
-                        locale = ofNullable(aiService.languageTagFor(concat.toString())).filter(StringUtils::isNotBlank)
-                                                                                        .map(Locale::forLanguageTag)
-                                                                                        .orElse(null);
+                        locale = ofNullable(aiService.languageTagFor(descriptor, concat.toString())).map(Result::content).map(this::localeFromTag).orElse(null);
                     }
                 }
             }
@@ -241,7 +242,7 @@ public class DefaultIOService implements IOService {
         return locale;
     }
 
-    private Locale localeFromString(String languageHeader) {
+    private Locale localeFromHeader(String languageHeader) {
         if (isNotBlank(languageHeader)) {
             Logger.debug(i18n().tr("Trying to guess locale from '{}'"), languageHeader);
             var headerFragments = languageHeader.split("[@_]");
@@ -259,6 +260,17 @@ public class DefaultIOService implements IOService {
                 } catch (IllformedLocaleException e) {
                     Logger.warn(i18n().tr("Invalid locale: {}"), languageHeader);
                 }
+            }
+        }
+        return null;
+    }
+
+    private Locale localeFromTag(String tag) {
+        if (isNotBlank(tag)) {
+            Logger.debug(i18n().tr("Trying to guess locale from '{}'"), tag);
+            var locale = Locale.forLanguageTag(tag);
+            if (LocaleUtils.isAvailableLocale(locale)) {
+                return locale;
             }
         }
         return null;

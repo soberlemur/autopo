@@ -14,19 +14,21 @@ package ooo.autopo.model.po;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import ooo.autopo.model.ai.AIModelDescriptor;
+
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
  * @author Andrea Vacondio
  */
-public record PoLoadRequest(PoFile poFile, boolean background) {
+public record PoLoadRequest(PoFile poFile, AIModelDescriptor descriptor, boolean background) {
 
     public PoLoadRequest {
         requireNotNullArg(poFile, "Cannot load a null poFile");
     }
 
-    public PoLoadRequest(PoFile poFile) {
-        this(poFile, false);
+    public PoLoadRequest(PoFile poFile, AIModelDescriptor descriptor) {
+        this(poFile, descriptor, false);
     }
 
 }

@@ -40,7 +40,11 @@ public class ProjectLoadController {
             final Subscription[] subscription = new Subscription[1];
             subscription[0] = r.project().status().subscribe(status -> {
                 if (status == LoadingStatus.LOADED) {
-                    r.project().translations().stream().map(e -> new PoLoadRequest(e, true)).forEach(eventStudio()::broadcast);
+                    r.project()
+                     .translations()
+                     .stream()
+                     .map(e -> new PoLoadRequest(e, app().translationAIModelDescriptor().orElse(null), true))
+                     .forEach(eventStudio()::broadcast);
                     r.project().pot().subscribe(pot -> {
                         if (nonNull(pot)) {
                             eventStudio().broadcast(new PotLoadRequest(p.pot().get()));

@@ -33,7 +33,7 @@ public class PoLoadController {
              .poFile()
              .subscribe(p -> ofNullable(p)
                      .filter(f -> f.status().getValue() == LoadingStatus.INITIAL)
-                     .map(PoLoadRequest::new)
+                     .map(f -> new PoLoadRequest(f, app().translationAIModelDescriptor().orElse(null)))
                      .ifPresent(eventStudio()::broadcast));
     }
 }

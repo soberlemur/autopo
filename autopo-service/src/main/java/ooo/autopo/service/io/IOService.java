@@ -15,6 +15,7 @@ package ooo.autopo.service.io;
  */
 
 import com.soberlemur.potentilla.catalog.parse.ParseException;
+import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PotFile;
 import ooo.autopo.model.project.Project;
@@ -29,7 +30,7 @@ public interface IOService {
 
     void load(PotFile pot) throws IOException;
 
-    void load(PoFile poFile) throws IOException, ParseException;
+    void load(PoFile poFile, AIModelDescriptor descriptor) throws IOException, ParseException;
 
     void updatePoFromTemplate(PoFile poFile, PotFile potFile) throws IOException;
 
