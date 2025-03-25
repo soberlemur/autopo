@@ -18,12 +18,19 @@ import javafx.beans.property.SimpleBooleanProperty;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 
+import java.util.List;
+
 /**
  * @author Andrea Vacondio
  */
-public record TranslationRequest(PoFile poFile, PoEntry poEntry, AIModelDescriptor descriptor, String projectDescription, SimpleBooleanProperty complete) {
+public record TranslationRequest(PoFile poFile, List<PoEntry> poEntries, AIModelDescriptor descriptor, String projectDescription,
+                                 SimpleBooleanProperty complete) {
+    public TranslationRequest(PoFile poFile, List<PoEntry> poEntries, AIModelDescriptor descriptor, String projectDescription) {
+        this(poFile, poEntries, descriptor, projectDescription, new SimpleBooleanProperty(false));
+    }
+
     public TranslationRequest(PoFile poFile, PoEntry poEntry, AIModelDescriptor descriptor, String projectDescription) {
-        this(poFile, poEntry, descriptor, projectDescription, new SimpleBooleanProperty(false));
+        this(poFile, List.of(poEntry), descriptor, projectDescription, new SimpleBooleanProperty(false));
     }
 }
 

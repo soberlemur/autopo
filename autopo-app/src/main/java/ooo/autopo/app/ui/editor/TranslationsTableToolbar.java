@@ -26,6 +26,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ooo.autopo.app.DebouncedStringProperty;
 import ooo.autopo.model.LoadingStatus;
+import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.TranslationRequest;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PoSaveRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
@@ -46,6 +48,7 @@ import static javafx.beans.binding.Bindings.not;
 import static javafx.beans.binding.Bindings.notEqual;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
@@ -158,13 +161,20 @@ public class TranslationsTableToolbar extends HBox {
         }
     }
 
-    static class TranslateButton extends Button {
+    static class TranslateButton extends AITranslateButton {
         public TranslateButton() {
             setText(i18n().tr("_Batch AI translation"));
             setGraphic(new FontIcon(FluentUiRegularAL.BOT_24));
             getStyleClass().addAll(Styles.SMALL);
             setDisable(true);
-            setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentProject().pot().get(), app().currentPoFile())));
+        }
+
+        @Override
+        void sendTranslationRequest(AIModelDescriptor aiModelDescriptor, String description) {
+            eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
+                                                           app().currentPoFile().entries().stream().filter(e -> isBlank(e.translatedValue().get())).toList(),
+                                                           aiModelDescriptor,
+                                                           description));
         }
     }
 }

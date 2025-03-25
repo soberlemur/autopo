@@ -44,7 +44,7 @@
         <eventstudio.version>4.0.1</eventstudio.version>
         <injector.version>5.0.0</injector.version>
         <ikonli.version>12.3.1</ikonli.version>
-        <javafx.version>23.0.2</javafx.version>
+        <javafx.version>24</javafx.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
         <jakarta.inject.version>2.0.1</jakarta.inject.version>
         <testfx.version>4.0.18</testfx.version>
@@ -78,14 +78,14 @@
         <module>autopo-themes</module>
         <module>autopo-ai-openai</module>
         <module>autopo-ai-gemini</module>
-<module>autopo-ai-anthropic</module>
+        <module>autopo-ai-anthropic</module>
     </modules>
 
     <profiles>
         <profile>
             <id>toolchain</id>
             <activation>
-                <jdk>(,21)</jdk>
+                <jdk>(,24)</jdk>
             </activation>
             <build>
                 <plugins>
@@ -103,7 +103,7 @@
                         <configuration>
                             <toolchains>
                                 <jdk>
-                                    <version>21</version>
+                                    <version>24</version>
                                 </jdk>
                             </toolchains>
                         </configuration>
@@ -132,7 +132,7 @@
                                 <additionalOption>-Xdoclint:none</additionalOption>
                                 <additionalOption>--enable-preview</additionalOption>
                             </additionalOptions>
-                            <release>21</release>
+                            <release>24</release>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -224,7 +224,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.0</version>
                     <configuration>
-                        <release>21</release>
+                        <release>24</release>
                         <!-- remove this once Foreign Function & Memory API is out of preview-->
                         <compilerArgs>--enable-preview</compilerArgs>
                     </configuration>
