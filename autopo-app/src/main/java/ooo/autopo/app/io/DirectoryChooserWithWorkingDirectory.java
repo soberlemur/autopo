@@ -20,7 +20,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 import static ooo.autopo.app.context.ApplicationContext.app;
@@ -49,10 +48,6 @@ public class DirectoryChooserWithWorkingDirectory {
         if (ofNullable(wrapped.getInitialDirectory()).map(File::toPath).filter(not(Files::isDirectory)).isPresent()) {
             wrapped.setInitialDirectory(null);
         }
-        Path selected = ofNullable(wrapped.showDialog(ownerWindow)).map(File::toPath).filter(Files::isDirectory).orElse(null);
-        if (nonNull(selected)) {
-            app().runtimeState().workingPath(selected);
-        }
-        return selected;
+        return ofNullable(wrapped.showDialog(ownerWindow)).map(File::toPath).filter(Files::isDirectory).orElse(null);
     }
 }

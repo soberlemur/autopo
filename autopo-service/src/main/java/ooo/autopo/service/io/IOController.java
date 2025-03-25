@@ -18,6 +18,7 @@ import com.soberlemur.potentilla.catalog.parse.ParseException;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
 import ooo.autopo.model.lifecycle.ShutdownEvent;
+import ooo.autopo.model.po.PoAddRequest;
 import ooo.autopo.model.po.PoLoadRequest;
 import ooo.autopo.model.po.PoSaveRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
@@ -35,6 +36,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static ooo.autopo.i18n.I18nContext.i18n;
+import static ooo.autopo.model.LoadingStatus.LOADED;
 import static ooo.autopo.model.LoadingStatus.LOADING;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
@@ -98,6 +100,21 @@ public class IOController {
                 eventStudio().broadcast(TranslationsCountChanged.INSTANCE);
                 request.complete().set(true);
             });
+        });
+    }
+
+    @EventListener
+    public void addPo(PoAddRequest request) {
+        Logger.trace("Po addition request received");
+        mainExecutor.submit(() -> {
+            try {
+                request.poFile().status(LOADED);
+                request.project().addTranslation(request.poFile());
+                ioService.updatePoFromTemplate(request.poFile(), request.project().pot().get());
+            } catch (IOException e) {
+                exceptionHandler.accept(e, i18n().tr("An error adding .po file '{0}' to the project", request.poFile().toString()));
+            }
+            Platform.runLater(() -> request.complete().set(true));
         });
     }
 

@@ -87,6 +87,7 @@ public class ApplicationRuntimeState {
             this.project.set(project);
             this.poFile.set(null);
             this.poEntry.set(null);
+            workingPath(project.location());
         }
     }
 

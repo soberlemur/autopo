@@ -16,6 +16,7 @@ package ooo.autopo.app.ui.explorer;
 
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
+import com.soberlemur.potentilla.Catalog;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -38,7 +39,10 @@ import javafx.util.Subscription;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.FileType;
+import ooo.autopo.model.notification.AddNotificationRequest;
+import ooo.autopo.model.notification.NotificationType;
 import ooo.autopo.model.po.PoAddRequest;
+import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.SaveProjectRequest;
@@ -103,7 +107,27 @@ public class FileExplorer extends BorderPane {
 
         var addTranslation = new MenuItem(i18n().tr("Add translation"));
         addTranslation.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
-        addTranslation.setOnAction(e -> eventStudio().broadcast(new PoAddRequest()));
+        addTranslation.setOnAction(e -> {
+            var poPath = Choosers.fileChooser(i18n().tr("Save a .po translation file"), FileType.PO).showSaveDialog(this.getScene().getWindow());
+            if (nonNull(poPath)) {
+                var filename = poPath.getFileName().toString();
+                if (!filename.toLowerCase().endsWith(".po")) {
+                    poPath = poPath.resolveSibling(filename + ".po");
+                }
+                if (Files.exists(poPath)) {
+                    eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR,
+                                                                       i18n().tr("The file {0} already exists", poPath.getFileName().toString())));
+                } else if (!poPath.toAbsolutePath().startsWith(app().currentProject().location().toAbsolutePath())) {
+                    eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR,
+                                                                       i18n().tr("The file {0} is not inside the current project directory",
+                                                                                 poPath.getFileName().toString())));
+                } else {
+                    var poFile = new PoFile(poPath);
+                    poFile.catalog(new Catalog());
+                    eventStudio().broadcast(new PoAddRequest(app().currentProject(), poFile), "LANGUAGE_SELECTION_STATION");
+                }
+            }
+        });
 
         var updateAll = new MenuItem(i18n().tr("Update all from pot"));
         updateAll.setOnAction(e -> eventStudio().broadcast(new PoUpdateRequest(app().currentProject().pot().get(), app().currentProject().translations())));
@@ -255,6 +279,19 @@ public class FileExplorer extends BorderPane {
              .map(t -> TreeNode.ofPo(t, () -> app().runtimeState().poFile(t), new PoContextMenu(t)))
              .map(TreeItem::new)
              .forEach(translationsRootItem.getChildren()::add);
+    }
+
+    @EventListener(priority = Integer.MIN_VALUE)
+    public void onPoAdd(PoAddRequest request) {
+        request.complete().subscribe((o, n) -> {
+            if (n) {
+                //TODO add it in order, in the correct position
+                translationsRootItem.getChildren()
+                                    .add(new TreeItem<>(TreeNode.ofPo(request.poFile(),
+                                                                      () -> app().runtimeState().poFile(request.poFile()),
+                                                                      new PoContextMenu(request.poFile()))));
+            }
+        });
     }
 
 }

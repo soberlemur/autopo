@@ -43,6 +43,7 @@ module ooo.autopo.app {
     requires org.slf4j;
     requires org.tinylog.api;
     requires org.tinylog.impl;
+    requires langchain4j.anthropic;
 
     opens ooo.autopo.app to org.pdfsam.injector, org.pdfsam.eventstudio;
     opens ooo.autopo.app.ui to org.pdfsam.injector, org.pdfsam.eventstudio;

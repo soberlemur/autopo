@@ -24,7 +24,7 @@ import dev.langchain4j.service.V;
  */
 public interface TranslateWithAI {
 
-    @SystemMessage("You are a native {{sourceLanguage}}/{{targetLanguage}} speaker and a professional translator. Your task is to provide translations from {{sourceLanguage}} to {{targetLanguage}}. You will take special care to not add any quotes, punctuation, linefeed or extra symbols and maintain the same case and formatting as the original. You answer will be automatically process therefore you need to return the translated text only and nothing more, no comments, no additional quotes, trailing or leading spaces, or full stop, just the translation.")
+    @SystemMessage("You are a native {{sourceLanguage}}/{{targetLanguage}} speaker and a professional translator. Your task is to provide translations from {{sourceLanguage}} to {{targetLanguage}}. You will take special care to not add any quotes, punctuation, linefeed or extra symbols and maintain the same case and formatting as the original. You answer will be automatically processed therefore you need to return the translated text only and nothing more, no comments, no additional quotes, trailing or leading spaces, or full stop just the translation.")
     @UserMessage("Your are translating {{description}}. Translate this: {{text}}")
     Result<String> translate(@V("sourceLanguage") String sourceLanguage, @V("targetLanguage") String targetLanguage, @V("text") String text,
             @V("description") String description);

@@ -14,8 +14,14 @@ package ooo.autopo.model.po;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import javafx.beans.property.SimpleBooleanProperty;
+import ooo.autopo.model.project.Project;
+
 /**
  * @author Andrea Vacondio
  */
-public class PoAddRequest {
+public record PoAddRequest(Project project, PoFile poFile, SimpleBooleanProperty complete) {
+    public PoAddRequest(Project project, PoFile poFile) {
+        this(project, poFile, new SimpleBooleanProperty(false));
+    }
 }

@@ -103,7 +103,6 @@ public class DefaultIOService implements IOService {
             poFile.updateFromTemplate(potFile);
             Logger.info(i18n().tr("Po file {} updated"), poFile.poFile().toString());
             save(poFile);
-            poFile.updatePercentageOfTranslation();
         } else {
             Logger.error(i18n().tr("Cannot update file {} because it is not loaded yet"), poFile.poFile().getFileName().toString());
         }
@@ -142,6 +141,7 @@ public class DefaultIOService implements IOService {
             poFile.catalog().header().updateRevisionDate();
         }
         new PoWriter().withAddHeaderIfMissing().withCharset(StandardCharsets.UTF_8).write(poFile.catalog(), Files.newBufferedWriter(poFile.poFile()));
+        poFile.updatePercentageOfTranslation();
         eventStudio().broadcast(new IOEvent(poFile.poFile(), IOEventType.SAVED, FileType.PO));
         Logger.info(i18n().tr("File {} saved"), poFile.poFile().toString());
     }

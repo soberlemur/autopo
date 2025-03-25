@@ -24,7 +24,6 @@ import java.util.List;
 
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
-import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 import static ooo.autopo.app.context.ApplicationContext.app;
@@ -67,7 +66,6 @@ public class FileChooserWithWorkingDirectory {
                                                                                                 .map(File::toPath)
                                                                                                 .filter(Files::isRegularFile)
                                                                                                 .toList()).orElse(emptyList());
-        selected.stream().findFirst().ifPresent(this::updateWorkingPath);
         return selected;
     }
 
@@ -75,17 +73,9 @@ public class FileChooserWithWorkingDirectory {
         wrapped.getExtensionFilters().setAll(stream(filters).map(FileType::getFilter).toList());
     }
 
-    private Path updateWorkingPath(Path path) {
-        if (nonNull(path)) {
-            app().runtimeState().workingPath(path);
-        }
-        return path;
-    }
-
     private Path singleFileDialog(File file) {
         return ofNullable(file).map(File::toPath)
                                .filter(f -> !Files.isDirectory(f))
-                               .map(this::updateWorkingPath)
                                .orElse(null);
 
     }
@@ -104,7 +94,6 @@ public class FileChooserWithWorkingDirectory {
     private Path singleExistingFileDialog(File file) {
         return ofNullable(file).map(File::toPath)
                                .filter(Files::isRegularFile)
-                               .map(this::updateWorkingPath)
                                .orElse(null);
 
     }
