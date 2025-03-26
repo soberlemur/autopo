@@ -21,6 +21,9 @@ import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import org.pdfsam.persistence.PreferencesRepository;
 
+import java.util.Set;
+
+import static dev.langchain4j.model.chat.Capability.RESPONSE_FORMAT_JSON_SCHEMA;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -47,7 +50,7 @@ public class OpenAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel model() {
+    public ChatLanguageModel translationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(OpenAIPersistentProperty.TEMPERATURE.key(), -1);
@@ -57,6 +60,26 @@ public class OpenAiModelDescriptor implements AIModelDescriptor {
             return OpenAiChatModel.builder()
                     .apiKey(repo.getString(OpenAIPersistentProperty.API_KEY.key(), ""))
                     .temperature(temperature)
+                    .logRequests(true)
+                    .modelName(OpenAiChatModelName.valueOf(repo.getString(OpenAIPersistentProperty.MODEL_NAME.key(), GPT_4.name())))
+                    .build();
+        }
+        return null;
+    }
+
+    @Override
+    public ChatLanguageModel validationModel() {
+        if (isUsable()) {
+            var temperature = 0.2d;
+            var temperatureIntValue = repo.getInt(OpenAIPersistentProperty.TEMPERATURE.key(), -1);
+            if (temperatureIntValue >= 0) {
+                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+            }
+            return OpenAiChatModel.builder()
+                    .apiKey(repo.getString(OpenAIPersistentProperty.API_KEY.key(), ""))
+                    .temperature(temperature)
+                    .supportedCapabilities(Set.of(RESPONSE_FORMAT_JSON_SCHEMA)) // see [2] below
+                    .strictJsonSchema(true)
                     .logRequests(true)
                     .modelName(OpenAiChatModelName.valueOf(repo.getString(OpenAIPersistentProperty.MODEL_NAME.key(), GPT_4.name())))
                     .build();

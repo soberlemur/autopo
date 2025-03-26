@@ -16,11 +16,13 @@ package ooo.autopo.model.po;
 
 import com.soberlemur.potentilla.Message;
 import com.soberlemur.potentilla.MessageKey;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Subscription;
+import ooo.autopo.model.ai.TranslationAssessment;
 import ooo.autopo.model.consistency.ConsistencyValidator;
 import org.sejda.commons.util.RequireUtils;
 
@@ -41,6 +43,7 @@ public class PoEntry {
     private final Message message;
     private final SimpleStringProperty untranslatedValue = new SimpleStringProperty();
     private final SimpleStringProperty translatedValue = new SimpleStringProperty();
+    private final SimpleObjectProperty<TranslationAssessment> assessment = new SimpleObjectProperty();
     private final List<String> comments = new ArrayList<>();
     private final List<String> formats = new ArrayList<>();
     private final List<String> extractedComments = new ArrayList<>();
@@ -59,7 +62,6 @@ public class PoEntry {
         this.extractedComments.addAll(message.getExtractedComments());
         this.sourceReferences.addAll(message.getSourceReferences());
         this.translatedValue.subscribe((o, n) -> message.setMsgstr(n));
-        //TODO listener for comments updating the message comments
     }
 
     public MessageKey key() {
@@ -119,5 +121,13 @@ public class PoEntry {
 
     public ObservableList<String> warnings() {
         return warnings;
+    }
+
+    public SimpleObjectProperty<TranslationAssessment> assessment() {
+        return assessment;
+    }
+
+    public void acceptSuggestion() {
+        ofNullable(assessment.get()).map(TranslationAssessment::suggestedReplacement).ifPresent(this.translatedValue::set);
     }
 }

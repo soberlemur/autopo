@@ -2,7 +2,7 @@ package ooo.autopo.model.ai;
 
 /*
  * This file is part of the Autopo project
- * Created 17/03/25
+ * Created 26/03/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * You are not permitted to distribute it in any form unless explicit
@@ -14,23 +14,13 @@ package ooo.autopo.model.ai;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import javafx.scene.layout.Pane;
+import dev.langchain4j.model.output.structured.Description;
 
 /**
  * @author Andrea Vacondio
  */
-public interface AIModelDescriptor {
+public record TranslationAssessment(@Description("A score from 1 to 10, with 10 being a perfect translation") int score,
+                                    @Description("A brief explanation of any errors or areas for improvement") String feedback,
+                                    @Description("A suggested replacement translation that better fits the context") String suggestedReplacement) {
 
-    String id();
-
-    String name();
-
-    Pane settingsPane();
-
-    ChatLanguageModel translationModel();
-
-    ChatLanguageModel validationModel();
-
-    boolean isUsable();
 }

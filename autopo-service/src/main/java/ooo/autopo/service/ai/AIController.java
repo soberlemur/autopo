@@ -19,6 +19,8 @@ import dev.langchain4j.service.Result;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
 import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.AssessmentRequest;
+import ooo.autopo.model.ai.TranslationAssessment;
 import ooo.autopo.model.ai.TranslationRequest;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
@@ -34,6 +36,7 @@ import java.util.concurrent.StructuredTaskScope;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static java.util.Objects.nonNull;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 import static org.sejda.commons.util.RequireUtils.requireArg;
@@ -60,19 +63,17 @@ public class AIController {
     public void translate(TranslationRequest request) {
         Logger.trace("AI translation request received");
         requireNotNullArg(request.poFile(), "Cannot translate a null poFile");
-        requireNotNullArg(request.poEntries(), "Cannot translate a null poEntry");
-        requireArg(!request.poEntries().isEmpty(), "Cannot translate an empty poEntry collection");
+        requireArg(nonNull(request.poEntries()) && !request.poEntries().isEmpty(), "Cannot translate an empty poEntry collection");
         requireNotNullArg(request.descriptor(), "Cannot translate with a null descriptor");
         if (request.poEntries().size() == 1) {
             translateSingle(request);
         } else {
             translateMultiple(request);
         }
-
     }
 
     private void translateMultiple(TranslationRequest request) {
-        Thread.ofVirtual().name("translation-thread-", 0).start(() -> {
+        Thread.ofVirtual().name("translation-vthread-", 0).start(() -> {
 
             try (var scope = new StructuredTaskScope()) {
                 var callables = request.poEntries()
@@ -97,7 +98,7 @@ public class AIController {
     }
 
     private void translateSingle(TranslationRequest request) {
-        Thread.ofVirtual().name("translation-thread-", 0).start(() -> {
+        Thread.ofVirtual().name("translation-vthread-", 0).start(() -> {
             try {
                 var result = translateEntry(request.poFile(), request.poEntries().getFirst(), request.descriptor(), request.projectDescription());
                 eventStudio().broadcast(new SetStatusLabelRequest(i18n().tr("Total token used {0} (input: {1}, output: {2})",
@@ -119,6 +120,40 @@ public class AIController {
             poEntry.translatedValue().set(result.content().trim());
             poFile.modified(true);
         });
+        return result;
+    }
+
+    @EventListener
+    public void assess(AssessmentRequest request) {
+        Logger.trace("AI assess request received");
+        requireNotNullArg(request.poFile(), "Cannot assess a null poFile");
+        requireArg(nonNull(request.poEntries()) && !request.poEntries().isEmpty(), "Cannot assess an empty poEntry collection");
+        requireNotNullArg(request.descriptor(), "Cannot assess with a null descriptor");
+        if (request.poEntries().size() == 1) {
+            assessSingle(request);
+        }
+    }
+
+    private void assessSingle(AssessmentRequest request) {
+        Thread.ofVirtual().name("assessment-vthread-", 0).start(() -> {
+            try {
+                var result = evaluateEntry(request.poFile(), request.poEntries().getFirst(), request.descriptor(), request.projectDescription());
+                eventStudio().broadcast(new SetStatusLabelRequest(i18n().tr("Total token used {0} (input: {1}, output: {2})",
+                                                                            result.tokenUsage().totalTokenCount().toString(),
+                                                                            result.tokenUsage().inputTokenCount().toString(),
+                                                                            result.tokenUsage().outputTokenCount().toString())));
+            } catch (Throwable e) {
+                exceptionHandler.accept(e, i18n().tr("An error occurred while assessing a translation with AI"));
+            }
+            Platform.runLater(() -> request.complete().set(true));
+        });
+    }
+
+    private Result<TranslationAssessment> evaluateEntry(PoFile poFile, PoEntry poEntry, AIModelDescriptor descriptor, String projectDescription) {
+        requireNotNullArg(poEntry, "Cannot assess a null poEntry");
+        var result = aiService.assess(poFile, poEntry, descriptor, projectDescription);
+        requireState(result.finishReason() == FinishReason.STOP, i18n().tr("Invalid finish reason: {0}", result.finishReason().name()));
+        Platform.runLater(() -> poEntry.assessment().set(result.content()));
         return result;
     }
 }

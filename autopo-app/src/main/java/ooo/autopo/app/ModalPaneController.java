@@ -20,6 +20,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 import ooo.autopo.app.ui.editor.WaitDialog;
 import ooo.autopo.app.ui.explorer.SelectLanguageDialog;
+import ooo.autopo.model.ai.AssessmentRequest;
 import ooo.autopo.model.ai.TranslationRequest;
 import ooo.autopo.model.po.PoAddRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
@@ -40,9 +41,7 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 public class ModalPaneController {
 
     private final ModalPane modalPane;
-    private WaitDialog translatingDialog;
-    private WaitDialog updatingDialog;
-    private WaitDialog addingDialog;
+    private WaitDialog waitDialog = new WaitDialog();
     private SelectLanguageDialog selectLanguageDialog;
 
     @Inject
@@ -53,9 +52,8 @@ public class ModalPaneController {
 
     @EventListener(priority = Integer.MIN_VALUE)
     public void onTranslationRequest(TranslationRequest request) {
-        translatingDialog = Optional.ofNullable(translatingDialog)
-                                    .orElseGet(() -> new WaitDialog(new Label(i18n().tr("Translating..."), new FontIcon(FluentUiRegularAL.BOT_24))));
-        modalPane.show(translatingDialog);
+        waitDialog.setLabel(new Label(i18n().tr("Translating..."), new FontIcon(FluentUiRegularAL.BOT_24)));
+        modalPane.show(waitDialog);
         request.complete().subscribe((o, n) -> {
             if (n) {
                 Platform.runLater(() -> modalPane.hide(true));
@@ -65,9 +63,8 @@ public class ModalPaneController {
 
     @EventListener(priority = Integer.MIN_VALUE)
     public void onUpdateRequest(PoUpdateRequest request) {
-        updatingDialog = Optional.ofNullable(updatingDialog)
-                                 .orElseGet(() -> new WaitDialog(new Label(i18n().tr("Updating..."), new FontIcon(FluentUiRegularAL.ARROW_SYNC_24))));
-        modalPane.show(updatingDialog);
+        waitDialog.setLabel(new Label(i18n().tr("Updating..."), new FontIcon(FluentUiRegularAL.ARROW_SYNC_24)));
+        modalPane.show(waitDialog);
         request.complete().subscribe((o, n) -> {
             if (n) {
                 Platform.runLater(() -> modalPane.hide(true));
@@ -77,10 +74,8 @@ public class ModalPaneController {
 
     @EventListener(priority = Integer.MIN_VALUE)
     public void onPoAdd(PoAddRequest request) {
-        addingDialog = Optional.ofNullable(addingDialog)
-                               .orElseGet(() -> new WaitDialog(new Label(i18n().tr("Adding .po to the project..."),
-                                                                         new FontIcon(FluentUiRegularAL.ARROW_SYNC_24))));
-        modalPane.show(addingDialog);
+        waitDialog.setLabel(new Label(i18n().tr("Adding .po to the project..."), new FontIcon(FluentUiRegularAL.ARROW_SYNC_24)));
+        modalPane.show(waitDialog);
         request.complete().subscribe((o, n) -> {
             if (n) {
                 Platform.runLater(() -> modalPane.hide(true));
@@ -94,6 +89,17 @@ public class ModalPaneController {
                                        .orElseGet(() -> new SelectLanguageDialog(() -> Platform.runLater(() -> modalPane.hide(true))));
         selectLanguageDialog.currentRequest(request);
         modalPane.show(selectLanguageDialog);
+    }
+
+    @EventListener(priority = Integer.MIN_VALUE)
+    public void onAssessmentRequest(AssessmentRequest request) {
+        waitDialog.setLabel(new Label(i18n().tr("Validating..."), new FontIcon(FluentUiRegularAL.BOT_24)));
+        modalPane.show(waitDialog);
+        request.complete().subscribe((o, n) -> {
+            if (n) {
+                Platform.runLater(() -> modalPane.hide(true));
+            }
+        });
     }
 
 }

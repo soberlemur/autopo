@@ -16,6 +16,7 @@ package ooo.autopo.service.ai;
 
 import dev.langchain4j.service.Result;
 import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.TranslationAssessment;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoFile;
 
@@ -30,4 +31,6 @@ public interface AIService {
     Result<String> languageTagFor(AIModelDescriptor aiModelDescriptor, String string);
 
     Result<String> translate(PoFile poFile, PoEntry entry, AIModelDescriptor aiModelDescriptor, String projectDescription);
+
+    Result<TranslationAssessment> assess(PoFile poFile, PoEntry entry, AIModelDescriptor aiModelDescriptor, String projectDescription);
 }

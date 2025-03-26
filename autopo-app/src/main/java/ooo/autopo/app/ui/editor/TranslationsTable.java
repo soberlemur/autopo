@@ -24,6 +24,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import ooo.autopo.model.ai.TranslationAssessment;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.ui.SearchTranslation;
@@ -81,9 +82,25 @@ public class TranslationsTable extends TableView<PoEntry> {
 
         translationColumn.setCellValueFactory(param -> param.getValue().translatedValue());
 
+        var assessmentColumn = new TableColumn<PoEntry, TranslationAssessment>(i18n().tr("Rate"));
+        assessmentColumn.setPrefWidth(25);
+        //assessmentColumn.setComparator(Comparator.naturalOrder());
+        assessmentColumn.setCellValueFactory(param -> param.getValue().assessment());
+        assessmentColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(TranslationAssessment item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(Integer.toString(item.score()));
+                }
+            }
+        });
+
         getSelectionModel().selectedItemProperty().subscribe((oldValue, newValue) -> app().runtimeState().poEntry(newValue));
 
-        getColumns().addAll(warningColumn, sourceColumn, translationColumn);
+        getColumns().addAll(warningColumn, sourceColumn, translationColumn, assessmentColumn);
         getSortOrder().add(translationColumn);
         eventStudio().addAnnotatedListeners(this);
     }

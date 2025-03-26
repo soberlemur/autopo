@@ -20,6 +20,7 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import org.pdfsam.persistence.PreferencesRepository;
+import org.tinylog.Logger;
 
 import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_3_5_HAIKU_20241022;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -47,8 +48,29 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel model() {
+    public ChatLanguageModel translationModel() {
         if (isUsable()) {
+            var temperature = 0.2d;
+            var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
+            if (temperatureIntValue >= 0) {
+                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+            }
+            return AnthropicChatModel.builder()
+                    .apiKey(repo.getString(AnthropicAIPersistentProperty.API_KEY.key(), ""))
+                    .modelName(AnthropicChatModelName.valueOf(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_3_5_HAIKU_20241022.name())))
+                    .temperature(temperature)
+                    .logRequests(true)
+                    .logResponses(true)
+                    .build();
+
+        }
+        return null;
+    }
+
+    @Override
+    public ChatLanguageModel validationModel() {
+        if (isUsable()) {
+            Logger.warn("JSON mode not yet implemented for Anthropic AI");
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
             if (temperatureIntValue >= 0) {

@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
  */
 public class WaitDialog extends VBox {
 
-    public WaitDialog(Label label) {
+    public WaitDialog() {
         getStyleClass().add("autopo-dialog");
         setSpacing(10);
         setAlignment(Pos.CENTER);
@@ -32,6 +32,10 @@ public class WaitDialog extends VBox {
         setMaxSize(350, 200);
         var progress = new ProgressBar();
         progress.setPrefWidth(200);
-        getChildren().addAll(label, progress);
+        getChildren().addAll(new Label(), progress);
+    }
+
+    public void setLabel(Label label) {
+        getChildren().set(0, label);
     }
 }

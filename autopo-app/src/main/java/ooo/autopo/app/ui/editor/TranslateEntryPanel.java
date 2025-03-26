@@ -18,9 +18,10 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
 import jakarta.inject.Inject;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -29,10 +30,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Subscription;
 import ooo.autopo.app.ui.Style;
+import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.AssessmentRequest;
 import ooo.autopo.model.ai.TranslationRequest;
-import ooo.autopo.model.notification.AddNotificationRequest;
-import ooo.autopo.model.notification.NotificationType;
-import ooo.autopo.model.project.ProjectProperty;
 
 import java.util.Objects;
 
@@ -40,7 +40,6 @@ import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
@@ -64,34 +63,24 @@ public class TranslateEntryPanel extends SplitPane {
 
         var toolbar = new HBox();
         toolbar.getStyleClass().addAll("tool-bar", "translation-edit-toolbar");
-        var aiTranslateButton = new Button(i18n().tr("AI Translate"));
+        var aiTranslateButton = new AITranslateButton() {
+            @Override
+            void sendTranslationRequest(AIModelDescriptor aiModelDescriptor, String description) {
+                eventStudio().broadcast(new TranslationRequest(app().currentPoFile(), app().currentPoEntry(), aiModelDescriptor, description));
+            }
+        };
+        aiTranslateButton.setText(i18n().tr("AI Translate"));
         aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
         app().runtimeState().poEntry().subscribe(e -> aiTranslateButton.setDisable(isNull(e) || isNull(app().currentPoFile().locale())));
 
-        aiTranslateButton.setOnAction(e -> {
-            var description = ofNullable(app().currentProject().getProperty(ProjectProperty.DESCRIPTION)).orElse("");
-            if (isBlank(description)) {
-                eventStudio().broadcast(new AddNotificationRequest(NotificationType.WARN,
-                                                                   i18n().tr(
-                                                                           "Add a project description to give the AI model more context and improve translations accuracy")));
+        var aiValidateButton = new AIValidationButton() {
+            @Override
+            void sendValidationRequest(AIModelDescriptor aiModelDescriptor, String description) {
+                eventStudio().broadcast(new AssessmentRequest(app().currentPoFile(), app().currentPoEntry(), aiModelDescriptor, description));
             }
-            if (isNull(app().currentPoFile().locale())) {
-                eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("The project must have a target locale to translate to")));
-            } else {
-                var model = app().translationAIModelDescriptor();
-                if (model.isPresent()) {
-                    eventStudio().broadcast(new TranslationRequest(app().currentPoFile(), app().currentPoEntry(), model.get(), description));
-                } else {
-                    eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("Unable to find a usable translation AI model")));
-
-                }
-
-            }
-        });
-
-        var aiValidateButton = new Button(i18n().tr("AI Validate"));
+        };
+        aiValidateButton.setText(i18n().tr("AI Validate"));
         aiValidateButton.getStyleClass().addAll(Styles.SMALL);
-        aiValidateButton.disableProperty().bind(aiTranslateButton.disableProperty());
 
         toolbar.getChildren().addAll(aiTranslateButton, aiValidateButton);
         var translationView = new TextArea();
@@ -100,6 +89,7 @@ public class TranslateEntryPanel extends SplitPane {
         translationView.setEditable(false);
         VBox.setVgrow(translationView, Priority.ALWAYS);
 
+        aiValidateButton.disableProperty().bind(translationView.textProperty().isEmpty());
         entriesPanel.getChildren().addAll(sourceView, toolbar, translationView);
 
         var commentsFlow = new VBox();
@@ -108,7 +98,14 @@ public class TranslateEntryPanel extends SplitPane {
         commentsScroll.setFitToWidth(true);
         commentsScroll.setFitToHeight(true);
 
-        this.getItems().addAll(entriesPanel, commentsScroll);
+        var sidePane = new TabPane();
+        sidePane.getStyleClass().addAll(Style.CONTAINER.css());
+        sidePane.getTabs().add(new Tab(i18n().tr("Assessment"), new AssessmentPane()));
+        sidePane.getTabs().add(new Tab(i18n().tr("Comments"), commentsScroll));
+        //sidePane.getStyleClass().add("settings-panel");
+        sidePane.getTabs().forEach(tab -> tab.setClosable(false));
+
+        this.getItems().addAll(entriesPanel, sidePane);
 
         app().runtimeState().poEntry().subscribe((oldEntry, newEntry) -> {
             //let's remove the old binding
