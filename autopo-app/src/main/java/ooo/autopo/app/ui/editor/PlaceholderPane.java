@@ -19,6 +19,8 @@ import atlantafx.base.theme.Tweaks;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import static ooo.autopo.i18n.I18nContext.i18n;
+
 /**
  * @author Andrea Vacondio
  */
@@ -26,7 +28,7 @@ public class PlaceholderPane extends VBox {
 
     public PlaceholderPane() {
         this.getStyleClass().addAll(Tweaks.EDGE_TO_EDGE, "placeholder-pane");
-        var label = new Label("No translation selected");
+        var label = new Label(i18n().tr("No translation selected"));
         label.getStyleClass().addAll(Styles.TITLE_1, "placeholder");
         getChildren().add(label);
     }

@@ -1,0 +1,5 @@
+#Thu Mar 27 18:06:00 CET 2025
+ooo.autopo.description=UI elements of an application that can use AI to translate .po files or validate.po translations. It also allows to update a .pot template, clear obsolete items.
+ooo.autopo.exclude=target
+ooo.autopo.name=Autopo
+ooo.autopo.template.path=po/autopo.pot

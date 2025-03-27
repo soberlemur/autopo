@@ -8,14 +8,142 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: info@soberlemur.com\n"
-"POT-Creation-Date: 2025-02-04 09:39+0100\n"
+"POT-Creation-Date: 2025-03-27 18:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "Model:"
+msgstr ""
+
+msgid "AI Model to use"
+msgstr ""
+
+msgid "API key:"
+msgstr ""
+
+msgid "Temperature:"
+msgstr ""
+
+msgid ""
+"Higher values make the output more random, lower values make it more "
+"deterministic"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Clear Anthropic settings"
+msgstr ""
+
+msgid "Base URL:"
+msgstr ""
+
+msgid "Clear Ollama settings"
+msgstr ""
+
+msgid "There was an error retrieving recently used projects"
+msgstr ""
+
+msgid "An error occurred loading .po file '{0}'"
+msgstr ""
+
+msgid "An error occurred loading .pot file '{0}'"
+msgstr ""
+
+msgid "An error occurred updating .po file '{0}'"
+msgstr ""
+
+msgid "An error adding .po file '{0}' to the project"
+msgstr ""
+
+msgid "An error occurred saving .po file to '{0}'"
+msgstr ""
+
+msgid "An error occurred loading project file '{0}'"
+msgstr ""
+
+msgid "An error occurred saving project to '{0}'"
+msgstr ""
+
+msgid "Loading .po file {}"
+msgstr ""
+
+msgid "Unable to find or detect a valid locale"
+msgstr ""
+
+msgid "File {} loaded"
+msgstr ""
+
+msgid "Updating po file {} from template {}"
+msgstr ""
+
+msgid "Po file {} updated"
+msgstr ""
+
+msgid "Cannot update file {} because it is not loaded yet"
+msgstr ""
+
+msgid "Loading .pot file {}"
+msgstr ""
+
+msgid "Saving po file {}"
+msgstr ""
+
+msgid "File {} saved"
+msgstr ""
+
+msgid "Loading project file {}"
+msgstr ""
+
+msgid "Creating project descriptor file '{}'"
+msgstr ""
+
+msgid "Found template file '{}'"
+msgstr ""
+
+msgid "Skipping directory '{}'"
+msgstr ""
+
+msgid "Project {} loaded"
+msgstr ""
+
+msgid "Saving project file {}"
+msgstr ""
+
+msgid "Trying to guess locale from filename '{}'"
+msgstr ""
+
+msgid "Trying to guess locale from file content with AI"
+msgstr ""
+
+msgid "Trying to guess locale from '{}'"
+msgstr ""
+
+msgid "Invalid locale: {}"
+msgstr ""
+
+#, java-format
+msgid "Total token used {0}"
+msgstr ""
+
+msgid "An error occurred while translating with AI"
+msgstr ""
+
+#, java-format
+msgid "Total token used {0} (input: {1}, output: {2})"
+msgstr ""
+
+#, java-format
+msgid "Invalid finish reason: {0}"
+msgstr ""
+
+msgid "An error occurred while assessing a translation with AI"
+msgstr ""
 
 msgid "Inconsistent trailing spaces between original and translation"
 msgstr ""
@@ -23,7 +151,21 @@ msgstr ""
 msgid "Inconsistent trailing linefeed between original and translation"
 msgstr ""
 
+msgid "Translated string should be included in ¡ and !"
+msgstr ""
+
+msgid "Translated string should not be included in ¡ and !"
+msgstr ""
+
+msgid "Inconsistent question mark between original and translation"
+msgstr ""
+
 msgid "Inconsistent full stop ending between original and translation"
+msgstr ""
+
+msgid ""
+"Inconsistent capitalization of the first letter between the original and "
+"translation"
 msgstr ""
 
 #, java-format, java-printf-format
@@ -32,16 +174,417 @@ msgid ""
 "original and translation"
 msgstr ""
 
-msgid "Suspicious lowercase of the first letter"
+msgid "Translated string should be included in ¿ and ?"
 msgstr ""
 
-msgid ""
-"Inconsistent capitalization of the first letter between the original and "
-"translation"
+msgid "Translated string should not be included in ¿ and ?"
+msgstr ""
+
+msgid "Suspicious lowercase of the first letter"
 msgstr ""
 
 msgid "Inconsistent leading spaces between original and translation"
 msgstr ""
 
+msgid "Inconsistent exclamation mark between original and translation"
+msgstr ""
+
 msgid "Suspicious quotes inconsistency between original and translation"
+msgstr ""
+
+msgid "Nord dark"
+msgstr ""
+
+msgid "Darcula"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "Cupertino dark"
+msgstr ""
+
+msgid "Cupertino light"
+msgstr ""
+
+msgid "Dark"
+msgstr ""
+
+msgid "Nord light"
+msgstr ""
+
+msgid "Clear Google Gemini settings"
+msgstr ""
+
+msgid "Translating..."
+msgstr ""
+
+msgid "Updating..."
+msgstr ""
+
+msgid "Adding .po to the project..."
+msgstr ""
+
+msgid "Validating..."
+msgstr ""
+
+msgid "System default"
+msgstr ""
+
+msgid "First available"
+msgstr ""
+
+msgid "Persistent application settings deleted"
+msgstr ""
+
+msgid "Unable to clear application settings"
+msgstr ""
+
+msgid "Closing..."
+msgstr ""
+
+msgid "modificato"
+msgstr ""
+
+msgid "Unexpected error"
+msgstr ""
+
+msgid "Unable to open '{}', please copy and paste the url to your browser"
+msgstr ""
+
+msgid "General settings"
+msgstr ""
+
+msgid "AI providers"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Language:"
+msgstr ""
+
+msgid "Set your preferred language (restart needed)"
+msgstr ""
+
+msgid "Theme:"
+msgstr ""
+
+msgid "Set the application theme"
+msgstr ""
+
+msgid "Font size:"
+msgstr ""
+
+msgid "Set the application font size"
+msgstr ""
+
+msgid "Translations AI provider:"
+msgstr ""
+
+msgid "Set the AI provider for translations"
+msgstr ""
+
+msgid "Validations AI provider:"
+msgstr ""
+
+msgid "Set the AI provider used for validation"
+msgstr ""
+
+msgid "Batch size:"
+msgstr ""
+
+msgid "Set the number of entries to translate with the AI batch translation"
+msgstr ""
+
+msgid "Discard modification"
+msgstr ""
+
+msgid ""
+"There are modified Po files, loading a new project will discard the "
+"modification, do you want to proceed?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid "Translations"
+msgstr ""
+
+msgid "Expand"
+msgstr ""
+
+msgid "Collapse"
+msgstr ""
+
+msgid "Edit project"
+msgstr ""
+
+msgid "Select template"
+msgstr ""
+
+msgid "Add translation"
+msgstr ""
+
+msgid "Save a .po translation file"
+msgstr ""
+
+#, java-format
+msgid "The file {0} already exists"
+msgstr ""
+
+#, java-format
+msgid "The file {0} is not inside the current project directory"
+msgstr ""
+
+msgid "Update all from pot"
+msgstr ""
+
+msgid "Remove obsolete entries from every .po file"
+msgstr ""
+
+msgid "Select a template"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Remove obsolete entries"
+msgstr ""
+
+msgid "No obsolete entries to remove"
+msgstr ""
+
+msgid "Obsolete entries removed"
+msgstr ""
+
+msgid "Select the language for the translation"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Removes all the log messages"
+msgstr ""
+
+msgid "_Clear"
+msgstr ""
+
+msgid "_Save"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Save log"
+msgstr ""
+
+msgid "Select where to save the log file"
+msgstr ""
+
+msgid "Logs"
+msgstr ""
+
+msgid "No translation selected"
+msgstr ""
+
+msgid "AI Translate"
+msgstr ""
+
+msgid "AI Validate"
+msgstr ""
+
+msgid "Assessment"
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Extracted comments"
+msgstr ""
+
+msgid "Formats"
+msgstr ""
+
+msgid "Source reference"
+msgstr ""
+
+msgid "Rate:"
+msgstr ""
+
+msgid "Feedback"
+msgstr ""
+
+msgid "Suggested replacement"
+msgstr ""
+
+msgid "Accept suggestion"
+msgstr ""
+
+#, java-format
+msgid "Rate: {0}"
+msgstr ""
+
+msgid "Translation"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Rate"
+msgstr ""
+
+msgid ""
+"Add a project description to give the AI model more context and improve "
+"translations accuracy"
+msgstr ""
+
+msgid "The project must have a target locale"
+msgstr ""
+
+msgid "Unable to find a usable validation AI model"
+msgstr ""
+
+#, java-format
+msgid "Translated {0} out of {1}"
+msgstr ""
+
+msgid "_Update from pot"
+msgstr ""
+
+msgid "_Batch AI translation"
+msgstr ""
+
+msgid "The project must have a target locale to translate to"
+msgstr ""
+
+msgid "Unable to find a usable translation AI model"
+msgstr ""
+
+msgid "Rename project"
+msgstr ""
+
+msgid "Enter the new name for the project:"
+msgstr ""
+
+msgid "Exit"
+msgstr ""
+
+msgid "Project"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Select the project directory"
+msgstr ""
+
+msgid "Recents"
+msgstr ""
+
+msgid "Clear recents"
+msgstr ""
+
+msgid "_File"
+msgstr ""
+
+msgid "_Edit"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "Project name:"
+msgstr ""
+
+msgid ""
+"This description will be provided to the AI model to improve translation "
+"accuracy by giving it context. Example: 'UI components for an e-commerce "
+"website that sells avocados."
+msgstr ""
+
+msgid "Please enter a valid project name"
+msgstr ""
+
+msgid "Project settings"
+msgstr ""
+
+msgid "Environment"
+msgstr ""
+
+#, java-printf-format
+msgid "Vendor: %s"
+msgstr ""
+
+#, java-printf-format
+msgid "Java runtime path: %s"
+msgstr ""
+
+#, java-printf-format
+msgid "JavaFX runtime version: %s"
+msgstr ""
+
+msgid "Copy to clipboard"
+msgstr ""
+
+msgid "Support"
+msgstr ""
+
+msgid "Bug and feature requests"
+msgstr ""
+
+msgid "Fork me on GitHub"
+msgstr ""
+
+msgid "Donate"
+msgstr ""
+
+msgid "Open application logs"
+msgstr ""
+
+#, java-format
+msgid "File {0} saved"
+msgstr ""
+
+#, java-format
+msgid "File {0} loaded"
+msgstr ""
+
+msgid "Open logs"
+msgstr ""
+
+msgid "Error saving content to file {}"
+msgstr ""
+
+msgid "Error saving content to clipboard"
+msgstr ""
+
+msgid "Clear Azure Open AI settings"
+msgstr ""
+
+msgid "Clear OpenAI settings"
 msgstr ""
