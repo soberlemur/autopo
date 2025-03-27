@@ -79,6 +79,7 @@
         <module>autopo-ai-openai</module>
         <module>autopo-ai-gemini</module>
         <module>autopo-ai-anthropic</module>
+        <module>autopo-ai-ollama</module>
         <module>autopo-ai-azure-open-ai</module>
     </modules>
 

@@ -81,6 +81,11 @@
         </dependency>
         <dependency>
             <groupId>ooo.autopo</groupId>
+            <artifactId>autopo-ai-ollama</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ooo.autopo</groupId>
             <artifactId>autopo-ai-azure-open-ai</artifactId>
             <version>${project.version}</version>
         </dependency>
