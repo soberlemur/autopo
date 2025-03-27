@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ooo.autopo.app.DebouncedStringProperty;
+import ooo.autopo.app.context.IntegerPersistentProperty;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.ai.TranslationRequest;
@@ -172,7 +173,12 @@ public class TranslationsTableToolbar extends HBox {
         @Override
         void sendTranslationRequest(AIModelDescriptor aiModelDescriptor, String description) {
             eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
-                                                           app().currentPoFile().entries().stream().filter(e -> isBlank(e.translatedValue().get())).toList(),
+                                                           app().currentPoFile()
+                                                                .entries()
+                                                                .stream()
+                                                                .filter(e -> isBlank(e.translatedValue().get()))
+                                                                .limit(app().persistentSettings().get(IntegerPersistentProperty.BATCH_SIZE))
+                                                                .toList(),
                                                            aiModelDescriptor,
                                                            description));
         }

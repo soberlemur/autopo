@@ -21,7 +21,8 @@ import java.util.function.Supplier;
  * @author Andrea Vacondio
  */
 public enum IntegerPersistentProperty implements PersistentProperty<Integer> {
-    LOGVIEW_ROWS_NUMBER(() -> 200);
+    LOGVIEW_ROWS_NUMBER(() -> 200),
+    BATCH_SIZE(() -> 50);
 
     private final Supplier<Integer> defaultSupplier;
 

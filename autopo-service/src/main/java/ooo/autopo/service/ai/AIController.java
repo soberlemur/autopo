@@ -88,7 +88,7 @@ public class AIController {
                                                                               .toList();
                 scope.join();
                 var totalTokens = suppliers.stream().map(Supplier::get).map(result -> result.tokenUsage().totalTokenCount()).reduce(0, Integer::sum);
-                eventStudio().broadcast(new SetStatusLabelRequest(i18n().tr("Total token used {0})", totalTokens.toString())));
+                eventStudio().broadcast(new SetStatusLabelRequest(i18n().tr("Total token used {0}", totalTokens.toString())));
             } catch (Throwable e) {
                 exceptionHandler.accept(e, i18n().tr("An error occurred while translating with AI"));
             }

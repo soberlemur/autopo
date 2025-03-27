@@ -21,7 +21,9 @@ package ooo.autopo.app.ui.settings;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.layout.GridPane;
+import ooo.autopo.app.context.IntegerPersistentProperty;
 import ooo.autopo.app.ui.Style;
 import ooo.autopo.app.ui.components.preferences.PreferenceComboBox;
 import ooo.autopo.i18n.SetLocaleRequest;
@@ -30,6 +32,7 @@ import ooo.autopo.model.ui.ComboItem;
 import java.util.Comparator;
 import java.util.Locale;
 
+import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.ui.Views.helpIcon;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
@@ -81,6 +84,15 @@ class GeneralSettingsPane extends GridPane {
         add(validationAiCombo, 1, 4);
         add(helpIcon(i18n().tr("Set the AI provider used for validation")), 2, 4);
 
+        add(new Label(i18n().tr("Batch size:")), 0, 5);
+        var batchSize = new Spinner<Integer>(0, Integer.MAX_VALUE, 50, 1);
+        batchSize.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
+        batchSize.getValueFactory().setValue(app().persistentSettings().get(IntegerPersistentProperty.BATCH_SIZE));
+        batchSize.valueProperty().subscribe((o, n) -> app().persistentSettings().set(IntegerPersistentProperty.BATCH_SIZE, n));
+        add(batchSize, 1, 5);
+        add(helpIcon(i18n().tr("Set the number of entries to translate with the AI batch translation")), 2, 5);
+
+        add(helpIcon(i18n().tr("Higher values make the output more random, lower values make it more deterministic")), 2, 2);
         getStyleClass().addAll(Style.CONTAINER.css());
         getStyleClass().addAll(Style.GRID.css());
     }
