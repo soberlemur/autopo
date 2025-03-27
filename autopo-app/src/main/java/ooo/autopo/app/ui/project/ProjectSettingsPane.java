@@ -65,6 +65,7 @@ public class ProjectSettingsPane extends BorderPane implements NotClosable {
 
         var descriptionArea = new TextArea();
         descriptionArea.setMinHeight(100);
+        descriptionArea.setWrapText(true);
         descriptionArea.setPromptText("Project description");
         descriptionArea.textProperty().subscribe((o, n) -> modified.set(true));
         app().runtimeState().project().subscribe(p -> {
