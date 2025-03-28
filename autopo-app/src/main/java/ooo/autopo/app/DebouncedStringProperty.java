@@ -16,8 +16,6 @@ package ooo.autopo.app;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -30,10 +28,9 @@ import static java.util.Optional.ofNullable;
  */
 public class DebouncedStringProperty extends SimpleStringProperty {
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final int debounceDelay;
     private final TimeUnit timeUnit;
-    private ValueSetter valueSetter;
+    private volatile ValueSetter valueSetter;
 
     public DebouncedStringProperty() {
         this(150, TimeUnit.MILLISECONDS);
@@ -54,7 +51,14 @@ public class DebouncedStringProperty extends SimpleStringProperty {
         ofNullable(valueSetter).ifPresent(s -> s.cancelled.set(true));
         this.valueSetter = new ValueSetter(newValue);
 
-        scheduler.schedule(this.valueSetter, debounceDelay, timeUnit);
+        Thread.ofVirtual().start(() -> {
+            try {
+                timeUnit.sleep(debounceDelay);
+                this.valueSetter.run();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
     }
 
     private class ValueSetter implements Runnable {
@@ -72,4 +76,5 @@ public class DebouncedStringProperty extends SimpleStringProperty {
             }
         }
     }
+
 }
