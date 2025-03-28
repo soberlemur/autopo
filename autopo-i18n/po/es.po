@@ -1,0 +1,626 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-28 18:29+0100\n"
+"PO-Revision-Date: 2025-03-28 18:36+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"X-Generator: Autopo v${project.version}\n"
+
+msgid "Model:"
+msgstr "Modelo:"
+
+msgid "AI Model to use"
+msgstr "Modelo de IA a utilizar"
+
+msgid "API key:"
+msgstr "Clave API:"
+
+msgid "Temperature:"
+msgstr "Temperatura:"
+
+msgid ""
+"Higher values make the output more random, lower values make it more "
+"deterministic"
+msgstr ""
+"Valores más altos hacen la salida más aleatoria, valores más bajos la hacen "
+"más determinista"
+
+msgid "Clear"
+msgstr "Limpiar"
+
+msgid "Clear Anthropic settings"
+msgstr "Borrar configuración de Anthropic"
+
+msgid "Base URL:"
+msgstr "URL base:"
+
+msgid "Clear Ollama settings"
+msgstr "Borrar configuración de Ollama"
+
+msgid "There was an error retrieving recently used projects"
+msgstr "Hubo un error al recuperar los proyectos utilizados recientemente"
+
+msgid "An error occurred loading .po file '{0}'"
+msgstr "Ocurrió un error al cargar el archivo .po '{0}'"
+
+msgid "An error occurred loading .pot file '{0}'"
+msgstr "Ha ocurrido un error al cargar el archivo .pot '{0}'"
+
+msgid "An error occurred updating .po file '{0}'"
+msgstr "Ocurrió un error al actualizar el archivo .po '{0}'"
+
+msgid "An error adding .po file '{0}' to the project"
+msgstr "Un error al agregar el archivo .po '{0}' al proyecto"
+
+msgid "An error occurred saving .po file to '{0}'"
+msgstr "Ocurrió un error al guardar el archivo .po en '{0}'"
+
+msgid "An error occurred loading project file '{0}'"
+msgstr "Ha ocurrido un error al cargar el archivo de proyecto '{0}'"
+
+msgid "An error occurred saving project to '{0}'"
+msgstr "Ocurrió un error al guardar el proyecto en '{0}'"
+
+msgid "Loading .po file {}"
+msgstr "Cargando archivo .po {}"
+
+msgid "Unable to find or detect a valid locale"
+msgstr "No se puede encontrar o detectar una configuración regional válida"
+
+msgid "File {} loaded"
+msgstr "Archivo {} cargado"
+
+msgid "Updating po file {} from template {}"
+msgstr "Actualizando archivo po {} desde plantilla {}"
+
+msgid "Po file {} updated"
+msgstr "Archivo Po {} actualizado"
+
+msgid "Cannot update file {} because it is not loaded yet"
+msgstr "No se puede actualizar el archivo {} porque aún no está cargado"
+
+msgid "Loading .pot file {}"
+msgstr "Cargando archivo .pot {}"
+
+msgid "Saving po file {}"
+msgstr "Guardando archivo po {}"
+
+msgid "File {} saved"
+msgstr "Archivo {} guardado"
+
+msgid "Loading project file {}"
+msgstr "Cargando archivo de proyecto {}"
+
+msgid "Creating project descriptor file '{}'"
+msgstr "Creando archivo descriptor de proyecto '{}'"
+
+msgid "Found template file '{}'"
+msgstr "Se encontró el archivo de plantilla '{}'"
+
+msgid "Skipping directory '{}'"
+msgstr "Omitiendo directorio '{}'"
+
+msgid "Project {} loaded"
+msgstr "Proyecto {} cargado"
+
+msgid "Saving project file {}"
+msgstr "Guardando archivo de proyecto {}"
+
+msgid "Trying to guess locale from filename '{}'"
+msgstr ""
+"Intentando adivinar la configuración regional del nombre de archivo '{}'"
+
+msgid "Trying to guess locale from file content with AI"
+msgstr ""
+"Intentando adivinar la configuración regional del contenido del archivo con "
+"IA"
+
+msgid "Trying to guess locale from '{}'"
+msgstr "Intentando adivinar la configuración regional desde '{}'"
+
+msgid "Invalid locale: {}"
+msgstr "Configuración regional no válida: {}"
+
+#, java-format
+msgid "Total token used {0}"
+msgstr "Total de tokens usados {0}"
+
+msgid "An error occurred while translating with AI"
+msgstr "Ha ocurrido un error al traducir con IA"
+
+#, java-format
+msgid "Total token used {0} (input: {1}, output: {2})"
+msgstr "Total de tokens usados {0} (entrada: {1}, salida: {2})"
+
+#, java-format
+msgid "Invalid finish reason: {0}"
+msgstr "Razón de finalización no válida: {0}"
+
+msgid "An error occurred while assessing with AI"
+msgstr "Ocurrió un error al evaluar con IA"
+
+msgid "An error occurred while assessing a translation with AI"
+msgstr "Ocurrió un error al evaluar una traducción con IA"
+
+msgid "Inconsistent trailing spaces between original and translation"
+msgstr "Espacios finales inconsistentes entre el original y la traducción"
+
+msgid "Inconsistent trailing linefeed between original and translation"
+msgstr "Salto de línea final inconsistente entre el original y la traducción"
+
+msgid "Translated string should be included in ¡ and !"
+msgstr "La cadena traducida debe estar incluida entre ¡ y !"
+
+msgid "Translated string should not be included in ¡ and !"
+msgstr "La cadena traducida no debe incluirse entre ¡ y !"
+
+msgid "Inconsistent question mark between original and translation"
+msgstr ""
+"Signo de interrogación inconsistente entre el original y la traducción"
+
+msgid "Inconsistent full stop ending between original and translation"
+msgstr ""
+"Finalización inconsistente con punto final entre el original y la traducción"
+
+msgid ""
+"Inconsistent capitalization of the first letter between the original and "
+"translation"
+msgstr ""
+"Uso inconsistente de mayúsculas en la primera letra entre el original y la "
+"traducción"
+
+#, java-format, java-printf-format
+msgid ""
+"Inconsistent number of placeholders (%s, %d, %c, %x, %b, %f, {0}...) between "
+"original and translation"
+msgstr ""
+"Número inconsistente de marcadores de posición (%s, %d, %c, %x, %b, %f, {0}.."
+".) entre el original y la traducción"
+
+msgid "Translated string should be included in ¿ and ?"
+msgstr "La cadena traducida debe estar incluida entre ¿ y ?"
+
+msgid "Translated string should not be included in ¿ and ?"
+msgstr "La cadena traducida no debe incluir ¿ y ?"
+
+msgid "Suspicious lowercase of the first letter"
+msgstr "Sospechosa minúscula de la primera letra"
+
+msgid "Inconsistent leading spaces between original and translation"
+msgstr "Espacios iniciales inconsistentes entre el original y la traducción"
+
+msgid "Inconsistent exclamation mark between original and translation"
+msgstr "Signo de exclamación inconsistente entre el original y la traducción"
+
+msgid "Suspicious quotes inconsistency between original and translation"
+msgstr ""
+"Inconsistencia sospechosa de comillas entre el original y la traducción"
+
+msgid "Nord dark"
+msgstr "Nord oscuro"
+
+msgid "Darcula"
+msgstr "Darcula"
+
+msgid "Light"
+msgstr "Claro"
+
+msgid "Cupertino dark"
+msgstr "Cupertino oscuro"
+
+msgid "Cupertino light"
+msgstr "Cupertino claro"
+
+msgid "Dark"
+msgstr "Oscuro"
+
+msgid "Nord light"
+msgstr "Luz del Norte"
+
+msgid "Clear Google Gemini settings"
+msgstr "Borrar configuración de Google Gemini"
+
+msgid "Translating..."
+msgstr "Traduciendo..."
+
+msgid "Updating..."
+msgstr "Actualizando..."
+
+msgid "Adding .po to the project..."
+msgstr "Agregando .po al proyecto..."
+
+msgid "Validating..."
+msgstr "Validando..."
+
+msgid "System default"
+msgstr "Predeterminado del sistema"
+
+msgid "First available"
+msgstr "Primera disponible"
+
+msgid "Persistent application settings deleted"
+msgstr "Configuración de aplicación persistente eliminada"
+
+msgid "Unable to clear application settings"
+msgstr "No se pueden borrar la configuración de la aplicación"
+
+msgid "Closing..."
+msgstr "Cerrando..."
+
+msgid "modificato"
+msgstr "modificado"
+
+msgid "Unexpected error"
+msgstr "Error inesperado"
+
+msgid "Unable to open '{}', please copy and paste the url to your browser"
+msgstr ""
+"No se puede abrir '{}', por favor copie y pegue la URL en su navegador"
+
+msgid "General settings"
+msgstr "Configuración general"
+
+msgid "AI providers"
+msgstr "Proveedores de IA"
+
+msgid "Settings"
+msgstr "Configuración"
+
+msgid "Language:"
+msgstr "Idioma:"
+
+msgid "Set your preferred language (restart needed)"
+msgstr "Establece tu idioma preferido (se requiere reiniciar)"
+
+msgid "Theme:"
+msgstr "Tema:"
+
+msgid "Set the application theme"
+msgstr "Establecer el tema de la aplicación"
+
+msgid "Font size:"
+msgstr "Tamaño de fuente:"
+
+msgid "Set the application font size"
+msgstr "Establecer el tamaño de fuente de la aplicación"
+
+msgid "Translations AI provider:"
+msgstr "Proveedor de IA para traducciones:"
+
+msgid "Set the AI provider for translations"
+msgstr "Establecer el proveedor de IA para traducciones"
+
+msgid "Validations AI provider:"
+msgstr "Proveedor de validación de IA:"
+
+msgid "Set the AI provider used for validation"
+msgstr "Establecer el proveedor de IA utilizado para validación"
+
+msgid "Batch size:"
+msgstr "Tamaño de lote:"
+
+msgid "Set the number of entries to translate with the AI batch translation"
+msgstr ""
+"Establece el número de entradas para traducir con la traducción por lotes de "
+"IA"
+
+msgid "Discard modification"
+msgstr "Descartar modificación"
+
+msgid ""
+"There are modified Po files, loading a new project will discard the "
+"modification, do you want to proceed?"
+msgstr ""
+"Hay archivos Po modificados, cargar un nuevo proyecto descartará las "
+"modificaciones, ¿desea continuar?"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "No"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Template"
+msgstr "Plantilla"
+
+msgid "Translations"
+msgstr "Traducciones"
+
+msgid "Expand"
+msgstr "Expandir"
+
+msgid "Collapse"
+msgstr "Contraer"
+
+msgid "Edit project"
+msgstr "Editar proyecto"
+
+msgid "Select template"
+msgstr "Seleccionar plantilla"
+
+msgid "Add translation"
+msgstr "Añadir traducción"
+
+msgid "Save a .po translation file"
+msgstr "Guardar un archivo de traducción .po"
+
+#, java-format
+msgid "The file {0} already exists"
+msgstr "El archivo {0} ya existe"
+
+#, java-format
+msgid "The file {0} is not inside the current project directory"
+msgstr "El archivo {0} no está dentro del directorio del proyecto actual"
+
+msgid "Update all from pot"
+msgstr "Actualizar todo desde pot"
+
+msgid "Remove obsolete entries from every .po file"
+msgstr "Eliminar entradas obsoletas de cada archivo .po"
+
+msgid "Select a template"
+msgstr "Seleccionar una plantilla"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Remove obsolete entries"
+msgstr "Eliminar entradas obsoletas"
+
+msgid "No obsolete entries to remove"
+msgstr "No hay entradas obsoletas para eliminar"
+
+msgid "Obsolete entries removed"
+msgstr "Entradas obsoletas eliminadas"
+
+msgid "Select the language for the translation"
+msgstr "Seleccione el idioma para la traducción"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Add"
+msgstr "Añadir"
+
+msgid "Removes all the log messages"
+msgstr "Elimina todos los mensajes de registro"
+
+msgid "_Clear"
+msgstr "_Limpiar"
+
+msgid "_Save"
+msgstr "_Guardar"
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+msgid "Save log"
+msgstr "Guardar registro"
+
+msgid "Select where to save the log file"
+msgstr "Seleccione dónde guardar el archivo de registro"
+
+msgid "Logs"
+msgstr "Registros"
+
+msgid "No translation selected"
+msgstr "Ninguna traducción seleccionada"
+
+msgid "AI Translate"
+msgstr "Traducción IA"
+
+msgid "AI Validate"
+msgstr "Validar IA"
+
+msgid "Assessment"
+msgstr "Evaluación"
+
+msgid "Comments"
+msgstr "Comentarios"
+
+msgid "Extracted comments"
+msgstr "Comentarios extraídos"
+
+msgid "Formats"
+msgstr "Formatos"
+
+msgid "Source reference"
+msgstr "Referencia de origen"
+
+msgid ""
+"Add a project description to give the AI model more context and improve "
+"translations accuracy"
+msgstr ""
+"Agregue una descripción del proyecto para proporcionar más contexto al "
+"modelo de IA y mejorar la precisión de las traducciones"
+
+msgid "The project must have a target locale to translate to"
+msgstr ""
+"El proyecto debe tener una configuración regional de destino para traducir"
+
+msgid "Unable to find a usable translation AI model"
+msgstr "No se pudo encontrar un modelo de IA de traducción utilizable"
+
+msgid "Rate:"
+msgstr "Tasa:"
+
+msgid "Feedback"
+msgstr "Comentarios"
+
+msgid "Suggested replacement"
+msgstr "Reemplazo sugerido"
+
+msgid "Accept suggestion"
+msgstr "Aceptar sugerencia"
+
+#, java-format
+msgid "Rate: {0}"
+msgstr "Tasa: {0}"
+
+msgid "Translation"
+msgstr "Traducción"
+
+msgid "Source"
+msgstr "Fuente"
+
+msgid "Rate"
+msgstr "Calificar"
+
+msgid "Clear selected translations"
+msgstr "Borrar traducciones seleccionadas"
+
+msgid "Translate selected with AI"
+msgstr "Traducir seleccionado con IA"
+
+msgid "Validate selected with AI"
+msgstr "Validar seleccionado con IA"
+
+#, java-format
+msgid "Translated {0} out of {1}"
+msgstr "Traducido {0} de {1}"
+
+msgid "_Update from pot"
+msgstr "Act_ualizar desde pot"
+
+msgid "_Batch AI translation"
+msgstr "_Traducción por lotes con IA"
+
+msgid ""
+"Translate a batch of untranslated entries with the selected AI model (The "
+"batch size is defined in the settings)"
+msgstr ""
+"Traducir un lote de entradas sin traducir con el modelo de IA seleccionado "
+"(El tamaño del lote está definido en la configuración)"
+
+msgid "Rename project"
+msgstr "Renombrar proyecto"
+
+msgid "Enter the new name for the project:"
+msgstr "Introduzca el nuevo nombre para el proyecto:"
+
+msgid "Exit"
+msgstr "Salir"
+
+msgid "Project"
+msgstr "Proyecto"
+
+msgid "Open"
+msgstr "Abrir"
+
+msgid "Select the project directory"
+msgstr "Selecciona el directorio del proyecto"
+
+msgid "Recents"
+msgstr "Recientes"
+
+msgid "Clear recents"
+msgstr "Limpiar recientes"
+
+msgid "_File"
+msgstr "A_rchivo"
+
+msgid "_Edit"
+msgstr "_Editar"
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "_Help"
+msgstr "_Ayuda"
+
+msgid "Project name:"
+msgstr "Nombre del proyecto:"
+
+msgid ""
+"This description will be provided to the AI model to improve translation "
+"accuracy by giving it context. Example: 'UI components for an e-commerce "
+"website that sells avocados."
+msgstr ""
+"Esta descripción se proporcionará al modelo de IA para mejorar la precisión "
+"de la traducción dándole contexto. Ejemplo: 'Componentes de interfaz de "
+"usuario para un sitio web de comercio electrónico que vende aguacates."
+
+msgid "Please enter a valid project name"
+msgstr "Por favor, introduzca un nombre de proyecto válido"
+
+msgid "Project settings"
+msgstr "Configuración del proyecto"
+
+msgid "Environment"
+msgstr "Entorno"
+
+#, java-printf-format
+msgid "Vendor: %s"
+msgstr "Proveedor: %s"
+
+#, java-printf-format
+msgid "Java runtime path: %s"
+msgstr "Ruta de tiempo de ejecución de Java: %s"
+
+#, java-printf-format
+msgid "JavaFX runtime version: %s"
+msgstr "Versión de tiempo de ejecución de JavaFX: %s"
+
+msgid "Copy to clipboard"
+msgstr "Copiar al portapapeles"
+
+msgid "Support"
+msgstr "Soporte"
+
+msgid "Bug and feature requests"
+msgstr "Solicitudes de errores y funciones"
+
+msgid "Fork me on GitHub"
+msgstr "Hazme un fork en GitHub"
+
+msgid "Donate"
+msgstr "Donar"
+
+msgid "Open application logs"
+msgstr "Abrir registros de la aplicación"
+
+#, java-format
+msgid "File {0} saved"
+msgstr "Archivo {0} guardado"
+
+#, java-format
+msgid "File {0} loaded"
+msgstr "Archivo {0} cargado"
+
+msgid "Open logs"
+msgstr "Abrir registros"
+
+msgid "Error saving content to file {}"
+msgstr "Error guardando contenido en el archivo {}"
+
+msgid "Error saving content to clipboard"
+msgstr "Error al guardar el contenido en el portapapeles"
+
+msgid "Clear Azure Open AI settings"
+msgstr "Borrar la configuración de Azure Open AI"
+
+msgid "Clear OpenAI settings"
+msgstr "Borrar configuración de OpenAI"

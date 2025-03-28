@@ -37,7 +37,7 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 public final class I18nContext {
 
-    private final Set<Locale> supported = Set.of(Locale.ITALIAN, Locale.UK);
+    private final Set<Locale> supported = Set.of(Locale.ITALIAN, Locale.of("es"), Locale.UK);
 
     private final SimpleObjectProperty<Locale> locale = new SimpleObjectProperty<>();
     private Optional<ResourceBundle> bundle = empty();
@@ -48,7 +48,7 @@ public final class I18nContext {
     }
 
     @EventListener
-    public void setLocale(ooo.autopo.i18n.SetLocaleRequest e) {
+    public void setLocale(SetLocaleRequest e) {
         if (nonNull(e.languageTag()) && !e.languageTag().isBlank()) {
             Logger.trace("Setting locale to {}", e.languageTag());
             ofNullable(Locale.forLanguageTag(e.languageTag())).filter(supported::contains).ifPresent(locale::set);
