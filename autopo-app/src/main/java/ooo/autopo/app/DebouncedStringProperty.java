@@ -19,10 +19,11 @@ import javafx.beans.property.SimpleStringProperty;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Objects.nonNull;
 
 /**
- * A SimpleStringProperty that debounces the value changes. The value is set only after a certain delay has passed since the last change.
+ * A SimpleStringProperty that debounces the value changes. The value is set only after a certain delay has passed since the last change. This is not thread
+ * safe but it shouldn't be an issue since it's going to be used in the UI thread
  *
  * @author Andrea Vacondio
  */
@@ -48,13 +49,15 @@ public class DebouncedStringProperty extends SimpleStringProperty {
 
     private void scheduleDebouncedUpdate(String newValue) {
         // Cancel any pending debounce task
-        ofNullable(valueSetter).ifPresent(s -> s.cancelled.set(true));
+        if (nonNull(this.valueSetter)) {
+            this.valueSetter.cancel();
+        }
         this.valueSetter = new ValueSetter(newValue);
-
         Thread.ofVirtual().start(() -> {
             try {
+                var currentValue = this.valueSetter;
                 timeUnit.sleep(debounceDelay);
-                this.valueSetter.run();
+                currentValue.run();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -74,6 +77,10 @@ public class DebouncedStringProperty extends SimpleStringProperty {
             if (!cancelled.get()) {
                 Platform.runLater(() -> DebouncedStringProperty.super.set(value));
             }
+        }
+
+        void cancel() {
+            this.cancelled.set(true);
         }
     }
 
