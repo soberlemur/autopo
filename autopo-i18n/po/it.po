@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-27 18:09+0100\n"
-"PO-Revision-Date: 2025-03-27 18:12+0100\n"
+"PO-Revision-Date: 2025-03-28 18:26+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -477,11 +477,11 @@ msgstr ""
 "Aggiungi una descrizione del progetto per fornire più contesto al modello di "
 "intelligenza artificiale e migliorare l'accuratezza delle traduzioni"
 
-msgid "The project must have a target locale"
-msgstr "Il progetto deve avere una lingua di destinazione"
+#~ msgid "The project must have a target locale"
+#~ msgstr "Il progetto deve avere una lingua di destinazione"
 
-msgid "Unable to find a usable validation AI model"
-msgstr "Impossibile trovare un modello di validazione AI utilizzabile"
+#~ msgid "Unable to find a usable validation AI model"
+#~ msgstr "Impossibile trovare un modello di validazione AI utilizzabile"
 
 #, java-format
 msgid "Translated {0} out of {1}"
@@ -613,3 +613,23 @@ msgstr "Cancella impostazioni OpenAI"
 
 msgid "No translation selected"
 msgstr "Nessuna traduzione selezionata"
+
+msgid "An error occurred while assessing with AI"
+msgstr "Si è verificato un errore durante la valutazione con AI"
+
+msgid "Clear selected translations"
+msgstr "Elimina traduzioni selezionate"
+
+msgid "Translate selected with AI"
+msgstr "Traduci selezionati con IA"
+
+msgid "Validate selected with AI"
+msgstr "Convalida selezionati con IA"
+
+msgid ""
+"Translate a batch of untranslated entries with the selected AI model (The "
+"batch size is defined in the settings)"
+msgstr ""
+"Traduci un batch di voci non tradotte con il modello di intelligenza "
+"artificiale selezionato (La dimensione del batch è definita nelle "
+"impostazioni)"

@@ -25,6 +25,7 @@ import ooo.autopo.app.WindowStatusController;
 import ooo.autopo.app.ui.AppContentController;
 import ooo.autopo.app.ui.OverlayItem;
 import ooo.autopo.app.ui.about.AboutOverlayItem;
+import ooo.autopo.app.ui.logs.LogListView;
 import ooo.autopo.app.ui.logs.LogsOverlayItem;
 import ooo.autopo.app.ui.notification.NotificationsController;
 import ooo.autopo.app.ui.project.ProjectSettingsOverlay;
@@ -41,7 +42,7 @@ import java.util.List;
  * @author Andrea Vacondio
  */
 @Components({ WindowStatusController.class, ApplicationTitleController.class, NotificationsController.class, AppContentController.class,
-        ProjectLoadController.class, PoLoadController.class, ModalPaneController.class })
+        ProjectLoadController.class, PoLoadController.class, ModalPaneController.class, LogListView.class })
 public class AppConfig {
 
     private final HostServices services;

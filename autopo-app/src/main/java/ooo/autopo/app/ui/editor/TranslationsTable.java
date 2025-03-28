@@ -19,12 +19,20 @@ import atlantafx.base.theme.Tweaks;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.AssessmentRequest;
 import ooo.autopo.model.ai.TranslationAssessment;
+import ooo.autopo.model.ai.TranslationRequest;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.ui.SearchTranslation;
@@ -33,6 +41,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
 
 import java.util.Comparator;
+import java.util.Optional;
 
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
@@ -50,7 +59,7 @@ public class TranslationsTable extends TableView<PoEntry> {
     public TranslationsTable() {
         this.setEditable(false);
         getStyleClass().add("translations-table");
-        getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         getStyleClass().addAll(Styles.DENSE, Styles.STRIPED, Tweaks.EDGE_TO_EDGE);
         var warningColumn = new TableColumn<PoEntry, ObservableList<String>>();
@@ -102,6 +111,40 @@ public class TranslationsTable extends TableView<PoEntry> {
 
         getColumns().addAll(warningColumn, sourceColumn, translationColumn, assessmentColumn);
         getSortOrder().add(translationColumn);
+
+        var contextMenu = new ContextMenu();
+        var clearMenuItem = new MenuItem(i18n().tr("Clear selected translations"));
+        clearMenuItem.disableProperty().bind(getSelectionModel().selectedItemProperty().isNull());
+        clearMenuItem.setOnAction(e -> getSelectionModel().getSelectedItems().forEach(po -> po.translatedValue().set("")));
+
+        var translateMenuItem = new MenuItem(i18n().tr("Translate selected with AI"));
+        translateMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.T, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN));
+        translateMenuItem.disableProperty().bind(getSelectionModel().selectedItemProperty().isNull());
+        translateMenuItem.setOnAction(new AIActionEventHandler() {
+            @Override
+            void onPositiveAction(AIModelDescriptor aiModelDescriptor, String description) {
+                eventStudio().broadcast(new TranslationRequest(app().currentPoFile(), getSelectionModel().getSelectedItems(), aiModelDescriptor, description));
+            }
+        });
+
+        var validateMenuItem = new MenuItem(i18n().tr("Validate selected with AI"));
+        validateMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN));
+        validateMenuItem.disableProperty().bind(getSelectionModel().selectedItemProperty().isNull());
+        validateMenuItem.setOnAction(new AIActionEventHandler() {
+            @Override
+            void onPositiveAction(AIModelDescriptor aiModelDescriptor, String description) {
+                eventStudio().broadcast(new AssessmentRequest(app().currentPoFile(), getSelectionModel().getSelectedItems(), aiModelDescriptor, description));
+            }
+
+            @Override
+            Optional<AIModelDescriptor> getModel() {
+                return app().validationAIModelDescriptor();
+            }
+        });
+
+        contextMenu.getItems().addAll(clearMenuItem, translateMenuItem, validateMenuItem);
+        setContextMenu(contextMenu);
+
         eventStudio().addAnnotatedListeners(this);
     }
 

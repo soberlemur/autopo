@@ -22,6 +22,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ooo.autopo.app.DebouncedStringProperty;
@@ -162,25 +163,28 @@ public class TranslationsTableToolbar extends HBox {
         }
     }
 
-    static class TranslateButton extends AITranslateButton {
+    static class TranslateButton extends Button {
         public TranslateButton() {
             setText(i18n().tr("_Batch AI translation"));
+            setTooltip(new Tooltip(i18n().tr("Translate a batch of untranslated entries with the selected AI model (The batch size is defined in the settings)")));
             setGraphic(new FontIcon(FluentUiRegularAL.BOT_24));
             getStyleClass().addAll(Styles.SMALL);
             setDisable(true);
+            setOnAction(new AIActionEventHandler() {
+                @Override
+                void onPositiveAction(AIModelDescriptor aiModelDescriptor, String description) {
+                    eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
+                                                                   app().currentPoFile()
+                                                                        .entries()
+                                                                        .stream()
+                                                                        .filter(e -> isBlank(e.translatedValue().get()))
+                                                                        .limit(app().persistentSettings().get(IntegerPersistentProperty.BATCH_SIZE))
+                                                                        .toList(),
+                                                                   aiModelDescriptor,
+                                                                   description));
+                }
+            });
         }
 
-        @Override
-        void sendTranslationRequest(AIModelDescriptor aiModelDescriptor, String description) {
-            eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
-                                                           app().currentPoFile()
-                                                                .entries()
-                                                                .stream()
-                                                                .filter(e -> isBlank(e.translatedValue().get()))
-                                                                .limit(app().persistentSettings().get(IntegerPersistentProperty.BATCH_SIZE))
-                                                                .toList(),
-                                                           aiModelDescriptor,
-                                                           description));
-        }
     }
 }

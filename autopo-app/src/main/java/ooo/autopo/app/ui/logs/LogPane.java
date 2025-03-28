@@ -43,6 +43,7 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  *
  * @author Andrea Vacondio
  */
+
 public class LogPane extends BorderPane implements NotClosable {
 
     private final LogListView logView;

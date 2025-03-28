@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: info@soberlemur.com\n"
-"POT-Creation-Date: 2025-03-27 18:11+0100\n"
+"POT-Creation-Date: 2025-03-28 18:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,9 @@ msgstr ""
 
 #, java-format
 msgid "Invalid finish reason: {0}"
+msgstr ""
+
+msgid "An error occurred while assessing with AI"
 msgstr ""
 
 msgid "An error occurred while assessing a translation with AI"
@@ -430,6 +433,17 @@ msgstr ""
 msgid "Source reference"
 msgstr ""
 
+msgid ""
+"Add a project description to give the AI model more context and improve "
+"translations accuracy"
+msgstr ""
+
+msgid "The project must have a target locale to translate to"
+msgstr ""
+
+msgid "Unable to find a usable translation AI model"
+msgstr ""
+
 msgid "Rate:"
 msgstr ""
 
@@ -455,15 +469,13 @@ msgstr ""
 msgid "Rate"
 msgstr ""
 
-msgid ""
-"Add a project description to give the AI model more context and improve "
-"translations accuracy"
+msgid "Clear selected translations"
 msgstr ""
 
-msgid "The project must have a target locale"
+msgid "Translate selected with AI"
 msgstr ""
 
-msgid "Unable to find a usable validation AI model"
+msgid "Validate selected with AI"
 msgstr ""
 
 #, java-format
@@ -476,10 +488,9 @@ msgstr ""
 msgid "_Batch AI translation"
 msgstr ""
 
-msgid "The project must have a target locale to translate to"
-msgstr ""
-
-msgid "Unable to find a usable translation AI model"
+msgid ""
+"Translate a batch of untranslated entries with the selected AI model (The "
+"batch size is defined in the settings)"
 msgstr ""
 
 msgid "Rename project"

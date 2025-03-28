@@ -24,6 +24,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.stage.Window;
 import ooo.autopo.app.ConstrainedObservableList;
 import org.pdfsam.eventstudio.annotation.EventListener;
+import org.pdfsam.injector.Auto;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
@@ -36,7 +37,8 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  *
  * @author Andrea Vacondio
  */
-class LogListView extends ListView<LogMessage> {
+@Auto
+public class LogListView extends ListView<LogMessage> {
 
     @Inject
     public LogListView() {

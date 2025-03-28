@@ -18,6 +18,7 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
 import jakarta.inject.Inject;
 import javafx.geometry.Orientation;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
@@ -35,6 +36,7 @@ import ooo.autopo.model.ai.AssessmentRequest;
 import ooo.autopo.model.ai.TranslationRequest;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
@@ -63,22 +65,30 @@ public class TranslateEntryPanel extends SplitPane {
 
         var toolbar = new HBox();
         toolbar.getStyleClass().addAll("tool-bar", "translation-edit-toolbar");
-        var aiTranslateButton = new AITranslateButton() {
+        var aiTranslateButton = new Button();
+        aiTranslateButton.setOnAction(new AIActionEventHandler() {
             @Override
-            void sendTranslationRequest(AIModelDescriptor aiModelDescriptor, String description) {
+            void onPositiveAction(AIModelDescriptor aiModelDescriptor, String description) {
                 eventStudio().broadcast(new TranslationRequest(app().currentPoFile(), app().currentPoEntry(), aiModelDescriptor, description));
             }
-        };
+        });
+
         aiTranslateButton.setText(i18n().tr("AI Translate"));
         aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
         app().runtimeState().poEntry().subscribe(e -> aiTranslateButton.setDisable(isNull(e) || isNull(app().currentPoFile().locale())));
 
-        var aiValidateButton = new AIValidationButton() {
+        var aiValidateButton = new Button();
+        aiValidateButton.setOnAction(new AIActionEventHandler() {
             @Override
-            void sendValidationRequest(AIModelDescriptor aiModelDescriptor, String description) {
+            void onPositiveAction(AIModelDescriptor aiModelDescriptor, String description) {
                 eventStudio().broadcast(new AssessmentRequest(app().currentPoFile(), app().currentPoEntry(), aiModelDescriptor, description));
             }
-        };
+
+            @Override
+            Optional<AIModelDescriptor> getModel() {
+                return app().validationAIModelDescriptor();
+            }
+        });
         aiValidateButton.setText(i18n().tr("AI Validate"));
         aiValidateButton.getStyleClass().addAll(Styles.SMALL);
 

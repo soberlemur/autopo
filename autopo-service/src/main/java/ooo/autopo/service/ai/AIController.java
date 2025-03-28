@@ -54,6 +54,8 @@ public class AIController {
 
     private final ServiceExceptionHandler exceptionHandler;
     private final AIService aiService;
+    private final Thread.Builder assessmentThreadBuilder = Thread.ofVirtual().name("assessment-vthread-", 0);
+    private final Thread.Builder translationsThreadBuilder = Thread.ofVirtual().name("translation-vthread-", 0);
 
     @Inject
     public AIController(AIService aiService, ServiceExceptionHandler exceptionHandler) {
@@ -76,9 +78,9 @@ public class AIController {
     }
 
     private void translateMultiple(TranslationRequest request) {
-        Thread.ofVirtual().name("translation-vthread-", 0).start(() -> {
+        translationsThreadBuilder.start(() -> {
 
-            try (var scope = new StructuredTaskScope()) {
+            try (var scope = new StructuredTaskScope(null, translationsThreadBuilder.factory())) {
                 var callables = request.poEntries()
                                        .stream()
                                        .map(poEntry -> (Callable<Result<String>>) () -> translateEntry(request.poFile(),
@@ -101,7 +103,7 @@ public class AIController {
     }
 
     private void translateSingle(TranslationRequest request) {
-        Thread.ofVirtual().name("translation-vthread-", 0).start(() -> {
+        translationsThreadBuilder.start(() -> {
             try {
                 var result = translateEntry(request.poFile(), request.poEntries().getFirst(), request.descriptor(), request.projectDescription());
                 eventStudio().broadcast(new SetStatusLabelRequest(i18n().tr("Total token used {0} (input: {1}, output: {2})",
@@ -137,11 +139,38 @@ public class AIController {
         requireNotNullArg(request.descriptor(), "Cannot assess with a null descriptor");
         if (request.poEntries().size() == 1) {
             assessSingle(request);
+        } else {
+            assessMultiple(request);
         }
     }
 
+    private void assessMultiple(AssessmentRequest request) {
+        assessmentThreadBuilder.start(() -> {
+
+            try (var scope = new StructuredTaskScope(null, assessmentThreadBuilder.factory())) {
+                var callables = request.poEntries()
+                                       .stream()
+                                       .map(poEntry -> (Callable<Result<TranslationAssessment>>) () -> evaluateEntry(request.poFile(),
+                                                                                                                     poEntry,
+                                                                                                                     request.descriptor(),
+                                                                                                                     request.projectDescription()))
+                                       .toList();
+                List<? extends Supplier<Result<TranslationAssessment>>> suppliers = callables.stream()
+                                                                                             .map((Function<? super Callable<Result<TranslationAssessment>>, ? extends StructuredTaskScope.Subtask<Result<TranslationAssessment>>>) scope::fork)
+                                                                                             .toList();
+                scope.join();
+                var totalTokens = suppliers.stream().map(Supplier::get).map(result -> result.tokenUsage().totalTokenCount()).reduce(0, Integer::sum);
+                eventStudio().broadcast(new SetStatusLabelRequest(i18n().tr("Total token used {0}", totalTokens.toString())));
+            } catch (Throwable e) {
+                exceptionHandler.accept(e, i18n().tr("An error occurred while assessing with AI"));
+            }
+            Platform.runLater(() -> request.complete().set(true));
+
+        });
+    }
+
     private void assessSingle(AssessmentRequest request) {
-        Thread.ofVirtual().name("assessment-vthread-", 0).start(() -> {
+        assessmentThreadBuilder.start(() -> {
             try {
                 var result = evaluateEntry(request.poFile(), request.poEntries().getFirst(), request.descriptor(), request.projectDescription());
                 eventStudio().broadcast(new SetStatusLabelRequest(i18n().tr("Total token used {0} (input: {1}, output: {2})",
