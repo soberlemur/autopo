@@ -17,6 +17,8 @@ import static org.sejda.commons.util.RequireUtils.requireNotBlank;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
+ * Request to add a notification of the given type and with the given message
+ *
  * @author Andrea Vacondio
  */
 public record AddNotificationRequest(NotificationType type, String message) {

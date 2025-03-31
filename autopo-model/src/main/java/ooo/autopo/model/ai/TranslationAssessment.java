@@ -17,6 +17,8 @@ package ooo.autopo.model.ai;
 import dev.langchain4j.model.output.structured.Description;
 
 /**
+ * Model for a translation assessment that the AI will provide
+ *
  * @author Andrea Vacondio
  */
 public record TranslationAssessment(@Description("A score from 1 to 10, with 10 being a perfect translation") int score,

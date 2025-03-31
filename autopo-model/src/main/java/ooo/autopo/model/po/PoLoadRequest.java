@@ -19,6 +19,8 @@ import ooo.autopo.model.ai.AIModelDescriptor;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
+ * Request to load the given {@link PoFile}. The background flag signals that the file is not the one requested in the UI and it can be loaded in background
+ *
  * @author Andrea Vacondio
  */
 public record PoLoadRequest(PoFile poFile, AIModelDescriptor descriptor, boolean background) {

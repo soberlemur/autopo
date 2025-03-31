@@ -21,6 +21,8 @@ import ooo.autopo.model.po.PoFile;
 import java.util.List;
 
 /**
+ * Request to assess/validate the translations in the input {@link PoEntry}s
+ *
  * @author Andrea Vacondio
  */
 public record AssessmentRequest(PoFile poFile, List<PoEntry> poEntries, AIModelDescriptor descriptor, String projectDescription,

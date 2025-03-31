@@ -14,8 +14,15 @@ package ooo.autopo.model.po;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
+
 /**
+ * Request to load a .pot file
+ *
  * @author Andrea Vacondio
  */
 public record PotLoadRequest(PotFile potFile) {
+    public PotLoadRequest {
+        requireNotNullArg(potFile, "Cannot load a null potFile");
+    }
 }

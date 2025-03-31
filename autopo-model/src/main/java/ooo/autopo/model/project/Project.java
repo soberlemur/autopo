@@ -29,6 +29,9 @@ import java.util.TreeSet;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Model for a project. A project has a root directory, a template (.pot) inside the root or a subdirectory (but not outside the root), a loading status and a
+ * number of translations inside the root or its subdirectories
+ *
  * @author Andrea Vacondio
  */
 public class Project {
@@ -62,6 +65,9 @@ public class Project {
         status.set(newStatus);
     }
 
+    /**
+     * @return the loading status. It's LoadingStatus.LOADED once the IOService as walked all the root subdirectories searching for pot and po files.
+     */
     public ObservableObjectValue<LoadingStatus> status() {
         return this.status;
     }
@@ -82,8 +88,13 @@ public class Project {
         this.translations.add(poFile);
     }
 
+    /**
+     * Assign the given template to the project.
+     *
+     * @param pot
+     */
     public void pot(Path pot) {
-        setProperty(ProjectProperty.TEMPLATE_PATH, location().relativize(pot).toString());
+        setProperty(ProjectProperty.TEMPLATE_PATH, pot.toAbsolutePath().toString());
         this.pot.set(new PotFile(pot));
     }
 

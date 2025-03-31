@@ -45,7 +45,7 @@ import ooo.autopo.model.po.PoAddRequest;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
-import ooo.autopo.model.project.SaveProjectRequest;
+import ooo.autopo.model.project.ProjectSaveRequest;
 import ooo.autopo.model.ui.SetOverlayItem;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
@@ -218,7 +218,7 @@ public class FileExplorer extends BorderPane {
             ofNullable(app().currentProject()).ifPresent(p -> {
                 p.pot(template);
                 actualizeTemplate();
-                eventStudio().broadcast(new SaveProjectRequest(p));
+                eventStudio().broadcast(new ProjectSaveRequest(p));
             });
         }
     }
@@ -256,7 +256,7 @@ public class FileExplorer extends BorderPane {
     }
 
     @EventListener
-    public void onSaveProject(SaveProjectRequest request) {
+    public void onSaveProject(ProjectSaveRequest request) {
         actualizeRootName();
     }
 

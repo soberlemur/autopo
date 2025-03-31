@@ -19,10 +19,16 @@ import javafx.beans.property.SimpleBooleanProperty;
 import java.util.Collection;
 import java.util.List;
 
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
+
 /**
  * @author Andrea Vacondio
  */
 public record PoUpdateRequest(PotFile potFile, Collection<PoFile> poFiles, SimpleBooleanProperty complete) {
+
+    public PoUpdateRequest {
+        requireNotNullArg(potFile, "Cannot update Po files using a null potFile");
+    }
 
     public PoUpdateRequest(PotFile potFile, Collection<PoFile> poFiles) {
         this(potFile, poFiles, new SimpleBooleanProperty(false));

@@ -24,7 +24,7 @@ import ooo.autopo.model.po.PoSaveRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.po.PotLoadRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
-import ooo.autopo.model.project.SaveProjectRequest;
+import ooo.autopo.model.project.ProjectSaveRequest;
 import ooo.autopo.model.ui.TranslationsCountChanged;
 import ooo.autopo.service.ServiceExceptionHandler;
 import org.pdfsam.eventstudio.annotation.EventListener;
@@ -32,14 +32,15 @@ import org.pdfsam.injector.Auto;
 import org.tinylog.Logger;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.LoadingStatus.LOADED;
 import static ooo.autopo.model.LoadingStatus.LOADING;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
-import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
  * @author Andrea Vacondio
@@ -62,7 +63,6 @@ public class IOController {
     @EventListener
     public void loadPo(PoLoadRequest request) {
         Logger.trace("Po load request received");
-        requireNotNullArg(request.poFile(), "Cannot load a null poFile");
         executor(request.background()).submit(() -> {
             try {
                 ioService.load(request.poFile(), request.descriptor());
@@ -75,7 +75,6 @@ public class IOController {
     @EventListener
     public void loadPot(PotLoadRequest request) {
         Logger.trace("Pot load request received");
-        requireNotNullArg(request.potFile(), "Cannot load a null poFile");
         executor(true).submit(() -> {
             try {
                 ioService.load(request.potFile());
@@ -89,7 +88,7 @@ public class IOController {
     public void updatePo(PoUpdateRequest request) {
         Logger.trace("Po update load request received");
         executor(true).submit(() -> {
-            for (var po : request.poFiles()) {
+            for (var po : ofNullable(request.poFiles()).orElse(Collections.emptyList())) {
                 try {
                     ioService.updatePoFromTemplate(po, request.potFile());
                 } catch (IOException e) {
@@ -121,7 +120,6 @@ public class IOController {
     @EventListener
     public void savePo(PoSaveRequest request) {
         Logger.trace("Po save request received");
-        requireNotNullArg(request.poFile(), "Cannot save a null poFile");
         request.poFile().modified(false);
         mainExecutor.submit(() -> {
             try {
@@ -137,7 +135,6 @@ public class IOController {
     @EventListener
     public void loadProject(ProjectLoadRequest request) {
         Logger.trace("Project load request received");
-        requireNotNullArg(request.project(), "Cannot load a null project");
         request.project().status(LOADING);
         mainExecutor.submit(() -> {
             try {
@@ -149,9 +146,8 @@ public class IOController {
     }
 
     @EventListener
-    public void saveProject(SaveProjectRequest request) {
+    public void saveProject(ProjectSaveRequest request) {
         Logger.trace("Project save request received");
-        requireNotNullArg(request.project(), "Cannot save a null project");
         mainExecutor.submit(() -> {
             try {
                 ioService.save(request.project());

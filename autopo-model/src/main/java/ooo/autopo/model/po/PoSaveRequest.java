@@ -14,8 +14,15 @@ package ooo.autopo.model.po;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
+
 /**
+ * Request to save a po file
+ *
  * @author Andrea Vacondio
  */
 public record PoSaveRequest(PoFile poFile) {
+    public PoSaveRequest {
+        requireNotNullArg(poFile, "Cannot save a null poFile");
+    }
 }

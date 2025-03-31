@@ -26,11 +26,23 @@ public interface AIModelDescriptor {
 
     String name();
 
+    /**
+     * @return the pane where users can set options for this AI model
+     */
     Pane settingsPane();
 
+    /**
+     * @return {@link ChatLanguageModel} to be used to perform translations
+     */
     ChatLanguageModel translationModel();
 
+    /**
+     * @return {@link ChatLanguageModel} to be used to perform translations validation
+     */
     ChatLanguageModel validationModel();
 
+    /**
+     * @return true if the model is properly configured and can be used
+     */
     boolean isUsable();
 }

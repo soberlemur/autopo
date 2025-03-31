@@ -17,10 +17,19 @@ package ooo.autopo.model.po;
 import javafx.beans.property.SimpleBooleanProperty;
 import ooo.autopo.model.project.Project;
 
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
+
 /**
+ * Request to add a new Po file to the project
+ *
  * @author Andrea Vacondio
  */
 public record PoAddRequest(Project project, PoFile poFile, SimpleBooleanProperty complete) {
+    public PoAddRequest {
+        requireNotNullArg(project, "Cannot add a po file to a null project");
+        requireNotNullArg(poFile, "Cannot add a null po file to a project");
+    }
+
     public PoAddRequest(Project project, PoFile poFile) {
         this(project, poFile, new SimpleBooleanProperty(false));
     }

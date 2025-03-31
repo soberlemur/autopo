@@ -14,8 +14,15 @@ package ooo.autopo.model.project;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
+
 /**
+ * Request to save a project
+ *
  * @author Andrea Vacondio
  */
-public record SaveProjectRequest(Project project) {
+public record ProjectSaveRequest(Project project) {
+    public ProjectSaveRequest {
+        requireNotNullArg(project, "Cannot save a null project");
+    }
 }

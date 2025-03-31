@@ -17,6 +17,8 @@ package ooo.autopo.model.io;
 import java.nio.file.Path;
 
 /**
+ * An IO event informing the that something (File saved, file loaded...) happened on the service layer
+ *
  * @author Andrea Vacondio
  */
 public record IOEvent(Path path, IOEventType type, FileType fileType) {

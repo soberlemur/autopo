@@ -28,7 +28,7 @@ import net.synedra.validatorfx.Validator;
 import ooo.autopo.app.ui.components.CloseOverlayButton;
 import ooo.autopo.app.ui.components.NotClosable;
 import ooo.autopo.model.project.ProjectProperty;
-import ooo.autopo.model.project.SaveProjectRequest;
+import ooo.autopo.model.project.ProjectSaveRequest;
 import ooo.autopo.model.ui.HideOverlayItem;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
@@ -90,7 +90,7 @@ public class ProjectSettingsPane extends BorderPane implements NotClosable {
         saveButton.setOnAction(e -> {
             app().currentProject().setProperty(ProjectProperty.NAME, nameField.getText());
             app().currentProject().setProperty(ProjectProperty.DESCRIPTION, descriptionArea.getText());
-            eventStudio().broadcast(new SaveProjectRequest(app().currentProject()));
+            eventStudio().broadcast(new ProjectSaveRequest(app().currentProject()));
             eventStudio().broadcast(HideOverlayItem.INSTANCE);
             modified.set(false);
         });
