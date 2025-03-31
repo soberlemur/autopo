@@ -41,6 +41,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
@@ -158,6 +159,7 @@ public class DefaultIOService implements IOService {
                 try (var reader = Files.newBufferedReader(projectDescriptorPath)) {
                     project.properties().load(reader);
                 }
+                ofNullable(project.getProperty(ProjectProperty.TEMPLATE_PATH)).map(Paths::get).filter(Files::exists).ifPresent(project::pot);
             } else {
                 Logger.debug(i18n().tr("Creating project descriptor file '{}'"), projectDescriptorPath.toAbsolutePath().toString());
                 project.setProperty(ProjectProperty.NAME, RandomProjectNameGenerator.instance().getName());
