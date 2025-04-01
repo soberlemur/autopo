@@ -1,0 +1,29 @@
+#comment
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: info@soberlemur.com\n"
+"POT-Creation-Date: 2025-01-02 12:50+0100\n"
+"PO-Revision-Date: 2025-03-24 20:56+0100\n"
+"Last-Translator: Andrea Vacondio <info@pdfsam.org>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Autopo v${project.version}\n"
+
+msgid "The task did not generate any output file"
+msgstr "La tarea no generÃ³ ningÃºn archivo de salida"
+
+msgid "The task has ended unexpectedly, please report this bug"
+msgstr ""
+"La tarea ha terminado inesperadamente, por favor informe de este error"
+
+#, java-printf-format
+msgid "Unable to read page %d of %s"
+msgstr "No se puede leer la pÃ¡gina %d de %s"
+
+msgid "Task took too long to process"
+msgstr "La tarea tardÃ³ demasiado en procesarse"

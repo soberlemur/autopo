@@ -27,6 +27,8 @@ import static org.sejda.commons.util.RequireUtils.requireArg;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
+ * Represent a .pot file.
+ *
  * @author Andrea Vacondio
  */
 public class PotFile {
@@ -49,6 +51,11 @@ public class PotFile {
         return catalog;
     }
 
+    /**
+     * sets a template catalog
+     *
+     * @throws IllegalArgumentException if the input catalog is not a template
+     */
     public void catalog(Catalog catalog) {
         requireNonNull(catalog);
         requireArg(catalog.isTemplate(), "Cannot set a non template catalog");

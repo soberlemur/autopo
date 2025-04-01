@@ -37,6 +37,8 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 import static org.sejda.commons.util.RequireUtils.requireState;
 
 /**
+ * Represent a .po file.
+ *
  * @author Andrea Vacondio
  */
 public class PoFile {
@@ -63,6 +65,10 @@ public class PoFile {
         return locale;
     }
 
+    /**
+     * Sets the locale for this {@link PoFile } and notifies its entries. Entries need to be notified because a different locale may need different constraint
+     * validators
+     */
     public void locale(Locale locale) {
         requireNonNull(locale);
         this.locale = locale;
@@ -73,6 +79,10 @@ public class PoFile {
         return catalog;
     }
 
+    /**
+     * Sets the catalog for this PoFile. The Catalog is the structure resulting from the parsing of the .po file and contains all the {@link Message}s and
+     * comments and header.
+     */
     public void catalog(Catalog catalog) {
         requireNonNull(catalog);
         this.catalog = catalog;
@@ -96,13 +106,22 @@ public class PoFile {
         return translationPercentage;
     }
 
+    /**
+     * Walk through all the entries to see what is translated and what is not, updating the translationPercentage observable value
+     */
     public void updatePercentageOfTranslation() {
         var translated = entries().stream().filter(t -> isNotBlank(t.translatedValue().getValue())).count();
-        translationPercentage.set((double) translated / entries.size());
+        if (translated == 0) {
+            translationPercentage.set(0);
+        } else {
+            translationPercentage.set((double) translated / entries.size());
+        }
     }
 
     /**
-     * Clears the obsolete messages from the catalog. No need to check the entries collection since we dont add obsolete entries there.
+     * Clears the obsolete messages from the catalog. No need to check the entries collection since we don't add obsolete entries there.
+     *
+     * @return true if some obsolete entry was found and removed
      */
     public boolean clearObsolete() {
         requireState(isLoaded(), "Cannot clear obsolete messages from a non loaded po file");
@@ -159,8 +178,13 @@ public class PoFile {
         this.modified.set(value);
     }
 
+    /**
+     * Updates the catalog from the given template. This will add to this po any new entry in the pot and mark obsolete any entry that is not in the pot
+     * anymore
+     *
+     * @param pot
+     */
     public void updateFromTemplate(PotFile pot) {
-        //TODO require not modified?
         this.catalog.updateFromTemplate(pot.catalog());
         //refresh the catalog
         this.catalog(this.catalog);
