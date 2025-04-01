@@ -24,7 +24,6 @@ import javafx.collections.ObservableList;
 import javafx.util.Subscription;
 import ooo.autopo.model.ai.TranslationAssessment;
 import ooo.autopo.model.consistency.ConsistencyValidator;
-import org.sejda.commons.util.RequireUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,18 +31,21 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
+ * Represents an entry of the .po file.
+ *
  * @author Andrea Vacondio
  */
 public class PoEntry {
 
     private final MessageKey key;
-    private final Message message;
     private final SimpleStringProperty untranslatedValue = new SimpleStringProperty();
     private final SimpleStringProperty translatedValue = new SimpleStringProperty();
-    private final SimpleObjectProperty<TranslationAssessment> assessment = new SimpleObjectProperty();
+    private final SimpleObjectProperty<TranslationAssessment> assessment = new SimpleObjectProperty<>();
     private final List<String> comments = new ArrayList<>();
     private final List<String> formats = new ArrayList<>();
     private final List<String> extractedComments = new ArrayList<>();
@@ -52,16 +54,15 @@ public class PoEntry {
     private Subscription warningsUpdaterSubscription;
 
     public PoEntry(Message message) {
-        RequireUtils.requireNotNullArg(message, "Message cannot be null");
+        requireNotNullArg(message, "Message cannot be null");
         this.key = new MessageKey(message);
-        this.message = message;
         this.translatedValue.set(message.getMsgstr());
         this.untranslatedValue.set(message.getMsgId());
         this.comments.addAll(message.getComments());
         this.formats.addAll(message.getFormats());
         this.extractedComments.addAll(message.getExtractedComments());
         this.sourceReferences.addAll(message.getSourceReferences());
-        this.translatedValue.subscribe((o, n) -> message.setMsgstr(n));
+        this.translatedValue.subscribe((o, n) -> message.setMsgstr(defaultString(n)));
     }
 
     public MessageKey key() {
@@ -92,9 +93,14 @@ public class PoEntry {
         return formats;
     }
 
-    public boolean contains(String search) {
-        if (isNotBlank(search)) {
-            var searchLowerCase = search.toLowerCase();
+    /**
+     * Search the needle inside the translated and untranslated value
+     *
+     * @return true if the translated or untranslated value contains the needle (case-insensitive)
+     */
+    public boolean contains(String needle) {
+        if (isNotBlank(needle)) {
+            var searchLowerCase = needle.toLowerCase();
             return ofNullable(untranslatedValue.get()).map(String::toLowerCase).map(s -> s.contains(searchLowerCase)).orElse(false) || ofNullable(
                     translatedValue.get()).map(String::toLowerCase).map(s -> s.contains(searchLowerCase)).orElse(false);
         }
@@ -105,7 +111,7 @@ public class PoEntry {
      * Notifies this entry that the target locale for this entry has changed. Consistency validators change depending on the target locale and this method takes
      * care of it.
      */
-    public void onLocaleUpdate(Locale targetLocale) {
+    public void notifyLocaleChange(Locale targetLocale) {
         if (Objects.nonNull(targetLocale)) {
             ofNullable(warningsUpdaterSubscription).ifPresent(Subscription::unsubscribe);
             this.warningsUpdaterSubscription = this.translatedValue.subscribe(v -> {
@@ -123,10 +129,16 @@ public class PoEntry {
         return warnings;
     }
 
+    /**
+     * @return a {@link TranslationAssessment} if available
+     */
     public SimpleObjectProperty<TranslationAssessment> assessment() {
         return assessment;
     }
 
+    /**
+     * If a suggested replacement is available, it updates the translated value of this {@code PoEntry} to the suggested replacement.
+     */
     public void acceptSuggestion() {
         ofNullable(assessment.get()).map(TranslationAssessment::suggestedReplacement).ifPresent(this.translatedValue::set);
     }

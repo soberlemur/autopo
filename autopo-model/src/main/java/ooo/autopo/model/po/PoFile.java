@@ -66,7 +66,7 @@ public class PoFile {
     public void locale(Locale locale) {
         requireNonNull(locale);
         this.locale = locale;
-        this.entries.forEach(e -> e.onLocaleUpdate(locale));
+        this.entries.forEach(e -> e.notifyLocaleChange(locale));
     }
 
     public Catalog catalog() {
@@ -79,7 +79,7 @@ public class PoFile {
         this.entries().clear();
         this.catalog.stream().filter(e -> !e.isObsolete()).map(PoEntry::new).forEachOrdered(e -> {
             this.addEntry(e);
-            e.onLocaleUpdate(this.locale());
+            e.notifyLocaleChange(this.locale());
         });
     }
 
