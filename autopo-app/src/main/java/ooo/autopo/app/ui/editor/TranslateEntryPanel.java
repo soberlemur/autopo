@@ -131,9 +131,9 @@ public class TranslateEntryPanel extends SplitPane {
                 entryModifiedSubscription = translationView.textProperty().subscribe((o, n) -> app().currentPoFile().modified(true));
 
                 commentsFlow.getChildren().add(createSection(i18n().tr("Comments"), newEntry.comments()));
-                commentsFlow.getChildren().add(createSection(i18n().tr("Extracted comments"), newEntry.comments()));
+                commentsFlow.getChildren().add(createSection(i18n().tr("Extracted comments"), newEntry.extractedComments()));
                 commentsFlow.getChildren().add(createSection(i18n().tr("Formats"), newEntry.formats()));
-                commentsFlow.getChildren().add(createSection(i18n().tr("Source reference"), newEntry.comments()));
+                commentsFlow.getChildren().add(createSection(i18n().tr("Source reference"), newEntry.sourceReferences()));
             }
         });
     }
