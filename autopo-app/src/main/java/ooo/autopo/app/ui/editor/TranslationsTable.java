@@ -40,9 +40,11 @@ import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
 
-import java.util.Comparator;
 import java.util.Optional;
 
+import static java.util.Comparator.comparingInt;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsLast;
 import static ooo.autopo.app.context.ApplicationContext.app;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -86,14 +88,14 @@ public class TranslationsTable extends TableView<PoEntry> {
 
         var sourceColumn = new TableColumn<PoEntry, String>(i18n().tr("Source"));
         sourceColumn.setPrefWidth(250);
-        sourceColumn.setComparator(Comparator.naturalOrder());
+        sourceColumn.setComparator(naturalOrder());
         sourceColumn.setCellValueFactory(param -> param.getValue().untranslatedValue());
 
         translationColumn.setCellValueFactory(param -> param.getValue().translatedValue());
 
         var assessmentColumn = new TableColumn<PoEntry, TranslationAssessment>(i18n().tr("Rate"));
         assessmentColumn.setPrefWidth(25);
-        //assessmentColumn.setComparator(Comparator.naturalOrder());
+        assessmentColumn.setComparator(nullsLast(comparingInt(TranslationAssessment::score)));
         assessmentColumn.setCellValueFactory(param -> param.getValue().assessment());
         assessmentColumn.setCellFactory(column -> new TableCell<>() {
             @Override
