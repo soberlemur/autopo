@@ -74,7 +74,7 @@ public class SelectLanguageDialog extends VBox {
         searchField.getStyleClass().addAll(Styles.SMALL);
         searchField.textProperty().subscribe(filterProperty::set);
         searchField.setOnAction(e -> search(searchField.getText()));
-        filterProperty.subscribe((o, n) -> search(n));
+        filterProperty.subscribe((o, n) -> search(n.toLowerCase()));
 
         var searchDismiss = new Button();
         searchDismiss.getStyleClass().add("search-dismiss");
