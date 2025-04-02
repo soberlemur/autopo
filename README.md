@@ -1,7 +1,7 @@
 [autopo.ooo](https://autopo.ooo)
 ==============================
 
-### Pronounced 'Auto-Po' (/ˈɔː.toʊ.poʊ/) and not (/ˈhaʊ tuː puː/).
+### It’s pronounced 'Auto-Po' (like 'auto' + 'po'), not 'How to poo'!
 
 ![Build Status](https://github.com/soberlemur/autopo/actions/workflows/build.yml/badge.svg)
 
