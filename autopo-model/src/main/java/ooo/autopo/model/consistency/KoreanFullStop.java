@@ -24,6 +24,9 @@ import java.util.Set;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * Consistency validator targeting Korean language. It checks for consistency in the use of the full stop at the end of a string between the original and
+ * translated strings. It considers valid '.' and '。' for the target koren language.
+ *
  * @author Andrea Vacondio
  */
 class KoreanFullStop implements ConsistencyValidator {

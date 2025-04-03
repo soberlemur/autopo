@@ -29,7 +29,7 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 /**
  * @author Andrea Vacondio
  */
-public class QuestionMark implements ConsistencyValidator {
+class QuestionMark implements ConsistencyValidator {
 
     private static final Set<String> EXCLUDE = Set.of("ar", "fa", "ur", "syr", "hy", "bo", "dz", "es", "gl");
 

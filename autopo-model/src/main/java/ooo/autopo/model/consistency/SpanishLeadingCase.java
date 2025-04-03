@@ -25,11 +25,11 @@ import static java.lang.Character.isUpperCase;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
- * In spanish questions are inlcuded in ¿ and ?, exclamations in ¡ and ! so we have to verify the case of the secondo char, not the first
+ * In Spanish questions are between ¿ and ?, exclamations between ¡ and ! so we have to verify the case of the second char, not the first
  *
  * @author Andrea Vacondio
  */
-public class SpanishLeadingCase implements ConsistencyValidator {
+class SpanishLeadingCase implements ConsistencyValidator {
 
     private static final Set<String> INCLUDES = Set.of("es", "gl");
 

@@ -26,6 +26,8 @@ import static java.lang.Character.isWhitespace;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * Consistency validator that checks for consistency in the presence of whitespaces at the beginning of the strings.
+ *
  * @author Andrea Vacondio
  */
 class LeadingWhitespace implements ConsistencyValidator {

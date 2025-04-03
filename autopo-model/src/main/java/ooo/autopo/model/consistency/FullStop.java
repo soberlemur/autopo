@@ -27,6 +27,8 @@ import static java.util.Map.ofEntries;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * Consistency validator that checks for consistency in the use of the full stop at the end of a string between the original and translated strings.
+ *
  * @author Andrea Vacondio
  */
 class FullStop implements ConsistencyValidator {

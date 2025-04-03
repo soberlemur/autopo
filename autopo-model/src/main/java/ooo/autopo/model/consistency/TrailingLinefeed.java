@@ -26,7 +26,9 @@ import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.apache.commons.lang3.CharUtils.LF;
 
 /**
- * @author Andrea VacondioF
+ * Consistency validator that checks for consistency in the presence of a linefeed at the end of the strings.
+ *
+ * @author Andrea Vacondio
  */
 class TrailingLinefeed implements ConsistencyValidator {
 

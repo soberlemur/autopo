@@ -26,9 +26,13 @@ import static java.util.Map.ofEntries;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * Validator that checks for consistency in the use of quotes between the original and translated strings. If the original string starts and ends with quotes,
+ * the translated string should also start and end with quotes. This can be improved because at the moment this validator is triggered only if the original
+ * string is in quotes and not vice versa
+ *
  * @author Andrea Vacondio
  */
-public class Quotes implements ConsistencyValidator {
+class Quotes implements ConsistencyValidator {
     private static final Map<String, Character> OPENING_QUOTES_EQUIV = ofEntries(entry("es", '«'),
                                                                                  entry("fr", '«'),
                                                                                  entry("de", '„'),
@@ -71,7 +75,7 @@ public class Quotes implements ConsistencyValidator {
         if (('"' == startChar || '\'' == startChar) && ('"' == endChar || '\'' == endChar)) {
             if (startChar != translated.charAt(0) || endChar != translated.charAt(translated.length() - 1)) {
                 if (translated.charAt(0) != OPENING_QUOTES_EQUIV.getOrDefault(targetLanguage,
-                                                                              '"') || translated.charAt(original.length() - 1) != CLOSING_QUOTES_EQUIV.getOrDefault(
+                                                                              '"') || translated.charAt(translated.length() - 1) != CLOSING_QUOTES_EQUIV.getOrDefault(
                         targetLanguage,
                         '"')) {
                     return i18n().tr("Suspicious quotes inconsistency between original and translation");

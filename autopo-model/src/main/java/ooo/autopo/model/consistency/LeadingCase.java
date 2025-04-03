@@ -26,27 +26,29 @@ import static java.lang.Character.isUpperCase;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * Consistency validator that checks for consistency in the capitalization of the input and translated string.
+ *
  * @author Andrea Vacondio
  */
 class LeadingCase implements ConsistencyValidator {
 
-    private static final Set<String> SKIP_FOR = Set.of(Locale.JAPANESE.getLanguage(),
-                                                       Locale.CHINESE.getLanguage(),
-                                                       "th",
-                                                       "lo",
-                                                       "my",
-                                                       "bo",
-                                                       "km",
-                                                       "dz",
-                                                       "ko",
-                                                       "ka",
-                                                       "de",
-                                                       "es",
-                                                       "gl",
-                                                       "he",
-                                                       "ckb",
-                                                       "kmr",
-                                                       "hi");
+    private static final Set<String> EXCLUDE = Set.of(Locale.JAPANESE.getLanguage(),
+                                                      Locale.CHINESE.getLanguage(),
+                                                      "th",
+                                                      "lo",
+                                                      "my",
+                                                      "bo",
+                                                      "km",
+                                                      "dz",
+                                                      "ko",
+                                                      "ka",
+                                                      "de",
+                                                      "es",
+                                                      "gl",
+                                                      "he",
+                                                      "ckb",
+                                                      "kmr",
+                                                      "hi");
 
     @Override
     public String validate(String original, String translated, String targetLanguage) {
@@ -58,6 +60,6 @@ class LeadingCase implements ConsistencyValidator {
 
     @Override
     public Set<String> excludeLanguages() {
-        return SKIP_FOR;
+        return EXCLUDE;
     }
 }

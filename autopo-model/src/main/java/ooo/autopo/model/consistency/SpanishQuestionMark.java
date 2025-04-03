@@ -24,9 +24,11 @@ import java.util.Set;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * In Spanish questions are between ¿ and ?
+ *
  * @author Andrea Vacondio
  */
-public class SpanishQuestionMark implements ConsistencyValidator {
+class SpanishQuestionMark implements ConsistencyValidator {
 
     private static final Set<String> INCLUDES = Set.of("es", "gl");
 

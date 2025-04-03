@@ -24,9 +24,12 @@ import java.util.regex.Pattern;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * Validator that checks for consistency in the number of placeholders between the original and translated strings. Placeholders include formats like %s, %d,
+ * %c, %x, %b, %f, and {0}.
+ *
  * @author Andrea Vacondio
  */
-public class PlaceholdersCount implements ConsistencyValidator {
+class PlaceholdersCount implements ConsistencyValidator {
     private static final Pattern PATTERN = Pattern.compile("%[sdcxbf]|\\{[0-9]}");
 
     @Override
