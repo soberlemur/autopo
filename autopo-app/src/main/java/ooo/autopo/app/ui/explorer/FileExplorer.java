@@ -51,7 +51,7 @@ import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.project.ProjectLoadRequest;
 import ooo.autopo.model.project.ProjectSaveRequest;
-import ooo.autopo.model.ui.SetOverlayItem;
+import ooo.autopo.model.ui.SetOverlayItemRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -102,7 +102,7 @@ public class FileExplorer extends BorderPane {
 
         var editProject = new MenuItem(i18n().tr("Edit project"));
         editProject.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
-        editProject.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("PROJECT_SETTINGS")));
+        editProject.setOnAction(e -> eventStudio().broadcast(new SetOverlayItemRequest("PROJECT_SETTINGS")));
         var editProjectContextMenu = new ContextMenu(editProject);
 
         var selectTemplate = new MenuItem(i18n().tr("Select template"));

@@ -34,7 +34,7 @@ import ooo.autopo.app.ui.components.CloseOverlayButton;
 import ooo.autopo.app.ui.components.NotClosable;
 import ooo.autopo.model.project.ProjectProperty;
 import ooo.autopo.model.project.ProjectSaveRequest;
-import ooo.autopo.model.ui.HideOverlayItem;
+import ooo.autopo.model.ui.HideOverlayItemRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -96,7 +96,7 @@ public class ProjectSettingsPane extends BorderPane implements NotClosable {
             app().currentProject().setProperty(ProjectProperty.NAME, nameField.getText());
             app().currentProject().setProperty(ProjectProperty.DESCRIPTION, descriptionArea.getText());
             eventStudio().broadcast(new ProjectSaveRequest(app().currentProject()));
-            eventStudio().broadcast(HideOverlayItem.INSTANCE);
+            eventStudio().broadcast(HideOverlayItemRequest.INSTANCE);
             modified.set(false);
         });
         saveButton.disableProperty().bind(Bindings.or(modified.not(), validator.containsErrorsProperty()));

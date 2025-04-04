@@ -33,7 +33,7 @@ import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.project.Project;
-import ooo.autopo.model.ui.SetOverlayItem;
+import ooo.autopo.model.ui.SetOverlayItemRequest;
 import ooo.autopo.service.project.RecentsService;
 import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.eventstudio.annotation.EventListener;
@@ -91,7 +91,7 @@ public class MainMenuBar extends MenuBar {
 
         var editProject = new MenuItem(i18n().tr("Edit project"));
         editProject.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN));
-        editProject.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("PROJECT_SETTINGS")));
+        editProject.setOnAction(e -> eventStudio().broadcast(new SetOverlayItemRequest("PROJECT_SETTINGS")));
         editProject.disableProperty().bind(isNull(app().runtimeState().project()));
 
         var addTranslation = new MenuItem(i18n().tr("Add translation"));
@@ -127,18 +127,18 @@ public class MainMenuBar extends MenuBar {
         var settings = new MenuItem(i18n().tr("Settings"));
         settings.setId("settingsMenuItem");
         settings.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN));
-        settings.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("SETTINGS")));
+        settings.setOnAction(e -> eventStudio().broadcast(new SetOverlayItemRequest("SETTINGS")));
         var editMenu = new Menu(i18n().tr("_Edit"));
         editMenu.getItems().addAll(settings);
 
         var about = new MenuItem(i18n().tr("About"));
         about.setId("aboutMenuItem");
-        about.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("ABOUT")));
+        about.setOnAction(e -> eventStudio().broadcast(new SetOverlayItemRequest("ABOUT")));
 
         var logs = new MenuItem(i18n().tr("Logs"));
         logs.setId("logsMenuItem");
         logs.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN));
-        logs.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("LOGS")));
+        logs.setOnAction(e -> eventStudio().broadcast(new SetOverlayItemRequest("LOGS")));
 
         var helpMenu = new Menu(i18n().tr("_Help"));
         helpMenu.getItems().addAll(logs, new SeparatorMenuItem(), about);

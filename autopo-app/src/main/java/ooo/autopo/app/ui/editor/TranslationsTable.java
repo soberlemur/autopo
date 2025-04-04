@@ -40,7 +40,7 @@ import ooo.autopo.model.ai.TranslationAssessment;
 import ooo.autopo.model.ai.TranslationRequest;
 import ooo.autopo.model.po.PoEntry;
 import ooo.autopo.model.po.PoUpdateRequest;
-import ooo.autopo.model.ui.SearchTranslation;
+import ooo.autopo.model.ui.SearchTranslationRequest;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.eventstudio.annotation.EventListener;
@@ -163,7 +163,7 @@ public class TranslationsTable extends TableView<PoEntry> {
     }
 
     @EventListener
-    public void onSearch(SearchTranslation text) {
+    public void onSearch(SearchTranslationRequest text) {
         if (isNotBlank(text.needle())) {
             var start = getSelectionModel().getSelectedIndex() + 1;
             for (int i = start; i < getItems().size() + start; i++) {

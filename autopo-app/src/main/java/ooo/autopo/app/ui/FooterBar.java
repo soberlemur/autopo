@@ -29,7 +29,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import ooo.autopo.app.ui.logs.ErrorLoggedEvent;
 import ooo.autopo.model.io.IOEvent;
-import ooo.autopo.model.ui.SetOverlayItem;
+import ooo.autopo.model.ui.SetOverlayItemRequest;
 import ooo.autopo.model.ui.SetStatusLabelRequest;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -52,10 +52,10 @@ public class FooterBar extends HBox {
         var logsButton = new Button();
         logsButton.setGraphic(new FontIcon(FluentUiRegularAL.DOCUMENT_ONE_PAGE_24));
         logsButton.getStyleClass().addAll(Styles.SMALL, Styles.FLAT);
-        logsButton.setOnAction(e -> eventStudio().broadcast(new SetOverlayItem("LOGS")));
+        logsButton.setOnAction(e -> eventStudio().broadcast(new SetOverlayItemRequest("LOGS")));
         logsButton.setTooltip(new Tooltip(i18n().tr("Open application logs")));
         eventStudio().add(ErrorLoggedEvent.class, e -> logsButton.getStyleClass().add(Styles.DANGER));
-        eventStudio().add(SetOverlayItem.class, e -> {
+        eventStudio().add(SetOverlayItemRequest.class, e -> {
             if ("LOGS".equals(e.id())) {
                 logsButton.getStyleClass().remove(Styles.DANGER);
             }

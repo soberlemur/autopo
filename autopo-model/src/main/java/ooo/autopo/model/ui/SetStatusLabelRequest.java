@@ -20,6 +20,8 @@ package ooo.autopo.model.ui;
  */
 
 /**
+ * Request to set the application status label to the given string
+ *
  * @author Andrea Vacondio
  */
 public record SetStatusLabelRequest(String status) {

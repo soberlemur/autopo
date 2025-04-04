@@ -38,7 +38,7 @@ import ooo.autopo.model.ai.TranslationRequest;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PoSaveRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
-import ooo.autopo.model.ui.SearchTranslation;
+import ooo.autopo.model.ui.SearchTranslationRequest;
 import ooo.autopo.model.ui.TranslationsCountChanged;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
 import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
@@ -107,8 +107,8 @@ public class TranslationsTableToolbar extends HBox {
         searchField.setPromptText(i18n().tr("Search"));
         searchField.getStyleClass().addAll(Styles.SMALL);
         searchField.textProperty().subscribe(filterProperty::set);
-        searchField.setOnAction(e -> eventStudio().broadcast(new SearchTranslation(searchField.getText())));
-        filterProperty.subscribe((o, n) -> eventStudio().broadcast(new SearchTranslation(n)));
+        searchField.setOnAction(e -> eventStudio().broadcast(new SearchTranslationRequest(searchField.getText())));
+        filterProperty.subscribe((o, n) -> eventStudio().broadcast(new SearchTranslationRequest(n)));
 
         var searchDismiss = new Button();
         searchDismiss.getStyleClass().add("search-dismiss");

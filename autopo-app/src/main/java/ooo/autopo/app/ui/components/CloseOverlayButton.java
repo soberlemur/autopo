@@ -21,7 +21,7 @@ package ooo.autopo.app.ui.components;
 
 import atlantafx.base.theme.Styles;
 import javafx.scene.control.Button;
-import ooo.autopo.model.ui.HideOverlayItem;
+import ooo.autopo.model.ui.HideOverlayItemRequest;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -36,6 +36,6 @@ public class CloseOverlayButton extends Button {
         setText(i18n().tr("Close"));
         setGraphic(new FontIcon(FluentUiFilledAL.DISMISS_20));
         getStyleClass().addAll(Styles.SMALL);
-        setOnAction(e -> eventStudio().broadcast(HideOverlayItem.INSTANCE));
+        setOnAction(e -> eventStudio().broadcast(HideOverlayItemRequest.INSTANCE));
     }
 }

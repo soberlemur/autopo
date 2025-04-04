@@ -27,7 +27,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import ooo.autopo.model.notification.NotificationType;
-import ooo.autopo.model.ui.SetOverlayItem;
+import ooo.autopo.model.ui.SetOverlayItemRequest;
 
 import static atlantafx.base.util.Animations.fadeIn;
 import static atlantafx.base.util.Animations.fadeOut;
@@ -60,7 +60,7 @@ public class NotificationsContainer extends VBox {
             var openLogsButton = new Button(i18n().tr("Open logs"));
             openLogsButton.setOnAction(e -> {
                 toAdd.getOnClose().handle(new Event(Event.ANY));
-                eventStudio().broadcast(new SetOverlayItem("LOGS"));
+                eventStudio().broadcast(new SetOverlayItemRequest("LOGS"));
             });
             toAdd.setPrimaryActions(openLogsButton);
         }

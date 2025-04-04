@@ -1,8 +1,13 @@
 package ooo.autopo.model.ui;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /*
  * This file is part of the Autopo project
- * Created 26/02/25
+ * Created 04/04/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,17 +22,20 @@ package ooo.autopo.model.ui;
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ */class SetOverlayItemRequestTest {
+    @Test
+    void nullTypeThrowsException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new SetOverlayItemRequest(null);
+        });
+        assertEquals("Overlay id cannot be blank", exception.getMessage());
+    }
 
-/**
- * Notifies about a change in the count of the current .po translations count.
- *
- * @author Andrea Vacondio
- */
-public class TranslationsCountChanged {
-    public static final TranslationsCountChanged INSTANCE = new TranslationsCountChanged();
-
-    private TranslationsCountChanged() {
-        //hide
+    @Test
+    void blankTypeThrowsException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new SetOverlayItemRequest("  ");
+        });
+        assertEquals("Overlay id cannot be blank", exception.getMessage());
     }
 }

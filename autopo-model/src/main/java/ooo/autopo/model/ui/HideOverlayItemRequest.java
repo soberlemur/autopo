@@ -2,7 +2,7 @@ package ooo.autopo.model.ui;
 
 /*
  * This file is part of the Autopo project
- * Created 03/03/25
+ * Created 17/02/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,15 @@ package ooo.autopo.model.ui;
  */
 
 /**
+ * Request to hide the current overlay item.
+ *
  * @author Andrea Vacondio
  */
-public record SearchTranslation(String needle) {
+public class HideOverlayItemRequest {
+
+    public static final HideOverlayItemRequest INSTANCE = new HideOverlayItemRequest();
+
+    private HideOverlayItemRequest() {
+        //hide
+    }
 }

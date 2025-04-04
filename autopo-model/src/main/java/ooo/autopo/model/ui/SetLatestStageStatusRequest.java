@@ -18,7 +18,7 @@ package ooo.autopo.model.ui;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static java.util.Objects.requireNonNull;
+import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 
 /**
  * Event to request to set the latest stage status
@@ -28,6 +28,6 @@ import static java.util.Objects.requireNonNull;
 public record SetLatestStageStatusRequest(StageStatus status) {
 
     public SetLatestStageStatusRequest {
-        requireNonNull(status, "Stage status cannot be null");
+        requireNotNullArg(status, "Stage status cannot be null");
     }
 }

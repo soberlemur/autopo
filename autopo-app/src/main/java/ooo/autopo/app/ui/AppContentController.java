@@ -21,8 +21,8 @@ package ooo.autopo.app.ui;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import ooo.autopo.model.ui.HideOverlayItem;
-import ooo.autopo.model.ui.SetOverlayItem;
+import ooo.autopo.model.ui.HideOverlayItemRequest;
+import ooo.autopo.model.ui.SetOverlayItemRequest;
 import ooo.autopo.model.ui.SetTitleRequest;
 import org.pdfsam.eventstudio.annotation.EventListener;
 import org.pdfsam.injector.Auto;
@@ -54,7 +54,7 @@ public class AppContentController {
     }
 
     @EventListener
-    public void onSetActiveOverlay(SetOverlayItem request) {
+    public void onSetActiveOverlay(SetOverlayItemRequest request) {
         Logger.trace("Request to set overlay to '{}'", request.id());
         var item = overlays.get(request.id());
         if (nonNull(item)) {
@@ -63,13 +63,13 @@ public class AppContentController {
                 container.overlay(item.panel().get());
                 eventStudio().broadcast(new SetTitleRequest(item.name()));
             } else {
-                hideOverlay(HideOverlayItem.INSTANCE);
+                hideOverlay(HideOverlayItemRequest.INSTANCE);
             }
         }
     }
 
     @EventListener
-    public void hideOverlay(HideOverlayItem request) {
+    public void hideOverlay(HideOverlayItemRequest request) {
         Logger.trace("Request to hide the overlay node");
         container.hideOverlay();
         this.activeOverlay = null;

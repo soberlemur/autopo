@@ -1,8 +1,13 @@
 package ooo.autopo.model.ui;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /*
  * This file is part of the Autopo project
- * Created 17/02/25
+ * Created 04/04/25
  * Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com).
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,15 +23,12 @@ package ooo.autopo.model.ui;
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
- * @author Andrea Vacondio
- */
-public class HideOverlayItem {
-
-    public static final HideOverlayItem INSTANCE = new HideOverlayItem();
-
-    private HideOverlayItem() {
-        //hide
+class SetLatestStageStatusRequestTest {
+    @Test
+    void testNullTypeThrowsException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new SetLatestStageStatusRequest(null);
+        });
+        assertEquals("Stage status cannot be null", exception.getMessage());
     }
 }

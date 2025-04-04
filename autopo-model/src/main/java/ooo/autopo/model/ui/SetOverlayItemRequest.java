@@ -19,8 +19,16 @@ package ooo.autopo.model.ui;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import static org.sejda.commons.util.RequireUtils.requireNotBlank;
+
 /**
+ * Request to set the overlay item with the given id as current overlay for the application
+ *
  * @author Andrea Vacondio
  */
-public record SetOverlayItem(String id) {
+public record SetOverlayItemRequest(String id) {
+
+    public SetOverlayItemRequest {
+        requireNotBlank(id, "Overlay id cannot be blank");
+    }
 }
