@@ -36,6 +36,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
@@ -105,9 +106,7 @@ public class PoEntry {
      */
     public boolean contains(String needle) {
         if (isNotBlank(needle)) {
-            var searchLowerCase = needle.toLowerCase();
-            return ofNullable(untranslatedValue.get()).map(String::toLowerCase).map(s -> s.contains(searchLowerCase)).orElse(false) || ofNullable(
-                    translatedValue.get()).map(String::toLowerCase).map(s -> s.contains(searchLowerCase)).orElse(false);
+            return containsIgnoreCase(untranslatedValue.get(), needle) || containsIgnoreCase(translatedValue.get(), needle);
         }
         return false;
     }
