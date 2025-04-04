@@ -125,7 +125,7 @@ public class IOController {
     @EventListener
     public void savePo(PoSaveRequest request) {
         Logger.trace("Po save request received");
-        request.poFile().modified(false);
+        Platform.runLater(() -> request.poFile().modified(false));
         mainExecutor.submit(() -> {
             try {
                 ioService.save(request.poFile());

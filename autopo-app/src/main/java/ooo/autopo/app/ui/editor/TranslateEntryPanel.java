@@ -80,7 +80,7 @@ public class TranslateEntryPanel extends SplitPane {
 
         aiTranslateButton.setText(i18n().tr("AI Translate"));
         aiTranslateButton.getStyleClass().addAll(Styles.SMALL);
-        app().runtimeState().poEntry().subscribe(e -> aiTranslateButton.setDisable(isNull(e) || isNull(app().currentPoFile().locale())));
+        app().runtimeState().poEntry().subscribe(e -> aiTranslateButton.setDisable(isNull(e) || isNull(app().currentPoFile().locale().get())));
 
         var aiValidateButton = new Button();
         aiValidateButton.setOnAction(new AIActionEventHandler() {

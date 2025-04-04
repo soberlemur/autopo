@@ -19,7 +19,6 @@ package ooo.autopo.app;
  */
 
 import javafx.stage.Stage;
-import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.ui.SetTitleRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.injector.Auto;
@@ -46,7 +45,7 @@ public class ApplicationTitleController {
             if (isNotBlank(request.title())) {
                 primaryStage.setTitle(APPLICATION_TITLE + " - " + request.title());
             } else {
-                var title = ofNullable(app().currentPoFile()).map(PoFile::locale)
+                var title = ofNullable(app().currentPoFile()).map(p -> p.locale().get())
                                                              .map(Locale::getDisplayName)
                                                              .map(StringUtils::capitalize)
                                                              .map(l -> APPLICATION_TITLE + " - " + l)

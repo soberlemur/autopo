@@ -46,7 +46,7 @@ public class DefaultAIService implements AIService {
         TranslationServiceAI aiService = AiServices.create(TranslationServiceAI.class, aiModelDescriptor.translationModel());
 
         return aiService.translate(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH),
-                                   poFile.locale().getDisplayLanguage(Locale.ENGLISH),
+                                   poFile.locale().get().getDisplayLanguage(Locale.ENGLISH),
                                    projectDescription,
                                    entry.untranslatedValue().getValue());
 
@@ -58,7 +58,7 @@ public class DefaultAIService implements AIService {
         TranslationServiceAI aiService = AiServices.create(TranslationServiceAI.class, aiModelDescriptor.validationModel());
 
         return aiService.assess(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH),
-                                poFile.locale().getDisplayLanguage(Locale.ENGLISH),
+                                poFile.locale().get().getDisplayLanguage(Locale.ENGLISH),
                                 projectDescription,
                                 entry.untranslatedValue().getValue(),
                                 entry.translatedValue().getValue());

@@ -47,7 +47,7 @@ abstract class AIActionEventHandler implements EventHandler<ActionEvent> {
                                                                i18n().tr(
                                                                        "Add a project description to give the AI model more context and improve translations accuracy")));
         }
-        if (isNull(app().currentPoFile().locale())) {
+        if (isNull(app().currentPoFile().locale().get())) {
             eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("The project must have a target locale to translate to")));
         } else {
             Optional<AIModelDescriptor> model = getModel();

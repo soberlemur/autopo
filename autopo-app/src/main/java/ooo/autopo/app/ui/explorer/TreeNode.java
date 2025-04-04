@@ -35,6 +35,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.Optional;
 
+import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.endsWith;
 import static org.apache.commons.lang3.StringUtils.removeEnd;
 
 /**
@@ -109,6 +111,18 @@ public class TreeNode {
                                 progress,
                                 onDoubleClickAction,
                                 contextMenu);
+        poFile.locale().subscribe(l -> {
+            if (nonNull(l)) {
+                Platform.runLater(() -> {
+                    if (endsWith(node.displayText.get(), " (*)")) {
+                        node.displayText.set(node.displayText.get() + " (" + l.toLanguageTag() + ") (*)");
+                    } else {
+                        node.displayText.set(node.displayText.get() + " (" + l.toLanguageTag() + ")");
+                    }
+                });
+            }
+
+        });
         poFile.modifiedProperty().subscribe(o -> {
             if (o) {
                 node.displayText.set(node.displayText.get() + " (*)");

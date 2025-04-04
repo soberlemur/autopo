@@ -140,8 +140,8 @@ public class DefaultIOService implements IOService {
     public void save(PoFile poFile) throws IOException {
         Logger.debug(i18n().tr("Saving po file {}"), poFile.poFile().toAbsolutePath().toString());
         if (nonNull(poFile.catalog().header())) {
-            if (!poFile.catalog().header().contains(Header.LANGUAGE) && nonNull(poFile.locale())) {
-                poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale()));
+            if (!poFile.catalog().header().contains(Header.LANGUAGE) && nonNull(poFile.locale().get())) {
+                poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale().get()));
             }
             poFile.catalog().header().setValue(Header.CONTENT_TYPE, "text/plain; charset=UTF-8");
             poFile.catalog()

@@ -98,14 +98,14 @@ class PoFileTest {
     @Test
     void testLocaleReturnsNullInitially() {
         var poFile = new PoFile(Paths.get("src/test/resources/test.po"));
-        assertNull(poFile.locale());
+        assertNull(poFile.locale().get());
     }
 
     @Test
     void testLocaleSetterUpdatesProperty() {
         var poFile = new PoFile(Paths.get("src/test/resources/test.po"));
         poFile.locale(Locale.FRANCE);
-        assertEquals(Locale.FRANCE, poFile.locale());
+        assertEquals(Locale.FRANCE, poFile.locale().get());
     }
 
     @Test
@@ -120,7 +120,7 @@ class PoFileTest {
         var entry = mock(PoEntry.class);
         poFile.addEntry(entry);
         poFile.locale(Locale.FRANCE);
-        assertEquals(Locale.FRANCE, poFile.locale());
+        assertEquals(Locale.FRANCE, poFile.locale().get());
         verify(entry).notifyLocaleChange(Locale.FRANCE);
     }
 

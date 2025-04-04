@@ -51,7 +51,7 @@ public class PoFile {
     private final SimpleObjectProperty<LoadingStatus> status = new SimpleObjectProperty<>(LoadingStatus.INITIAL);
     private final AtomicReference<LoadingStatus> atomicState = new AtomicReference<>(LoadingStatus.INITIAL);
     private final Path poFile;
-    private Locale locale;
+    private final SimpleObjectProperty<Locale> locale = new SimpleObjectProperty<>();
     private Catalog catalog;
     private final ObservableList<PoEntry> entries = FXCollections.observableArrayList();
     private final SimpleDoubleProperty translationPercentage = new SimpleDoubleProperty(0);
@@ -66,7 +66,7 @@ public class PoFile {
         return poFile;
     }
 
-    public Locale locale() {
+    public ObservableObjectValue<Locale> locale() {
         return locale;
     }
 
@@ -76,7 +76,7 @@ public class PoFile {
      */
     public void locale(Locale locale) {
         requireNonNull(locale);
-        this.locale = locale;
+        this.locale.set(locale);
         this.entries.forEach(e -> e.notifyLocaleChange(locale));
     }
 
@@ -94,7 +94,7 @@ public class PoFile {
         this.entries().clear();
         this.catalog.stream().filter(e -> !e.isObsolete()).map(PoEntry::new).forEachOrdered(e -> {
             this.addEntry(e);
-            e.notifyLocaleChange(this.locale());
+            e.notifyLocaleChange(this.locale().get());
         });
     }
 
