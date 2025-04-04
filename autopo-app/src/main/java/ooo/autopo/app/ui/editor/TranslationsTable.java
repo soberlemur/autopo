@@ -170,6 +170,7 @@ public class TranslationsTable extends TableView<PoEntry> {
                 var index = i % getItems().size();
                 var item = getItems().get(index);
                 if (item.contains(text.needle())) {
+                    getSelectionModel().clearSelection();
                     getSelectionModel().select(index);
                     scrollTo(item);
                     break;
