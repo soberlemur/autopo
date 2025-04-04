@@ -60,7 +60,7 @@
         <monocle.version>21</monocle.version>
         <awaitility.version>4.3.0</awaitility.version>
         <archunit.version>1.4.0</archunit.version>
-        <potentilla.version>0.0.2</potentilla.version>
+        <potentilla.version>0.0.3</potentilla.version>
         <validatorfx.version>0.5.1</validatorfx.version>
         <jackson.version>2.18.3</jackson.version>
         <atlantafx.version>2.0.1</atlantafx.version>

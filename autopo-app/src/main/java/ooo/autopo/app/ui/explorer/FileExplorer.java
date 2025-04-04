@@ -128,7 +128,7 @@ public class FileExplorer extends BorderPane {
                                                                                  poPath.getFileName().toString())));
                 } else {
                     var poFile = new PoFile(poPath);
-                    poFile.catalog(new Catalog());
+                    poFile.catalog(new Catalog().withDefaultHeader());
                     eventStudio().broadcast(new PoAddRequest(app().currentProject(), poFile), "LANGUAGE_SELECTION_STATION");
                 }
             }

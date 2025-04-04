@@ -52,7 +52,7 @@ class PoFileTest {
         obsoleteMessage.markObsolete();
         var nonObsoleteMessage = new Message();
         nonObsoleteMessage.setMsgId("valid");
-        var catalog = new Catalog(false);
+        var catalog = new Catalog();
         catalog.add(obsoleteMessage);
         catalog.add(nonObsoleteMessage);
         poFile.catalog(catalog);
@@ -72,7 +72,7 @@ class PoFileTest {
         obsoleteMessage.setMsgId("obsolete");
         var nonObsoleteMessage = new Message();
         nonObsoleteMessage.setMsgId("valid");
-        var catalog = new Catalog(false);
+        var catalog = new Catalog();
         catalog.add(obsoleteMessage);
         catalog.add(nonObsoleteMessage);
         poFile.catalog(catalog);
@@ -139,7 +139,7 @@ class PoFileTest {
     @Test
     void testCatalogSetterUpdatesCatalogAndClearsEntries() {
         var poFile = new PoFile(Paths.get("src/test/resources/test.po"));
-        var catalog = new Catalog(false);
+        var catalog = new Catalog();
         var entry = mock(PoEntry.class);
 
         poFile.addEntry(entry);
@@ -152,7 +152,7 @@ class PoFileTest {
     @Test
     void testCatalogSetterAddsNonObsoleteEntriesAndNotifiesLocale() {
         var poFile = new PoFile(Paths.get("src/test/resources/test.po"));
-        var catalog = new Catalog(false);
+        var catalog = new Catalog();
         var message1 = new Message();
         message1.setMsgId("id");
         message1.setMsgstr("text");
@@ -162,7 +162,7 @@ class PoFileTest {
         assertEquals(1, poFile.entries().size());
         assertEquals("text", poFile.entries().get(0).translatedValue().get());
 
-        var catalog2 = new Catalog(false);
+        var catalog2 = new Catalog();
         var message2 = new Message();
         message2.setMsgId("another");
         message2.setMsgstr("another text");
@@ -250,7 +250,7 @@ class PoFileTest {
         var potFile = new PotFile(Path.of("templateFile.pot"));
 
         // Setup template catalog
-        var templateCatalog = new Catalog(true);
+        var templateCatalog = new Catalog().asTemplate();
         var messageFromTemplate = new Message();
         messageFromTemplate.setMsgId("templateMessage");
         messageFromTemplate.setMsgstr("templateTranslation");
@@ -258,7 +258,7 @@ class PoFileTest {
         potFile.catalog(templateCatalog);
 
         // Setup current catalog
-        var currentCatalog = new Catalog(false);
+        var currentCatalog = new Catalog();
         var existingMessage = new Message();
         existingMessage.setMsgId("existingMessage");
         existingMessage.setMsgstr("existingTranslation");

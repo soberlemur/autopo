@@ -40,7 +40,7 @@ class PotFileTest {
     @Test
     void testSetAndGetCatalog() {
         var potFile = new PotFile(Path.of("example.pot"));
-        var catalog = new Catalog(true);
+        var catalog = new Catalog().asTemplate();
         potFile.catalog(catalog);
         assertEquals(catalog, potFile.catalog());
     }
@@ -56,7 +56,7 @@ class PotFileTest {
     void testSetCatalogThrowsExceptionForNonTemplateCatalog() {
         var potFile = new PotFile(Path.of("example.pot"));
 
-        var exception = assertThrows(IllegalArgumentException.class, () -> potFile.catalog(new Catalog(false)));
+        var exception = assertThrows(IllegalArgumentException.class, () -> potFile.catalog(new Catalog()));
         assertEquals("Cannot set a non template catalog", exception.getMessage());
     }
 
