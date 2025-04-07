@@ -19,32 +19,29 @@ package ooo.autopo.service.project;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import jakarta.inject.Inject;
-import ooo.autopo.model.io.IOEvent;
-import org.pdfsam.eventstudio.annotation.EventListener;
-import org.pdfsam.injector.Auto;
-
-import static ooo.autopo.model.io.FileType.OOO;
-import static ooo.autopo.model.io.IOEventType.LOADED;
-import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
+import java.nio.file.Path;
+import java.util.List;
 
 /**
+ * Service handling the recent projects
+ *
  * @author Andrea Vacondio
  */
-@Auto
-public class RecentsProjectsController {
-    private final RecentsService recentService;
+public interface RecentProjectsService {
+    /**
+     * Add the path to the list of recent projects
+     *
+     * @param projectPath
+     */
+    void addProject(Path projectPath);
 
-    @Inject
-    public RecentsProjectsController(RecentsService recentsService) {
-        this.recentService = recentsService;
-        eventStudio().addAnnotatedListeners(this);
-    }
+    /**
+     * @return the list of recent projects paths
+     */
+    List<String> getRecentProjects();
 
-    @EventListener(priority = Integer.MIN_VALUE)
-    public void onProjectLoaded(IOEvent event) {
-        if (LOADED == event.type() && OOO == event.fileType()) {
-            this.recentService.addProject(event.path());
-        }
-    }
+    /**
+     * clear the recent projects
+     */
+    void clear();
 }

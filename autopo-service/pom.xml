@@ -69,5 +69,11 @@
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
         </dependency>
+        <!-- tests -->
+        <dependency>
+            <groupId>org.pdfsam</groupId>
+            <artifactId>pdfsam-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

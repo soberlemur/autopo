@@ -45,15 +45,14 @@ import static org.sejda.commons.util.RequireUtils.requireNotNullArg;
 /**
  * @author Andrea Vacondio
  */
-
-public class DefaultRecentsService implements RecentsService {
+public class DefaultRecentProjectsService implements RecentProjectsService {
 
     static final int MAX_CAPACITY = 20;
     private final PreferencesRepository repo;
     private final Map<String, String> cache = new LRUMap<>(MAX_CAPACITY);
 
     @Inject
-    public DefaultRecentsService(@Named("recentRepository") PreferencesRepository repo) {
+    public DefaultRecentProjectsService(@Named("recentRepository") PreferencesRepository repo) {
         this.repo = repo;
         populateCache();
         eventStudio().addAnnotatedListeners(this);

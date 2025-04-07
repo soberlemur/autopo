@@ -34,7 +34,7 @@ import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.IOEvent;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.ui.SetOverlayItemRequest;
-import ooo.autopo.service.project.RecentsService;
+import ooo.autopo.service.project.RecentProjectsService;
 import org.apache.commons.lang3.StringUtils;
 import org.pdfsam.eventstudio.annotation.EventListener;
 
@@ -58,10 +58,10 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 public class MainMenuBar extends MenuBar {
 
     private final Menu recent;
-    private final RecentsService recentsService;
+    private final RecentProjectsService recentsService;
 
     @Inject
-    public MainMenuBar(RecentsService recentsService) {
+    public MainMenuBar(RecentProjectsService recentsService) {
         this.recentsService = recentsService;
         var exit = new MenuItem(i18n().tr("Exit"));
         exit.setId("exitMenuItem");

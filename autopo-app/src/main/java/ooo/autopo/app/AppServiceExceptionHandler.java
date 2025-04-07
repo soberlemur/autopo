@@ -27,6 +27,8 @@ import org.tinylog.Logger;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
+ * {@link ServiceExceptionHandler} that logs the exception and request to add a UI notification for this error
+ *
  * @author Andrea Vacondio
  */
 public class AppServiceExceptionHandler implements ServiceExceptionHandler {

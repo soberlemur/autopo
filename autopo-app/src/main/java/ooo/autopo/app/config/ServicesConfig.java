@@ -29,9 +29,9 @@ import ooo.autopo.service.ai.DefaultAIService;
 import ooo.autopo.service.io.DefaultIOService;
 import ooo.autopo.service.io.IOController;
 import ooo.autopo.service.io.IOService;
-import ooo.autopo.service.project.DefaultRecentsService;
-import ooo.autopo.service.project.RecentsProjectsController;
-import ooo.autopo.service.project.RecentsService;
+import ooo.autopo.service.project.DefaultRecentProjectsService;
+import ooo.autopo.service.project.RecentProjectsService;
+import ooo.autopo.service.project.RecentsProjectsAdder;
 import ooo.autopo.service.ui.DefaultStageService;
 import ooo.autopo.service.ui.StageService;
 import ooo.autopo.service.ui.StageServiceController;
@@ -42,7 +42,7 @@ import org.pdfsam.persistence.EntityRepository;
 /**
  * @author Andrea Vacondio
  */
-@Components({ IOController.class, StageServiceController.class, NativeOpenUrlController.class, RecentsProjectsController.class, AIController.class })
+@Components({ IOController.class, StageServiceController.class, NativeOpenUrlController.class, RecentsProjectsAdder.class, AIController.class })
 
 public class ServicesConfig {
     @Provides
@@ -56,7 +56,7 @@ public class ServicesConfig {
     }
 
     @Provides
-    RecentsService recents(DefaultRecentsService recentsService) {
+    RecentProjectsService recents(DefaultRecentProjectsService recentsService) {
         return recentsService;
     }
 

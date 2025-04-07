@@ -22,6 +22,8 @@ package ooo.autopo.service;
 import java.util.function.BiConsumer;
 
 /**
+ * Service layer component that is notified and can perform some action when a service method throws an exception
+ *
  * @author Andrea Vacondio
  */
 public interface ServiceExceptionHandler extends BiConsumer<Throwable, String> {
