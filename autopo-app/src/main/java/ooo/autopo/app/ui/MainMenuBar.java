@@ -32,6 +32,7 @@ import javafx.scene.input.KeyCombination;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.IOEvent;
+import ooo.autopo.model.po.PoAddRequestBuildRequest;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.ui.SetOverlayItemRequest;
 import ooo.autopo.service.project.RecentProjectsService;
@@ -95,7 +96,7 @@ public class MainMenuBar extends MenuBar {
         editProject.disableProperty().bind(isNull(app().runtimeState().project()));
 
         var addTranslation = new MenuItem(i18n().tr("Add translation"));
-        // addTranslation.setOnAction(e -> eventStudio().broadcast(new PoAddRequest()));
+        addTranslation.setOnAction(e -> eventStudio().broadcast(PoAddRequestBuildRequest.INSTANCE));
         addTranslation.disableProperty().bind(isNull(app().runtimeState().project()));
         app().runtimeState().project().subscribe(project -> {
             addTranslation.disableProperty().unbind();

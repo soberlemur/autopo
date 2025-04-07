@@ -96,6 +96,7 @@ public class AutopoApp extends Application {
         cleanIfRequired();
         app().instance(WindowStatusController.class).setStage(primaryStage);
         app().instance(ApplicationTitleController.class).setStage(primaryStage);
+        app().instance(PoAddController.class).setStage(primaryStage);
 
         //  var config = app().instance(AppBrand.class);
         //  System.setProperty(IOUtils.TMP_BUFFER_PREFIX_PROPERTY_NAME, config.property(BrandableProperty.HANDLE, "pdfblack"));
