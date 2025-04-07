@@ -56,9 +56,9 @@ public final class ObjectCollectionWriter implements OngoingWrite {
                 writer.append(defaultLineSeparator(item.toString()));
             }
         } catch (Exception e) {
-            Logger.error(e, i18n().tr("Error saving content to file {}", ofNullable(file).map(Path::toString).orElse("")));
+            Logger.error(e, i18n().tr("Error saving content to file {}"), ofNullable(file).map(Path::toString).orElse(""));
         }
-        Logger.info(i18n().tr("File {} saved", file.toString()));
+        Logger.info(i18n().tr("File {} saved"), file.toString());
     }
 
     @Override
