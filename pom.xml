@@ -53,7 +53,7 @@
         <eventstudio.version>4.0.1</eventstudio.version>
         <injector.version>5.0.0</injector.version>
         <ikonli.version>12.3.1</ikonli.version>
-        <javafx.version>24</javafx.version>
+        <javafx.version>25-ea+11</javafx.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
         <jakarta.inject.version>2.0.1</jakarta.inject.version>
         <testfx.version>4.0.18</testfx.version>
