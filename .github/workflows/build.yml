@@ -17,7 +17,7 @@ jobs:
         with:
           java-version: '24'
           distribution: 'liberica'
-          java-package: 'jdk-fx'
+          java-package: 'jdk+fx'
           cache: 'maven'
       - name: Install gettext and xvfb on Ubuntu
         if: matrix.os == 'ubuntu-latest'
