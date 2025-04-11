@@ -20,7 +20,6 @@ package ooo.autopo.app.ui;
  */
 
 import jakarta.inject.Inject;
-import javafx.application.Platform;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -32,6 +31,7 @@ import javafx.scene.input.KeyCombination;
 import ooo.autopo.app.io.Choosers;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.io.IOEvent;
+import ooo.autopo.model.lifecycle.CloseApplicationRequest;
 import ooo.autopo.model.po.PoAddRequestBuildRequest;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.ui.SetOverlayItemRequest;
@@ -66,7 +66,7 @@ public class MainMenuBar extends MenuBar {
         this.recentsService = recentsService;
         var exit = new MenuItem(i18n().tr("Exit"));
         exit.setId("exitMenuItem");
-        exit.setOnAction(e -> Platform.exit());
+        exit.setOnAction(e -> eventStudio().broadcast(CloseApplicationRequest.INSTANCE));
 
         var projects = new Menu(i18n().tr("Project"));
         projects.setId("projectsMenuItem");

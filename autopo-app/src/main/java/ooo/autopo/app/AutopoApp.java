@@ -42,6 +42,7 @@ import ooo.autopo.app.ui.notification.NotificationsContainer;
 import ooo.autopo.app.validation.CompositeDecoration;
 import ooo.autopo.i18n.SetLocaleRequest;
 import ooo.autopo.model.lifecycle.CleanupRequest;
+import ooo.autopo.model.lifecycle.CloseApplicationRequest;
 import ooo.autopo.model.lifecycle.ShutdownEvent;
 import ooo.autopo.model.lifecycle.StartupEvent;
 import ooo.autopo.model.ui.SetLatestStageStatusRequest;
@@ -97,21 +98,18 @@ public class AutopoApp extends Application {
         app().instance(WindowStatusController.class).setStage(primaryStage);
         app().instance(ApplicationTitleController.class).setStage(primaryStage);
         app().instance(PoAddController.class).setStage(primaryStage);
+        app().instance(DiscardModifiedFilesController.class).setStage(primaryStage);
 
-        //  var config = app().instance(AppBrand.class);
-        //  System.setProperty(IOUtils.TMP_BUFFER_PREFIX_PROPERTY_NAME, config.property(BrandableProperty.HANDLE, "pdfblack"));
         primaryStage.setScene(initScene());
-        primaryStage.setOnCloseRequest(e -> Platform.exit());
-
-        //   primaryStage.getIcons().addAll(config.icons());
+        primaryStage.setOnCloseRequest(e -> {
+            e.consume();
+            eventStudio().broadcast(CloseApplicationRequest.INSTANCE);
+        });
 
         DefaultDecoration.setFactory(CompositeDecoration::createCompositeDecoration);
-        initStartupContentItem();
 
         primaryStage.show();
         app().instance(MainPane.class).setDividerPositions(0.15f);
-        // keep the scale updated
-        // primaryStage.getScene().getWindow().outputScaleXProperty().addListener((a, b, c) -> app().runtimeState().scale(c.doubleValue()));
         closeSplash();
         eventStudio().broadcast(new StartupEvent());
         Logger.info("{} started", APPLICATION_TITLE);
@@ -133,10 +131,6 @@ public class AutopoApp extends Application {
         initTheme(mainScene);
         mainScene.getAccelerators().put(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN), Platform::exit);
         return mainScene;
-    }
-
-    private void initStartupContentItem() {
-        //TODO maybe open the latest project
     }
 
     private void initTheme(Scene scene) {

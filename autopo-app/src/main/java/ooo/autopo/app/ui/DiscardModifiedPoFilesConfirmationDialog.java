@@ -26,6 +26,8 @@ import javafx.scene.control.ButtonType;
 import static ooo.autopo.i18n.I18nContext.i18n;
 
 /**
+ * Dialog asking the user a confirmation to discard modified .po files
+ *
  * @author Andrea Vacondio
  */
 public class DiscardModifiedPoFilesConfirmationDialog extends Alert {
@@ -33,7 +35,7 @@ public class DiscardModifiedPoFilesConfirmationDialog extends Alert {
     public DiscardModifiedPoFilesConfirmationDialog() {
         super(AlertType.CONFIRMATION);
         setTitle(i18n().tr("Discard modification"));
-        setHeaderText(i18n().tr("There are modified Po files, loading a new project will discard the modification, do you want to proceed?"));
+        setHeaderText(i18n().tr("There are modified Po files, proceeding will discard the modifications, do you want to proceed?"));
         var yesBtn = new ButtonType(i18n().tr("Yes"), ButtonBar.ButtonData.YES);
         var noBtn = new ButtonType(i18n().tr("No"), ButtonBar.ButtonData.NO);
         getButtonTypes().setAll(yesBtn, noBtn);
