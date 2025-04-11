@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: info@soberlemur.com\n"
-"POT-Creation-Date: 2025-03-28 18:38+0100\n"
+"POT-Creation-Date: 2025-04-11 10:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -237,6 +237,17 @@ msgstr ""
 msgid "First available"
 msgstr ""
 
+msgid "Save a .po translation file"
+msgstr ""
+
+#, java-format
+msgid "The file {0} already exists"
+msgstr ""
+
+#, java-format
+msgid "The file {0} is not inside the current project directory"
+msgstr ""
+
 msgid "Persistent application settings deleted"
 msgstr ""
 
@@ -246,7 +257,7 @@ msgstr ""
 msgid "Closing..."
 msgstr ""
 
-msgid "modificato"
+msgid "modified"
 msgstr ""
 
 msgid "Unexpected error"
@@ -304,8 +315,8 @@ msgid "Discard modification"
 msgstr ""
 
 msgid ""
-"There are modified Po files, loading a new project will discard the "
-"modification, do you want to proceed?"
+"There are modified Po files, proceeding will discard the modifications, do "
+"you want to proceed?"
 msgstr ""
 
 msgid "Yes"
@@ -336,17 +347,6 @@ msgid "Select template"
 msgstr ""
 
 msgid "Add translation"
-msgstr ""
-
-msgid "Save a .po translation file"
-msgstr ""
-
-#, java-format
-msgid "The file {0} already exists"
-msgstr ""
-
-#, java-format
-msgid "The file {0} is not inside the current project directory"
 msgstr ""
 
 msgid "Update all from pot"
@@ -491,12 +491,6 @@ msgstr ""
 msgid ""
 "Translate a batch of untranslated entries with the selected AI model (The "
 "batch size is defined in the settings)"
-msgstr ""
-
-msgid "Rename project"
-msgstr ""
-
-msgid "Enter the new name for the project:"
 msgstr ""
 
 msgid "Exit"

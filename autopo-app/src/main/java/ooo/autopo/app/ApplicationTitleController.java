@@ -51,7 +51,7 @@ public class ApplicationTitleController {
                                                              .map(l -> APPLICATION_TITLE + " - " + l)
                                                              .orElse(APPLICATION_TITLE);
                 if (nonNull(app().currentPoFile()) && app().currentPoFile().modifiedProperty().get()) {
-                    title = title + " (" + i18n().tr("modificato") + ")";
+                    title = title + " (" + i18n().tr("modified") + ")";
                 }
                 primaryStage.setTitle(title);
             }
