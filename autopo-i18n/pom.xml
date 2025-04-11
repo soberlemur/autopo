@@ -55,10 +55,23 @@
             <groupId>org.pdfsam</groupId>
             <artifactId>eventstudio</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-        </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>CI</id>
+            <activation>
+                <property>
+                    <name>env.CI</name>
+                    <value>false</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-base</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
