@@ -33,7 +33,12 @@ jobs:
 
       - name: Install gettext on Windows
         if: matrix.os == 'windows-latest'
-        run: choco install gettext
+        uses: johnwason/vcpkg-action@v6
+        id: vcpkg
+        with:
+          pkgs: wxwidgets gettext[tools]
+          triplet: x64-windows
+          token: ${{ github.token }}
 
       - name: Build with Maven
         if: matrix.os == 'ubuntu-latest'
