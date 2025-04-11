@@ -17,7 +17,7 @@ jobs:
         with:
           java-version: '24'
           distribution: 'liberica'
-          java-package: 'jdk-fx',
+          java-package: 'jdk-fx'
           cache: 'maven'
       - name: Install gettext and xvfb on Ubuntu
         if: matrix.os == 'ubuntu-latest'
@@ -30,7 +30,7 @@ jobs:
       - name: Build with Maven
         if: matrix.os == 'macos-latest'
         run: mvn --batch-mode --update-snapshots verify
-        
+
       - name: Install gettext on Windows
         if: matrix.os == 'windows-latest'
         run: choco install gettext
