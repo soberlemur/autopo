@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ooo.autopo.service.ui.StageService;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.pdfsam.test.ClearEventStudioExtension;
@@ -39,6 +40,7 @@ import static org.mockito.Mockito.when;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @ExtendWith({ ApplicationExtension.class, ClearEventStudioExtension.class })
+@Tag("NoHeadless")
 public class WindowStatusControllerTest {
 
     private StageService service;
