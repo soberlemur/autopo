@@ -56,8 +56,7 @@
             <id>CI</id>
             <activation>
                 <property>
-                    <name>env.CI</name>
-                    <value>false</value>
+                    <name>!env.CI</name>
                 </property>
             </activation>
             <dependencies>

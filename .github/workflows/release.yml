@@ -1,0 +1,68 @@
+name: release
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+
+jobs:
+  os_matrix:
+    strategy:
+      matrix:
+        os: [ macos-latest, ubuntu-latest, macos-13, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    name: build ${{ matrix.os }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_SUB_SECRET_KEY }}
+          passphrase: ${{ secrets.GPG_SUB_SECRET_KEY_PASSWORD }}
+          fingerprint: ${{ secrets.GPG_SUB_FINGERPRINT }}
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'liberica'
+          java-package: 'jdk+fx'
+          cache: 'maven'
+
+      - name: Install gettext on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y gettext
+
+      - name: Install gettext on macOS
+        if: matrix.os == 'macos-latest'
+        run: brew install gettext
+
+      - name: Install gettext on Windows
+        if: matrix.os == 'windows-latest'
+        uses: johnwason/vcpkg-action@v6
+        id: vcpkg
+        with:
+          pkgs: wxwidgets gettext[tools]
+          triplet: x64-windows
+          token: ${{ github.token }}
+
+      - name: Build
+        run: mvn clean install -DskipTests -Drelease --batch-mode
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            pdfsam-basic/target/*.deb
+            pdfsam-basic/target/*.dmg
+            pdfsam-basic/target/*.zip
+            pdfsam-basic/target/*.tar.gz
+            pdfsam-basic/target/*.deb.asc
+            pdfsam-basic/target/*.dmg.asc
+            pdfsam-basic/target/*.zip.asc
+            pdfsam-basic/target/*.tar.gz.asc
+

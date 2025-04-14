@@ -20,23 +20,211 @@
         <url>https://github.com/soberlemur/autopo/issues</url>
     </issueManagement>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifestEntries>
+                                    <Built-By>Andrea Vacondio</Built-By>
+                                    <Automatic-Module-Name>ooo.autopo.app</Automatic-Module-Name>
+                                </manifestEntries>
+                                <addMavenDescriptor>false</addMavenDescriptor>
+                            </archive>
+                            <outputDirectory>
+                                ${project.build.directory}/assembled/lib
+                            </outputDirectory>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>jlink</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>jlink</executable>
+                                    <arguments>
+                                        <argument>--add-modules</argument>
+                                        <argument>
+                                            java.base,java.logging,java.naming,java.sql,java.desktop,java.xml,java.management,jdk.unsupported,java.prefs,javafx.controls,javafx.base,javafx.graphics
+                                        </argument>
+                                        <argument>--output</argument>
+                                        <argument>${project.build.directory}/assembled/runtime</argument>
+                                        <argument>--compress</argument>
+                                        <argument>zip-6</argument>
+                                        <argument>--no-header-files</argument>
+                                        <argument>--no-man-pages</argument>
+                                        <argument>--strip-debug</argument>
+                                        <argument>--vm=server</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/assembled/lib</outputDirectory>
+                                    <includeScope>compile</includeScope>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-to-assembled</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/assembled</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}</directory>
+                                            <includes>
+                                                <include>
+                                                    LICENSE.txt
+                                                </include>
+                                            </includes>
+                                        </resource>
+                                        <resource>
+                                            <directory>${basedir}/doc</directory>
+                                            <targetPath>${project.build.directory}/assembled/doc</targetPath>
+                                        </resource>
+                                        <resource>
+                                            <directory>${basedir}/src/assembly/resources/images</directory>
+                                            <targetPath>${project.build.directory}/assembled</targetPath>
+                                        </resource>
+                                        <resource>
+                                            <targetPath>${project.build.directory}/assembled/bin</targetPath>
+                                            <directory>${basedir}/src/assembly/resources/bin</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>fix-permissions</id>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <target>
+                                        <chmod file="${project.build.directory}/assembled/lib" perm="644" includes="**/*.*"/>
+                                        <chmod file="${project.build.directory}/assembled/splash.png" perm="644"/>
+                                        <chmod dir="${project.build.directory}/assembled/bin" perm="755" includes="**/*.sh"/>
+                                        <chmod dir="${project.build.directory}/assembled/runtime/bin" perm="755" includes="**/*.*"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>autopo-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>autopo-${project.version}-${os.detected.classifier}</finalName>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <descriptors>
+                                        <descriptor>src/assembly/portable-linux.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>CI</id>
+            <activation>
+                <property>
+                    <name>!env.CI</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-graphics</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Built-By>Andrea Vacondio</Built-By>
-                            <Automatic-Module-Name>ooo.autopo.app</Automatic-Module-Name>
-                        </manifestEntries>
-                        <addMavenDescriptor>false</addMavenDescriptor>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.pdfsam.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>2.0.0</version>
+            </extension>
+        </extensions>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>
@@ -82,11 +270,6 @@
         <dependency>
             <groupId>ooo.autopo</groupId>
             <artifactId>autopo-ai-ollama</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ooo.autopo</groupId>
-            <artifactId>autopo-ai-azure-open-ai</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -158,21 +341,4 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>CI</id>
-            <activation>
-                <property>
-                    <name>env.CI</name>
-                    <value>false</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-graphics</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 </project>
