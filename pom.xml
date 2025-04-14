@@ -42,6 +42,8 @@
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <maven.build.timestamp.format>dd-MMM-yyyy</maven.build.timestamp.format>
         <autopo.builddate>${maven.build.timestamp}</autopo.builddate>
+        <assembly.format>zip</assembly.format>
+        <slf4j.version>2.0.17</slf4j.version>
         <tinylog.version>2.7.0</tinylog.version>
         <junit.version>5.12.1</junit.version>
         <assertj.version>3.27.3</assertj.version>
@@ -312,6 +314,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.kordamp.ikonli</groupId>
                 <artifactId>ikonli-bom</artifactId>
                 <version>${ikonli.version}</version>
@@ -487,6 +494,10 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.sejda</groupId>
             <artifactId>sejda-commons</artifactId>

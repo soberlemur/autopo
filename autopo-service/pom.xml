@@ -75,7 +75,7 @@
 
     <profiles>
         <profile>
-            <id>CI</id>
+            <id>ci-service</id>
             <activation>
                 <property>
                     <name>!env.CI</name>

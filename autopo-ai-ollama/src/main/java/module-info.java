@@ -31,6 +31,7 @@ module ooo.autopo.ai.ollama {
     requires org.kordamp.ikonli.fluentui;
     requires org.apache.commons.lang3;
     requires atlantafx.base;
+    requires java.net.http;
 
     provides AIModelDescriptor with ooo.autopo.ai.ollama.OllamaAiModelDescriptor;
 }

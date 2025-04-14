@@ -41,4 +41,21 @@
             <artifactId>atlantafx-base</artifactId>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>ci-themes</id>
+            <activation>
+                <property>
+                    <name>!env.CI</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-controls</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>

@@ -55,7 +55,7 @@
 
     <profiles>
         <profile>
-            <id>CI</id>
+            <id>ci-openai</id>
             <activation>
                 <property>
                     <name>!env.CI</name>

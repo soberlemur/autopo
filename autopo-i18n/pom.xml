@@ -59,7 +59,7 @@
 
     <profiles>
         <profile>
-            <id>CI</id>
+            <id>ci-i18n</id>
             <activation>
                 <property>
                     <name>!env.CI</name>

@@ -72,7 +72,7 @@
 
     <profiles>
         <profile>
-            <id>CI</id>
+            <id>ci-model</id>
             <activation>
                 <property>
                     <name>!env.CI</name>

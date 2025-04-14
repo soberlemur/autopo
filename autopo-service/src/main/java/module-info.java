@@ -36,5 +36,4 @@ module ooo.autopo.service {
     requires javafx.graphics;
     requires langchain4j;
     requires langchain4j.core;
-    requires java.net.http;
 }

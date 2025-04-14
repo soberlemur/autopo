@@ -53,7 +53,7 @@
 
     <profiles>
         <profile>
-            <id>CI</id>
+            <id>ci-ollama</id>
             <activation>
                 <property>
                     <name>!env.CI</name>

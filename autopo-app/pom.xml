@@ -23,6 +23,11 @@
     <profiles>
         <profile>
             <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -56,7 +61,7 @@
                                     <arguments>
                                         <argument>--add-modules</argument>
                                         <argument>
-                                            java.base,java.logging,java.naming,java.sql,java.desktop,java.xml,java.management,jdk.unsupported,java.prefs,javafx.controls,javafx.base,javafx.graphics
+                                            java.base,java.logging,java.naming,java.sql,java.desktop,java.xml,java.management,jdk.unsupported,java.prefs,javafx.controls,javafx.base,javafx.graphics,java.net.http
                                         </argument>
                                         <argument>--output</argument>
                                         <argument>${project.build.directory}/assembled/runtime</argument>
@@ -148,21 +153,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>linux</id>
-            <activation>
-                <os>
-                    <family>linux</family>
-                </os>
-                <property>
-                    <name>release</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <executions>
@@ -176,7 +166,7 @@
                                     <finalName>autopo-${project.version}-${os.detected.classifier}</finalName>
                                     <appendAssemblyId>false</appendAssemblyId>
                                     <descriptors>
-                                        <descriptor>src/assembly/portable-linux.xml</descriptor>
+                                        <descriptor>src/assembly/portable.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
@@ -186,7 +176,21 @@
             </build>
         </profile>
         <profile>
-            <id>CI</id>
+            <id>release-linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <properties>
+                <assembly.format>tar.gz</assembly.format>
+            </properties>
+        </profile>
+        <profile>
+            <id>ci-app</id>
             <activation>
                 <property>
                     <name>!env.CI</name>
