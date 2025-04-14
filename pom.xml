@@ -68,17 +68,6 @@
         <langchain.version>1.0.0-beta3</langchain.version>
     </properties>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>soberlemur-maven-snapshot</id>
-            <url>https://maven.pkg.github.com/soberlemur/maven-packages</url>
-        </snapshotRepository>
-        <repository>
-            <id>soberlemur-maven</id>
-            <url>https://maven.pkg.github.com/soberlemur/maven-packages</url>
-        </repository>
-    </distributionManagement>
-
     <modules>
         <module>autopo-app</module>
         <module>autopo-i18n</module>
