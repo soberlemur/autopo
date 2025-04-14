@@ -191,7 +191,6 @@
                                     <goal>sign</goal>
                                 </goals>
                                 <configuration>
-                                    <signer>bc</signer>
                                     <keyFingerprintEnvName>PDFSAM_GPG_FINGERPRINT</keyFingerprintEnvName>
                                 </configuration>
                             </execution>
