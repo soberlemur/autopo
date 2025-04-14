@@ -43,6 +43,7 @@ jobs:
           pkgs: wxwidgets gettext[tools]
           triplet: x64-windows
           token: ${{ github.token }}
+          github-binarycache: true
 
       - name: Build with Maven
         if: matrix.os == 'windows-latest'
