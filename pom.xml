@@ -65,7 +65,7 @@
         <jackson.version>2.18.3</jackson.version>
         <atlantafx.version>2.0.1</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
-        <langchain.version>1.0.0-beta2</langchain.version>
+        <langchain.version>1.0.0-beta3</langchain.version>
     </properties>
 
     <distributionManagement>
