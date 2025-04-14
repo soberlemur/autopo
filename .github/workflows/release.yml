@@ -46,9 +46,10 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: wxwidgets gettext[tools]
+          pkgs: gettext[tools]
           triplet: x64-windows
           token: ${{ github.token }}
+          github-binarycache: true
 
       - name: Build
         env:
