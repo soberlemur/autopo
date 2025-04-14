@@ -41,15 +41,13 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: brew install gettext
 
+      - name: Install scoop on Windows
+        if: matrix.os == 'windows-latest'
+        uses: MinoruSekine/setup-scoop@v4
+
       - name: Install gettext on Windows
         if: matrix.os == 'windows-latest'
-        uses: johnwason/vcpkg-action@v6
-        id: vcpkg
-        with:
-          pkgs: gettext[tools]
-          triplet: x64-windows
-          token: ${{ github.token }}
-          github-binarycache: true
+        run: scoop install gettext
 
       - name: Build
         env:
@@ -60,8 +58,8 @@ jobs:
         with:
           draft: true
           files: |
-            pdfsam-basic/target/*.zip
-            pdfsam-basic/target/*.tar.gz
-            pdfsam-basic/target/*.zip.asc
-            pdfsam-basic/target/*.tar.gz.asc
+            autopo-app/target/*.zip
+            autopo-app/target/*.tar.gz
+            autopo-app/target/*.zip.asc
+            autopo-app/target/*.tar.gz.asc
 
