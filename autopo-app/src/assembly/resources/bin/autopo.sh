@@ -104,7 +104,7 @@ fi
 
 CLASSPATH=$(find "$LIBDIR" -name "*.jar" | tr '\n' ':')
 
-exec "$JAVACMD" --enable-preview $JAVA_OPTS -Xmx512M \
+exec "$JAVACMD" --enable-preview --enable-native-access=javafx.graphics $JAVA_OPTS -Xmx512M \
   -cp "$CLASSPATH" \
   -splash:$BASEDIR/splash.png \
   -Dapp.name="autopo" \

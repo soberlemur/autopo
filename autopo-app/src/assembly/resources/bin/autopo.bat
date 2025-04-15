@@ -86,7 +86,7 @@ for %%i in ("%BASEDIR%\lib\*.jar") do (
 @REM Reaching here means variables are defined and arguments have been captured
 :endInit
 
-"%JAVACMD%" --enable-preview -classpath "%CLASSPATH%" ooo.autopo.app.App %JAVA_OPTS% -Xmx512M -splash:%BASEDIR%\splash.png -Dapp.name="Autopo" -Dprism.lcdtext=false -Dapp.home="%BASEDIR%" -Dbasedir="%BASEDIR%" %CMD_LINE_ARGS%
+"%JAVACMD%" --enable-preview --enable-native-access=javafx.graphics -classpath "%CLASSPATH%" ooo.autopo.app.App %JAVA_OPTS% -Xmx512M -splash:%BASEDIR%\splash.png -Dapp.name="Autopo" -Dprism.lcdtext=false -Dapp.home="%BASEDIR%" -Dbasedir="%BASEDIR%" %CMD_LINE_ARGS%
 if %ERRORLEVEL% NEQ 0 goto error
 goto end
 
