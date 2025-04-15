@@ -24,6 +24,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -93,6 +94,7 @@ public class AutopoApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setWidth(1024);
+        this.primaryStage.getIcons().add(new Image(AutopoApp.class.getResource("/ooo/autopo/app/images/autopo.png").toExternalForm()));
         initInjector(primaryStage);
         cleanIfRequired();
         app().instance(WindowStatusController.class).setStage(primaryStage);
