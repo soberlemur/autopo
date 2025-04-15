@@ -8,26 +8,26 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-11 09:06+0200\n"
-"PO-Revision-Date: 2025-04-11 10:23+0200\n"
+"PO-Revision-Date: 2025-04-15 15:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
-"X-Generator: Autopo v${project.version}\n"
+"X-Generator: Autopo v0.0.1-SNAPSHOT\n"
 
 msgid "Model:"
-msgstr "Modèle :"
+msgstr "Modèle:"
 
 msgid "AI Model to use"
 msgstr "Modèle IA à utiliser"
 
 msgid "API key:"
-msgstr "Clé API :"
+msgstr "Clé API:"
 
 msgid "Temperature:"
-msgstr "Température :"
+msgstr "Température:"
 
 msgid ""
 "Higher values make the output more random, lower values make it more "
@@ -43,7 +43,7 @@ msgid "Clear Anthropic settings"
 msgstr "Effacer les paramètres Anthropic"
 
 msgid "Base URL:"
-msgstr "URL de base :"
+msgstr "URL de base:"
 
 msgid "Clear Ollama settings"
 msgstr "Effacer les paramètres Ollama"
@@ -134,7 +134,7 @@ msgid "Trying to guess locale from '{}'"
 msgstr "Tentative de deviner la locale à partir de '{}'"
 
 msgid "Invalid locale: {}"
-msgstr "Paramètres régionaux invalides : {}"
+msgstr "Locale invalide: {}"
 
 #, java-format
 msgid "Total token used {0}"
@@ -145,11 +145,11 @@ msgstr "Une erreur s'est produite lors de la traduction avec l'IA"
 
 #, java-format
 msgid "Total token used {0} (input: {1}, output: {2})"
-msgstr "Total des jetons utilisés {0} (entrée : {1}, sortie : {2})"
+msgstr "Total des jetons utilisés {0} (entrée: {1}, sortie: {2})"
 
 #, java-format
 msgid "Invalid finish reason: {0}"
-msgstr "Raison de fin invalide : {0}"
+msgstr "Raison de fin invalide: {0}"
 
 msgid "An error occurred while assessing with AI"
 msgstr "Une erreur s'est produite lors de l'évaluation par IA"
@@ -281,37 +281,37 @@ msgid "Settings"
 msgstr "Paramètres"
 
 msgid "Language:"
-msgstr "Langue :"
+msgstr "Langue:"
 
 msgid "Set your preferred language (restart needed)"
 msgstr "Définissez votre langue préférée (redémarrage nécessaire)"
 
 msgid "Theme:"
-msgstr "Thème :"
+msgstr "Thème:"
 
 msgid "Set the application theme"
 msgstr "Définir le thème de l'application"
 
 msgid "Font size:"
-msgstr "Taille de police :"
+msgstr "Taille de police:"
 
 msgid "Set the application font size"
 msgstr "Définir la taille de police de l'application"
 
 msgid "Translations AI provider:"
-msgstr "Fournisseur d'IA pour les traductions :"
+msgstr "Fournisseur d'IA pour les traductions:"
 
 msgid "Set the AI provider for translations"
 msgstr "Définir le fournisseur d'IA pour les traductions"
 
 msgid "Validations AI provider:"
-msgstr "Fournisseur d'IA pour les validations :"
+msgstr "Fournisseur d'IA pour les validations:"
 
 msgid "Set the AI provider used for validation"
 msgstr "Définir le fournisseur d'IA utilisé pour la validation"
 
 msgid "Batch size:"
-msgstr "Taille du lot :"
+msgstr "Taille du lot:"
 
 msgid "Set the number of entries to translate with the AI batch translation"
 msgstr "Définir le nombre d'entrées à traduire avec la traduction par lot IA"
@@ -476,7 +476,7 @@ msgstr "Accepter la suggestion"
 
 #, java-format
 msgid "Rate: {0}"
-msgstr "Taux : {0}"
+msgstr "Évaluation: {0}"
 
 msgid "Translation"
 msgstr "Traduction"
@@ -504,7 +504,7 @@ msgid "_Update from pot"
 msgstr "_Mettre à jour à partir du fichier pot"
 
 msgid "_Batch AI translation"
-msgstr "\"_Traduction IA en lot\""
+msgstr "_Traduction IA en lot"
 
 msgid ""
 "Translate a batch of untranslated entries with the selected AI model (The "
@@ -547,10 +547,10 @@ msgid "About"
 msgstr "À propos"
 
 msgid "_Help"
-msgstr "\"_Aide\""
+msgstr "_Aide"
 
 msgid "Project name:"
-msgstr "Nom du projet :"
+msgstr "Nom du projet:"
 
 msgid ""
 "This description will be provided to the AI model to improve translation "
@@ -558,9 +558,8 @@ msgid ""
 "website that sells avocados."
 msgstr ""
 "Cette description sera fournie au modèle d'IA pour améliorer la précision de "
-"la traduction en lui donnant du contexte. Exemple : « Composants d'interface "
-"utilisateur pour un site Web de commerce électronique qui vend des avocats."
-" »"
+"la traduction en lui donnant du contexte. Exemple: composants d'interface "
+"utilisateur pour un site web de commerce électronique qui vend des avocats."
 
 msgid "Please enter a valid project name"
 msgstr "Veuillez entrer un nom de projet valide"
@@ -573,15 +572,15 @@ msgstr "Environnement"
 
 #, java-printf-format
 msgid "Vendor: %s"
-msgstr "Fournisseur : %s"
+msgstr "Fournisseur: %s"
 
 #, java-printf-format
 msgid "Java runtime path: %s"
-msgstr "Chemin d'exécution Java : %s"
+msgstr "Chemin d'exécution Java: %s"
 
 #, java-printf-format
 msgid "JavaFX runtime version: %s"
-msgstr "Version d'exécution JavaFX : %s"
+msgstr "Version d'exécution JavaFX: %s"
 
 msgid "Copy to clipboard"
 msgstr "Copier dans le presse-papiers"
@@ -629,7 +628,7 @@ msgid ""
 "you want to proceed?"
 msgstr ""
 "Des fichiers Po ont été modifiés, si vous continuez, les modifications "
-"seront perdues, voulez-vous continuer ?"
+"seront perdues, voulez-vous continuer?"
 
 msgid "modified"
-msgstr "modificato"
+msgstr "modifié"

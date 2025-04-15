@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-02 12:47+0200\n"
-"PO-Revision-Date: 2025-04-11 10:23+0200\n"
+"PO-Revision-Date: 2025-04-15 15:37+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt\n"
-"X-Generator: Autopo v${project.version}\n"
+"X-Generator: Autopo v0.0.1-SNAPSHOT\n"
 
 msgid "Model:"
 msgstr "Modelo:"
@@ -251,9 +251,6 @@ msgstr "Não foi possível limpar as configurações do aplicativo"
 msgid "Closing..."
 msgstr "Fechando..."
 
-#~ msgid "modificato"
-#~ msgstr "modificado"
-
 msgid "Unexpected error"
 msgstr "Erro inesperado"
 
@@ -309,13 +306,6 @@ msgstr ""
 
 msgid "Discard modification"
 msgstr "Descartar modificação"
-
-#~ msgid ""
-#~ "There are modified Po files, loading a new project will discard the "
-#~ "modification, do you want to proceed?"
-#~ msgstr ""
-#~ "Existem arquivos Po modificados, carregar um novo projeto descartará as "
-#~ "modificações, deseja continuar?"
 
 msgid "Yes"
 msgstr "Sim"
@@ -469,7 +459,7 @@ msgstr "Aceitar sugestão"
 
 #, java-format
 msgid "Rate: {0}"
-msgstr "Taxa: {0}"
+msgstr "Avaliação: {0}"
 
 msgid "Translation"
 msgstr "Tradução"
@@ -478,7 +468,7 @@ msgid "Source"
 msgstr "Origem"
 
 msgid "Rate"
-msgstr "Classificar"
+msgstr "Avaliar"
 
 msgid "Clear selected translations"
 msgstr "Limpar traduções selecionadas"
@@ -505,12 +495,6 @@ msgid ""
 msgstr ""
 "Traduzir um lote de entradas não traduzidas com o modelo de IA selecionado "
 "(O tamanho do lote é definido nas configurações)"
-
-#~ msgid "Rename project"
-#~ msgstr "Renomear projeto"
-
-#~ msgid "Enter the new name for the project:"
-#~ msgstr "Digite o novo nome para o projeto:"
 
 msgid "Exit"
 msgstr "Sair"

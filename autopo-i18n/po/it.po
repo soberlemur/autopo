@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-27 18:09+0100\n"
-"PO-Revision-Date: 2025-04-11 10:23+0200\n"
+"PO-Revision-Date: 2025-04-15 15:36+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
-"X-Generator: Autopo v${project.version}\n"
+"X-Generator: Autopo v0.0.1-SNAPSHOT\n"
 
 msgid "Model:"
 msgstr "Modello:"
@@ -258,9 +258,6 @@ msgstr "Impossibile cancellare le impostazioni dell'applicazione"
 msgid "Closing..."
 msgstr "Chiusura in corso..."
 
-#~ msgid "modificato"
-#~ msgstr "modified"
-
 msgid "Unexpected error"
 msgstr "Errore imprevisto"
 
@@ -315,13 +312,6 @@ msgstr "Imposta il numero di voci da tradurre con la traduzione batch dell'IA"
 
 msgid "Discard modification"
 msgstr "Annulla modifiche"
-
-#~ msgid ""
-#~ "There are modified Po files, loading a new project will discard the "
-#~ "modification, do you want to proceed?"
-#~ msgstr ""
-#~ "Ci sono file Po modificati, il caricamento di un nuovo progetto eliminerà le "
-#~ "modifiche, si desidera procedere?"
 
 msgid "Yes"
 msgstr "Sì"
@@ -459,7 +449,7 @@ msgstr "Accetta suggerimento"
 
 #, java-format
 msgid "Rate: {0}"
-msgstr "Tasso: {0}"
+msgstr "Voto: {0}"
 
 msgid "Translation"
 msgstr "Traduzione"
@@ -468,7 +458,7 @@ msgid "Source"
 msgstr "Sorgente"
 
 msgid "Rate"
-msgstr "Valuta"
+msgstr "Valutazione"
 
 msgid ""
 "Add a project description to give the AI model more context and improve "
@@ -476,12 +466,6 @@ msgid ""
 msgstr ""
 "Aggiungi una descrizione del progetto per fornire più contesto al modello di "
 "intelligenza artificiale e migliorare l'accuratezza delle traduzioni"
-
-#~ msgid "The project must have a target locale"
-#~ msgstr "Il progetto deve avere una lingua di destinazione"
-
-#~ msgid "Unable to find a usable validation AI model"
-#~ msgstr "Impossibile trovare un modello di validazione AI utilizzabile"
 
 #, java-format
 msgid "Translated {0} out of {1}"
@@ -500,12 +484,6 @@ msgid "Unable to find a usable translation AI model"
 msgstr ""
 "Impossibile trovare un modello di intelligenza artificiale per la traduzione "
 "utilizzabile"
-
-#~ msgid "Rename project"
-#~ msgstr "Rinomina progetto"
-
-#~ msgid "Enter the new name for the project:"
-#~ msgstr "Inserisci il nuovo nome per il progetto:"
 
 msgid "Exit"
 msgstr "Esci"
