@@ -63,7 +63,6 @@ for %%i in ("%~dp0") do set "BASEDIR=%%~fi"
 
 :repoSetup
 set "RUNTIME=%BASEDIR%\runtime"
-set "MODULEPATH=%BASEDIR%\app\mods"
 set "PATH=%RUNTIME%;%BASEDIR%"
 
 if exist "%AUTOPO_JAVA_PATH%" (
@@ -76,10 +75,18 @@ if exist "%AUTOPO_JAVA_PATH%" (
 
 if "%JAVACMD%"=="" set JAVACMD=java
 
+setlocal enabledelayedexpansion
+
+REM Add all JARs in the lib subdirectory to the CLASSPATH
+set CLASSPATH=
+for %%i in ("%BASEDIR%\lib\*.jar") do (
+    set CLASSPATH=!CLASSPATH!;%%i
+)
+
 @REM Reaching here means variables are defined and arguments have been captured
 :endInit
 
-"%JAVACMD%" --enable-preview --module-path "%MODULEPATH%" --module ooo.autopo.app/ooo.autopo.app.App %JAVA_OPTS% -Xmx512M -splash:%BASEDIR%\autopo\splash.png -Dapp.name="Autopo" -Dprism.lcdtext=false -Dapp.home="%BASEDIR%" -Dbasedir="%BASEDIR%" %CMD_LINE_ARGS%
+"%JAVACMD%" --enable-preview -classpath "%CLASSPATH%" ooo.autopo.app.App %JAVA_OPTS% -Xmx512M -splash:%BASEDIR%\splash.png -Dapp.name="Autopo" -Dprism.lcdtext=false -Dapp.home="%BASEDIR%" -Dbasedir="%BASEDIR%" %CMD_LINE_ARGS%
 if %ERRORLEVEL% NEQ 0 goto error
 goto end
 
