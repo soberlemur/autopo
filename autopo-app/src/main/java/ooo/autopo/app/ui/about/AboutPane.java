@@ -32,9 +32,7 @@ import ooo.autopo.app.ui.components.UrlButton;
 import ooo.autopo.model.AppDescriptor;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
-import org.kordamp.ikonli.fluentui.FluentUiFilledMZ;
 import org.kordamp.ikonli.fluentui.FluentUiRegularAL;
-import org.kordamp.ikonli.fluentui.FluentUiRegularMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.Arrays;
@@ -42,14 +40,12 @@ import java.util.Arrays;
 import static ooo.autopo.app.io.ObjectCollectionWriter.writeContent;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.AppDescriptorProperty.COPYRIGHT;
-import static ooo.autopo.model.AppDescriptorProperty.DONATE_URL;
 import static ooo.autopo.model.AppDescriptorProperty.HOME_LABEL;
 import static ooo.autopo.model.AppDescriptorProperty.HOME_URL;
 import static ooo.autopo.model.AppDescriptorProperty.LICENSE_NAME;
 import static ooo.autopo.model.AppDescriptorProperty.LICENSE_URL;
 import static ooo.autopo.model.AppDescriptorProperty.NAME;
 import static ooo.autopo.model.AppDescriptorProperty.SCM_URL;
-import static ooo.autopo.model.AppDescriptorProperty.SUPPORT_URL;
 import static ooo.autopo.model.AppDescriptorProperty.TRACKER_URL;
 import static ooo.autopo.model.AppDescriptorProperty.VENDOR_URL;
 import static ooo.autopo.model.AppDescriptorProperty.VERSION;
@@ -100,9 +96,7 @@ public class AboutPane extends HBox {
         var supportSection = new VBox(Style.DEFAULT_SPACING);
         supportSection.getStyleClass().add("section");
         addHyperlink(FluentUiRegularAL.BUG_20, descriptor.property(TRACKER_URL), i18n().tr("Bug and feature requests"), supportSection);
-        addHyperlink(FluentUiFilledMZ.QUESTION_CIRCLE_20, descriptor.property(SUPPORT_URL), i18n().tr("Support"), supportSection);
         addHyperlink(FluentUiFilledAL.CODE_20, descriptor.property(SCM_URL), i18n().tr("Fork me on GitHub"), supportSection);
-        addHyperlink(FluentUiRegularMZ.MONEY_20, descriptor.property(DONATE_URL), i18n().tr("Donate"), supportSection);
         right.getChildren().add(supportSection);
         getChildren().addAll(left, right);
     }

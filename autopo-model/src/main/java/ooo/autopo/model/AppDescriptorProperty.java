@@ -32,9 +32,7 @@ public enum AppDescriptorProperty {
     LICENSE_NAME("ooo.autopo.license.name"),
     LICENSE_URL("ooo.autopo.license.url"),
     TRACKER_URL("ooo.autopo.tracker.url"),
-    SUPPORT_URL("ooo.autopo.support.url"),
-    SCM_URL("ooo.autopo.scm.url"),
-    DONATE_URL("ooo.autopo.donate.url");
+    SCM_URL("ooo.autopo.scm.url");
     public final String prop;
 
     AppDescriptorProperty(String prop) {
