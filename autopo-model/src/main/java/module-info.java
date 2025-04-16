@@ -40,6 +40,7 @@ module ooo.autopo.model {
     requires org.apache.commons.io;
     requires langchain4j.core;
     requires com.fasterxml.jackson.annotation;
+    requires org.tinylog.api;
     opens ooo.autopo.model.ui to com.fasterxml.jackson.databind;
 
 }

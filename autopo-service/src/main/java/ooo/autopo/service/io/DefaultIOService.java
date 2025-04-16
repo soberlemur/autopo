@@ -37,7 +37,6 @@ import ooo.autopo.model.po.PotFile;
 import ooo.autopo.model.project.Project;
 import ooo.autopo.model.project.ProjectProperty;
 import ooo.autopo.service.ai.AIService;
-import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.tinylog.Logger;
 
@@ -50,7 +49,6 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
-import java.util.IllformedLocaleException;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,7 +60,9 @@ import static ooo.autopo.model.LoadingStatus.ERROR;
 import static ooo.autopo.model.LoadingStatus.INITIAL;
 import static ooo.autopo.model.LoadingStatus.LOADED;
 import static ooo.autopo.model.LoadingStatus.LOADING;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static ooo.autopo.model.po.LocaleUtils.languageHeaderFromLocale;
+import static ooo.autopo.model.po.LocaleUtils.localeFromFilename;
+import static ooo.autopo.model.po.LocaleUtils.localeFromHeader;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 import static org.sejda.commons.util.RequireUtils.requireIOCondition;
 
@@ -141,7 +141,7 @@ public class DefaultIOService implements IOService {
         Logger.debug(i18n().tr("Saving po file {}"), poFile.poFile().toAbsolutePath().toString());
         if (nonNull(poFile.catalog().header())) {
             if (!poFile.catalog().header().contains(Header.LANGUAGE) && nonNull(poFile.locale().get())) {
-                poFile.catalog().header().setValue(Header.LANGUAGE, localeHeaderFromLocale(poFile.locale().get()));
+                poFile.catalog().header().setValue(Header.LANGUAGE, languageHeaderFromLocale(poFile.locale().get()));
             }
             poFile.catalog().header().setValue(Header.CONTENT_TYPE, "text/plain; charset=UTF-8");
             poFile.catalog()
@@ -231,17 +231,23 @@ public class DefaultIOService implements IOService {
                 locale = localeFromHeader(ofNullable(catalog.header()).map(h -> h.getValue("X-Poedit-Language")).orElse(null));
                 if (isNull(locale)) {
                     Logger.debug(i18n().tr("Trying to guess locale from filename '{}'"), filename);
-                    locale = localeFromTag(StringUtils.removeEndIgnoreCase(filename, ".po"));
-                    if (isNull(locale) && nonNull(descriptor)) {
-                        Logger.debug(i18n().tr("Trying to guess locale from file content with AI"));
-                        var concat = new StringBuilder();
-                        for (Message message : catalog) {
-                            ofNullable(message.getMsgstr()).filter(StringUtils::isNotBlank).map(s -> "\"" + s + "\" ").ifPresent(concat::append);
-                            if (concat.length() > 300) {
-                                break;
+                    var filenameNoExtension = StringUtils.removeEndIgnoreCase(filename, ".po");
+                    locale = localeFromHeader(filenameNoExtension);
+                    if (isNull(locale)) {
+                        locale = localeFromFilename(filenameNoExtension);
+                        if (isNull(locale) && nonNull(descriptor)) {
+                            Logger.debug(i18n().tr("Trying to guess locale from file content with AI"));
+                            var concat = new StringBuilder();
+                            for (Message message : catalog) {
+                                ofNullable(message.getMsgstr()).filter(StringUtils::isNotBlank).map(s -> "\"" + s + "\" ").ifPresent(concat::append);
+                                if (concat.length() > 300) {
+                                    break;
+                                }
                             }
+                            locale = ofNullable(aiService.languageTagFor(descriptor, concat.toString())).map(Result::content)
+                                                                                                        .map(Locale::forLanguageTag)
+                                                                                                        .orElse(null);
                         }
-                        locale = ofNullable(aiService.languageTagFor(descriptor, concat.toString())).map(Result::content).map(this::localeFromTag).orElse(null);
                     }
                 }
             }
@@ -249,50 +255,4 @@ public class DefaultIOService implements IOService {
         return locale;
     }
 
-    private Locale localeFromHeader(String languageHeader) {
-        if (isNotBlank(languageHeader)) {
-            Logger.debug(i18n().tr("Trying to guess locale from '{}'"), languageHeader);
-            var headerFragments = languageHeader.split("[@_]");
-            if (headerFragments.length > 0) {
-                try {
-                    var builder = new Locale.Builder().setLanguage(headerFragments[0]);
-                    if (headerFragments.length > 1) {
-                        builder.setRegion(headerFragments[1]);
-                        if (headerFragments.length > 2) {
-                            builder.setVariant(headerFragments[2]);
-                        }
-                    }
-
-                    return builder.build();
-                } catch (IllformedLocaleException e) {
-                    Logger.warn(i18n().tr("Invalid locale: {}"), languageHeader);
-                }
-            }
-        }
-        return null;
-    }
-
-    private Locale localeFromTag(String tag) {
-        if (isNotBlank(tag)) {
-            Logger.debug(i18n().tr("Trying to guess locale from '{}'"), tag);
-            var locale = Locale.forLanguageTag(tag);
-            if (LocaleUtils.isAvailableLocale(locale)) {
-                return locale;
-            }
-        }
-        return null;
-    }
-
-    private String localeHeaderFromLocale(Locale locale) {
-        String languageTag = locale.getLanguage();
-
-        if (isNotBlank(locale.getCountry())) {
-            languageTag += "_" + locale.getCountry().toUpperCase();
-        }
-
-        if (isNotBlank(locale.getVariant())) {
-            languageTag += "@" + locale.getVariant().toLowerCase();
-        }
-        return languageTag;
-    }
 }
