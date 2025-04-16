@@ -52,14 +52,14 @@ goto Win9xApp
 :Win9xGetScriptDir
 set SAVEDIR=%CD%
 %0\
-cd %0\..\..
+cd %0\..
 set BASEDIR=%CD%
 cd %SAVEDIR%
 set SAVE_DIR=
 goto repoSetup
 
 :WinNTGetScriptDir
-for %%i in ("%~dp0") do set "BASEDIR=%%~fi"
+for %%i in ("%~dp0..\") do set "BASEDIR=%%~fi"
 
 :repoSetup
 set "RUNTIME=%BASEDIR%\runtime"
