@@ -42,6 +42,8 @@ import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
  */
 public final class I18nContext {
 
+    private static final I18nContext CONTEXT = new I18nContext();
+
     private final Set<Locale> supported = Set.of(Locale.ITALIAN, Locale.of("es"), Locale.UK, Locale.GERMAN, Locale.FRANCE);
 
     private final SimpleObjectProperty<Locale> locale = new SimpleObjectProperty<>();
@@ -92,7 +94,7 @@ public final class I18nContext {
      * @return the default {@link I18nContext} instance
      */
     public static I18nContext i18n() {
-        return I18nContextHolder.CONTEXT;
+        return CONTEXT;
     }
 
     /**
@@ -125,19 +127,5 @@ public final class I18nContext {
 
     public Set<Locale> getSupported() {
         return supported;
-    }
-
-    /**
-     * Lazy initialization holder class idiom (Joshua Bloch, Effective Java second edition, item 71).
-     *
-     * @author Andrea Vacondio
-     */
-    private static final class I18nContextHolder {
-
-        private I18nContextHolder() {
-            // hide constructor
-        }
-
-        static final I18nContext CONTEXT = new I18nContext();
     }
 }
