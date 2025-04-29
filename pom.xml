@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ooo.autopo</groupId>
     <artifactId>autopo-parent</artifactId>
@@ -26,8 +27,8 @@
         <connection>scm:git:git@github.com:soberlemur/autopo.git</connection>
         <developerConnection>scm:git:git@github.com:soberlemur/autopo.git</developerConnection>
         <url>scm:git:git@github.com:soberlemur/autopo.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <developers>
         <developer>
@@ -54,7 +55,7 @@
         <commons.io.version>2.19.0</commons.io.version>
         <eventstudio.version>4.0.1</eventstudio.version>
         <injector.version>5.0.0</injector.version>
-        <ikonli.version>12.3.1</ikonli.version>
+        <ikonli.version>12.4.0</ikonli.version>
         <javafx.version>24</javafx.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
         <jakarta.inject.version>2.0.1</jakarta.inject.version>
@@ -63,7 +64,7 @@
         <awaitility.version>4.3.0</awaitility.version>
         <archunit.version>1.4.0</archunit.version>
         <potentilla.version>0.0.3</potentilla.version>
-        <validatorfx.version>0.5.1</validatorfx.version>
+        <validatorfx.version>0.6.1</validatorfx.version>
         <jackson.version>2.19.0</jackson.version>
         <atlantafx.version>2.0.1</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
