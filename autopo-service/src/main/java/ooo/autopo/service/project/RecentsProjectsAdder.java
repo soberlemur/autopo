@@ -29,7 +29,7 @@ import static ooo.autopo.model.io.IOEventType.LOADED;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 
 /**
- * Component adding a project the list of the recent ones when a new project is successfully loaded
+ * Component adding a project to the list of the recent ones when a new project is successfully loaded
  *
  * @author Andrea Vacondio
  */

@@ -41,7 +41,6 @@ import java.util.concurrent.StructuredTaskScope;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
@@ -125,9 +124,7 @@ public class AIController {
     private Result<String> translateEntry(PoFile poFile, PoEntry poEntry, AIModelDescriptor descriptor, String projectDescription) {
         requireNotNullArg(poEntry, "Cannot translate a null poEntry");
         var result = aiService.translate(poFile, poEntry, descriptor, projectDescription);
-        //TODO Ollama returns null, see https://github.com/langchain4j/langchain4j/issues/2714
-        //remove the isNull once fixed
-        require(result.finishReason() == FinishReason.STOP || isNull(result.finishReason()),
+        require(result.finishReason() == FinishReason.STOP,
                 () -> new IllegalStateException(i18n().tr("Invalid finish reason: {0}", ofNullable(result.finishReason()).map(Enum::name).orElse("null"))));
         Platform.runLater(() -> {
             poEntry.translatedValue().set(result.content().trim());

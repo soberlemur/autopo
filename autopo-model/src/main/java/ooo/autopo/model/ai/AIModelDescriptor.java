@@ -19,7 +19,7 @@ package ooo.autopo.model.ai;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import javafx.scene.layout.Pane;
 
 /**
@@ -37,14 +37,14 @@ public interface AIModelDescriptor {
     Pane settingsPane();
 
     /**
-     * @return {@link ChatLanguageModel} to be used to perform translations
+     * @return {@link ChatModel} to be used to perform translations
      */
-    ChatLanguageModel translationModel();
+    ChatModel translationModel();
 
     /**
-     * @return {@link ChatLanguageModel} to be used to perform translations validation
+     * @return {@link ChatModel} to be used to perform translations validation
      */
-    ChatLanguageModel validationModel();
+    ChatModel validationModel();
 
     /**
      * @return true if the model is properly configured and can be used

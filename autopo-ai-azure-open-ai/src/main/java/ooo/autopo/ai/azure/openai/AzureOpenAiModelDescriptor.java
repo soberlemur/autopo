@@ -21,7 +21,7 @@ package ooo.autopo.ai.azure.openai;
 
 import dev.langchain4j.model.azure.AzureOpenAiChatModel;
 import dev.langchain4j.model.azure.AzureOpenAiChatModelName;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import org.pdfsam.persistence.PreferencesRepository;
@@ -52,7 +52,7 @@ public class AzureOpenAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel translationModel() {
+    public ChatModel translationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), -1);
@@ -70,7 +70,7 @@ public class AzureOpenAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel validationModel() {
+    public ChatModel validationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), -1);

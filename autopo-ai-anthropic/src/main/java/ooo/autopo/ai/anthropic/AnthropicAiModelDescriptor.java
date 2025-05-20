@@ -21,7 +21,7 @@ package ooo.autopo.ai.anthropic;
 
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
 import dev.langchain4j.model.anthropic.AnthropicChatModelName;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import org.pdfsam.persistence.PreferencesRepository;
@@ -53,7 +53,7 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel translationModel() {
+    public ChatModel translationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
@@ -73,7 +73,7 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel validationModel() {
+    public ChatModel validationModel() {
         if (isUsable()) {
             Logger.warn("JSON mode not yet implemented for Anthropic AI");
             var temperature = 0.2d;

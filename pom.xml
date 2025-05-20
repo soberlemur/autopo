@@ -68,7 +68,7 @@
         <jackson.version>2.19.0</jackson.version>
         <atlantafx.version>2.0.1</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
-        <langchain.version>1.0.0-beta3</langchain.version>
+        <langchain.version>1.0.0</langchain.version>
     </properties>
 
     <modules>
@@ -421,13 +421,10 @@
             </dependency>
             <dependency>
                 <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j</artifactId>
+                <artifactId>langchain4j-bom</artifactId>
                 <version>${langchain.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-core</artifactId>
-                <version>${langchain.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!-- test -->
             <dependency>

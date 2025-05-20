@@ -19,7 +19,7 @@ package ooo.autopo.ai.gemini;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ResponseFormat;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import javafx.scene.layout.Pane;
@@ -51,7 +51,7 @@ public class GeminiAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel translationModel() {
+    public ChatModel translationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);
@@ -69,7 +69,7 @@ public class GeminiAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel validationModel() {
+    public ChatModel validationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);

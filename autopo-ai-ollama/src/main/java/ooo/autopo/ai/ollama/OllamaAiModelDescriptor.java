@@ -19,7 +19,7 @@ package ooo.autopo.ai.ollama;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
@@ -51,7 +51,7 @@ public class OllamaAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel translationModel() {
+    public ChatModel translationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(OllamaAIPersistentProperty.TEMPERATURE.key(), -1);
@@ -70,7 +70,7 @@ public class OllamaAiModelDescriptor implements AIModelDescriptor {
     }
 
     @Override
-    public ChatLanguageModel validationModel() {
+    public ChatModel validationModel() {
         if (isUsable()) {
             var temperature = 0.2d;
             var temperatureIntValue = repo.getInt(OllamaAIPersistentProperty.TEMPERATURE.key(), -1);
