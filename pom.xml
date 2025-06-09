@@ -10,6 +10,12 @@
     <description>Automate your translations with AI and flush your Po struggles away!</description>
     <url>https://autopo.ooo</url>
 
+    <parent>
+        <groupId>com.soberlemur</groupId>
+        <artifactId>soberlemur-parent</artifactId>
+        <version>1.0.2</version>
+    </parent>
+
     <licenses>
         <license>
             <name>GNU Affero General Public License</name>
@@ -44,28 +50,15 @@
         <maven.build.timestamp.format>dd-MMM-yyyy</maven.build.timestamp.format>
         <autopo.builddate>${maven.build.timestamp}</autopo.builddate>
         <assembly.format>zip</assembly.format>
-        <slf4j.version>2.0.17</slf4j.version>
-        <tinylog.version>2.7.0</tinylog.version>
-        <junit.version>5.12.2</junit.version>
-        <assertj.version>3.27.3</assertj.version>
-        <sejda.commons.version>3.0.0</sejda.commons.version>
-        <mockito.version>5.17.0</mockito.version>
         <pdfsam.version>5.3.0</pdfsam.version>
-        <commons.lang.version>3.17.0</commons.lang.version>
-        <commons.io.version>2.19.0</commons.io.version>
-        <eventstudio.version>4.0.1</eventstudio.version>
-        <injector.version>5.0.0</injector.version>
         <ikonli.version>12.4.0</ikonli.version>
         <javafx.version>24</javafx.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
         <jakarta.inject.version>2.0.1</jakarta.inject.version>
         <testfx.version>4.0.18</testfx.version>
         <monocle.version>21</monocle.version>
-        <awaitility.version>4.3.0</awaitility.version>
-        <archunit.version>1.4.0</archunit.version>
         <potentilla.version>0.0.3</potentilla.version>
         <validatorfx.version>0.6.1</validatorfx.version>
-        <jackson.version>2.19.0</jackson.version>
         <atlantafx.version>2.0.1</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
         <langchain.version>1.0.0</langchain.version>
@@ -95,7 +88,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-toolchains-plugin</artifactId>
-                        <version>3.2.0</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -228,51 +220,15 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.0</version>
                     <configuration>
                         <release>24</release>
                         <compilerArgs>--enable-preview</compilerArgs>
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.4.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.3.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.8.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.7.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.4.1</version>
-                </plugin>
-                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.5.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.3.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -281,31 +237,10 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-toolchains-plugin</artifactId>
-                    <version>3.2.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.5.3</version>
                     <configuration>
                         <useModulePath>false</useModulePath>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>3.1.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>3.2.7</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.11.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -315,11 +250,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.kordamp.ikonli</groupId>
                 <artifactId>ikonli-bom</artifactId>
                 <version>${ikonli.version}</version>
@@ -327,36 +257,9 @@
                 <type>pom</type>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>${jackson.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
                 <groupId>org.pdfsam</groupId>
                 <artifactId>pdfsam-persistence</artifactId>
                 <version>${pdfsam.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons.io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons.lang.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.pdfsam</groupId>
-                <artifactId>pdfsam-injector</artifactId>
-                <version>${injector.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.pdfsam</groupId>
-                <artifactId>eventstudio</artifactId>
-                <version>${eventstudio.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openjfx</groupId>
@@ -377,26 +280,6 @@
                 <groupId>jakarta.inject</groupId>
                 <artifactId>jakarta.inject-api</artifactId>
                 <version>${jakarta.inject.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.tinylog</groupId>
-                <artifactId>slf4j-tinylog</artifactId>
-                <version>${tinylog.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.tinylog</groupId>
-                <artifactId>tinylog-impl</artifactId>
-                <version>${tinylog.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.tinylog</groupId>
-                <artifactId>tinylog-api</artifactId>
-                <version>${tinylog.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.sejda</groupId>
-                <artifactId>sejda-commons</artifactId>
-                <version>${sejda.commons.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.soberlemur</groupId>
@@ -428,18 +311,6 @@
             </dependency>
             <!-- test -->
             <dependency>
-                <groupId>com.tngtech.archunit</groupId>
-                <artifactId>archunit-junit5</artifactId>
-                <version>${archunit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaitility.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.testfx</groupId>
                 <artifactId>testfx-core</artifactId>
                 <version>${testfx.version}</version>
@@ -461,25 +332,6 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-swing</artifactId>
                 <version>${javafx.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
