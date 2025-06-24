@@ -52,7 +52,7 @@
         <assembly.format>zip</assembly.format>
         <pdfsam.version>5.3.0</pdfsam.version>
         <ikonli.version>12.4.0</ikonli.version>
-        <javafx.version>24</javafx.version>
+        <javafx.version>25-ea+21</javafx.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
         <jakarta.inject.version>2.0.1</jakarta.inject.version>
         <testfx.version>4.0.18</testfx.version>
