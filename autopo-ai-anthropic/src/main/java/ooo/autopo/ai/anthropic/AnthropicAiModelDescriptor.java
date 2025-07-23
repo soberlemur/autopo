@@ -62,7 +62,7 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
             }
             return AnthropicChatModel.builder()
                     .apiKey(repo.getString(AnthropicAIPersistentProperty.API_KEY.key(), ""))
-                    .modelName(AnthropicChatModelName.valueOf(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_3_5_HAIKU_20241022.name())))
+                    .modelName(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), "claude-3-7-sonnet-latest"))
                     .temperature(temperature)
                     .logRequests(true)
                     .logResponses(true)

@@ -19,7 +19,6 @@ package ooo.autopo.ai.anthropic;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import dev.langchain4j.model.anthropic.AnthropicChatModelName;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -32,12 +31,6 @@ import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.persistence.PreferencesRepository;
 
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_2;
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_2_1;
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_3_5_HAIKU_20241022;
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_3_5_SONNET_20241022;
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_3_7_SONNET_20250219;
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_3_OPUS_20240229;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.ui.Views.helpIcon;
@@ -50,19 +43,17 @@ public class AnthropicAISettings extends GridPane {
     public AnthropicAISettings(PreferencesRepository repo) {
         this.getStyleClass().addAll("ai-tab", "settings-panel");
         add(new Label(i18n().tr("Model:")), 0, 0);
-        var modelCombo = new ComboBox<ComboItem<AnthropicChatModelName>>();
+        var modelCombo = new ComboBox<ComboItem<String>>();
         modelCombo.setId("anthropicAiModelCombo");
-        modelCombo.getItems().add(new ComboItem<>(CLAUDE_3_7_SONNET_20250219, CLAUDE_3_7_SONNET_20250219.name()));
-        modelCombo.getItems().add(new ComboItem<>(CLAUDE_3_5_SONNET_20241022, CLAUDE_3_5_SONNET_20241022.name()));
-        modelCombo.getItems().add(new ComboItem<>(CLAUDE_3_5_HAIKU_20241022, CLAUDE_3_5_HAIKU_20241022.name()));
-        modelCombo.getItems().add(new ComboItem<>(CLAUDE_3_OPUS_20240229, CLAUDE_3_OPUS_20240229.name()));
-        modelCombo.getItems().add(new ComboItem<>(CLAUDE_2_1, CLAUDE_2_1.name()));
-        modelCombo.getItems().add(new ComboItem<>(CLAUDE_2, CLAUDE_2.name()));
+        modelCombo.getItems().add(new ComboItem<>("claude-opus-4-0", "Claude Opus 4"));
+        modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-0", "Claude Sonnet 4"));
+        modelCombo.getItems().add(new ComboItem<>("claude-3-7-sonnet-latest", "Claude Sonnet 3.7"));
+        modelCombo.getItems().add(new ComboItem<>("claude-3-5-sonnet-latest", "Claude Sonnet 3.5"));
+        modelCombo.getItems().add(new ComboItem<>("claude-3-5-haiku-latest", "Claude Haiku 3.5"));
 
         modelCombo.setMaxWidth(Double.POSITIVE_INFINITY);
-        modelCombo.valueProperty().subscribe((o, n) -> repo.saveString(AnthropicAIPersistentProperty.MODEL_NAME.key(), n.key().name()));
-        ofNullable(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), (String) null)).map(AnthropicChatModelName::valueOf)
-                                                                                                 .map(m -> new ComboItem<>(m, m.name()))
+        modelCombo.valueProperty().subscribe((o, n) -> repo.saveString(AnthropicAIPersistentProperty.MODEL_NAME.key(), n.key()));
+        ofNullable(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), (String) null)).map(m -> new ComboItem<>(m, ""))
                                                                                                  .ifPresent(modelCombo::setValue);
         setFillWidth(modelCombo, true);
         add(modelCombo, 1, 0);
