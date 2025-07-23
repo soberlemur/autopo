@@ -71,6 +71,7 @@ class LeadingCaseTest {
     void excludeLanguages() {
         assertThat(validator.excludeLanguages()).containsExactlyInAnyOrder(Locale.JAPANESE.getLanguage(),
                                                                            Locale.CHINESE.getLanguage(),
+                                                                           "ar",
                                                                            "th",
                                                                            "lo",
                                                                            "my",
