@@ -34,6 +34,7 @@ class LeadingCase implements ConsistencyValidator {
 
     private static final Set<String> EXCLUDE = Set.of(Locale.JAPANESE.getLanguage(),
                                                       Locale.CHINESE.getLanguage(),
+                                                      "ar",
                                                       "th",
                                                       "lo",
                                                       "my",
