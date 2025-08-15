@@ -20,7 +20,6 @@ package ooo.autopo.ai.anthropic;
  */
 
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
-import dev.langchain4j.model.anthropic.AnthropicChatModelName;
 import dev.langchain4j.model.chat.ChatModel;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
@@ -83,7 +82,7 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
             }
             return AnthropicChatModel.builder()
                     .apiKey(repo.getString(AnthropicAIPersistentProperty.API_KEY.key(), ""))
-                    .modelName(AnthropicChatModelName.valueOf(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_3_5_HAIKU_20241022.name())))
+                    .modelName(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_3_5_HAIKU_20241022.name()))
                     .temperature(temperature)
                     .logRequests(true)
                     .logResponses(true)
