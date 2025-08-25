@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <description>Autopo App</description>
     <url>https://autopo.ooo</url>
@@ -87,7 +88,7 @@
                                 </goals>
                                 <configuration>
                                     <outputDirectory>${project.build.directory}/assembled/lib</outputDirectory>
-                                    <includeScope>compile</includeScope>
+                                    <includeScope>runtime</includeScope>
                                 </configuration>
                             </execution>
                         </executions>
@@ -140,10 +141,10 @@
                                 <phase>prepare-package</phase>
                                 <configuration>
                                     <target>
-                                        <chmod file="${project.build.directory}/assembled/lib" perm="644" includes="**/*.*" />
-                                        <chmod file="${project.build.directory}/assembled/splash.png" perm="644" />
-                                        <chmod dir="${project.build.directory}/assembled/bin" perm="755" includes="**/*.sh" />
-                                        <chmod dir="${project.build.directory}/assembled/runtime/bin" perm="755" includes="**/*.*" />
+                                        <chmod file="${project.build.directory}/assembled/lib" perm="644" includes="**/*.*"/>
+                                        <chmod file="${project.build.directory}/assembled/splash.png" perm="644"/>
+                                        <chmod dir="${project.build.directory}/assembled/bin" perm="755" includes="**/*.sh"/>
+                                        <chmod dir="${project.build.directory}/assembled/runtime/bin" perm="755" includes="**/*.*"/>
                                     </target>
                                 </configuration>
                                 <goals>
