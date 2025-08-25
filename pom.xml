@@ -4,7 +4,7 @@
     <groupId>ooo.autopo</groupId>
     <artifactId>autopo-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
     <name>Autopo</name>
     <description>Automate your translations with AI and flush your Po struggles away!</description>
     <url>https://autopo.ooo</url>
@@ -32,7 +32,7 @@
         <connection>scm:git:git@github.com:soberlemur/autopo.git</connection>
         <developerConnection>scm:git:git@github.com:soberlemur/autopo.git</developerConnection>
         <url>scm:git:git@github.com:soberlemur/autopo.git</url>
-        <tag>v1.0.4</tag>
+        <tag>v1.0.5</tag>
     </scm>
 
     <developers>
