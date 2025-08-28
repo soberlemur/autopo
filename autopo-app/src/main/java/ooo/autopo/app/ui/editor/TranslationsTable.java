@@ -160,6 +160,7 @@ public class TranslationsTable extends TableView<PoEntry> {
         getSortOrder().add(translationColumn);
         translationColumn.setSortType(TableColumn.SortType.ASCENDING);
         sort();
+        scrollTo(0);
     }
 
     @EventListener
