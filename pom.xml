@@ -60,7 +60,7 @@
         <validatorfx.version>0.6.1</validatorfx.version>
         <atlantafx.version>2.1.0</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
-        <langchain.version>1.3.0</langchain.version>
+        <langchain.version>1.5.0</langchain.version>
     </properties>
 
     <modules>
