@@ -43,6 +43,7 @@ import java.util.function.Supplier;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
+import static java.util.concurrent.StructuredTaskScope.Joiner.awaitAllSuccessfulOrThrow;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static org.pdfsam.eventstudio.StaticStudio.eventStudio;
 import static org.sejda.commons.util.RequireUtils.require;
@@ -84,7 +85,8 @@ public class AIController {
     private void translateMultiple(TranslationRequest request) {
         translationsThreadBuilder.start(() -> {
 
-            try (var scope = new StructuredTaskScope(null, translationsThreadBuilder.factory())) {
+            try (var scope = StructuredTaskScope.open(awaitAllSuccessfulOrThrow(),
+                                                      config -> config.withName("translation").withThreadFactory(translationsThreadBuilder.factory()))) {
                 var callables = request.poEntries()
                                        .stream()
                                        .map(poEntry -> (Callable<Result<String>>) () -> translateEntry(request.poFile(),
@@ -149,7 +151,8 @@ public class AIController {
     private void assessMultiple(AssessmentRequest request) {
         assessmentThreadBuilder.start(() -> {
 
-            try (var scope = new StructuredTaskScope(null, assessmentThreadBuilder.factory())) {
+            try (var scope = StructuredTaskScope.open(awaitAllSuccessfulOrThrow(),
+                                                      config -> config.withName("assessment").withThreadFactory(assessmentThreadBuilder.factory()))) {
                 var callables = request.poEntries()
                                        .stream()
                                        .map(poEntry -> (Callable<Result<TranslationAssessment>>) () -> evaluateEntry(request.poFile(),

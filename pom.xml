@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ooo.autopo</groupId>
     <artifactId>autopo-parent</artifactId>
@@ -51,7 +52,7 @@
         <assembly.format>zip</assembly.format>
         <pdfsam.version>5.3.0</pdfsam.version>
         <ikonli.version>12.4.0</ikonli.version>
-        <javafx.version>24</javafx.version>
+        <javafx.version>25</javafx.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
         <jakarta.inject.version>2.0.1</jakarta.inject.version>
         <testfx.version>4.0.18</testfx.version>
@@ -80,7 +81,7 @@
         <profile>
             <id>toolchain</id>
             <activation>
-                <jdk>(,24)</jdk>
+                <jdk>(,25)</jdk>
             </activation>
             <build>
                 <plugins>
@@ -97,7 +98,7 @@
                         <configuration>
                             <toolchains>
                                 <jdk>
-                                    <version>24</version>
+                                    <version>25</version>
                                 </jdk>
                             </toolchains>
                         </configuration>
@@ -220,9 +221,16 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <release>24</release>
+                        <release>25</release>
                         <compilerArgs>--enable-preview</compilerArgs>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.ow2.asm</groupId>
+                            <artifactId>asm</artifactId>
+                            <version>9.8</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
