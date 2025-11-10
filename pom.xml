@@ -58,7 +58,7 @@
         <testfx.version>4.0.18</testfx.version>
         <monocle.version>21</monocle.version>
         <potentilla.version>0.0.3</potentilla.version>
-        <validatorfx.version>0.6.1</validatorfx.version>
+        <validatorfx.version>0.6.3</validatorfx.version>
         <atlantafx.version>2.1.0</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
         <langchain.version>1.10.0</langchain.version>
