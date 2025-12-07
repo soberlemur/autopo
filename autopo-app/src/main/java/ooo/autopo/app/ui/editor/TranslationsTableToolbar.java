@@ -32,10 +32,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ooo.autopo.app.DebouncedStringProperty;
 import ooo.autopo.app.context.IntegerPersistentProperty;
+import javafx.util.Subscription;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.ai.TranslationRequest;
 import ooo.autopo.model.po.PoFile;
+import ooo.autopo.model.po.PoLoadRequest;
 import ooo.autopo.model.po.PoSaveRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
 import ooo.autopo.model.ui.SearchTranslationRequest;
@@ -97,6 +99,12 @@ public class TranslationsTableToolbar extends HBox {
             }
         });
 
+        var batchTranslateAllButton = new TranslationsTableToolbar.TranslateAllFilesButton();
+        app().runtimeState().project().subscribe(project -> {
+            batchTranslateAllButton.disableProperty().unbind();
+            batchTranslateAllButton.setDisable(isNull(project));
+        });
+
         var search = new HBox();
         search.setAlignment(Pos.CENTER);
         HBox.setHgrow(search, Priority.ALWAYS);
@@ -127,7 +135,7 @@ public class TranslationsTableToolbar extends HBox {
             }
         });
 
-        getChildren().addAll(saveButton, updateButton, batchTranslateButton, search, status);
+        getChildren().addAll(saveButton, updateButton, batchTranslateButton, batchTranslateAllButton, search, status);
         eventStudio().addAnnotatedListeners(this);
     }
 
@@ -191,5 +199,85 @@ public class TranslationsTableToolbar extends HBox {
             });
         }
 
+    }
+
+    static class TranslateAllFilesButton extends Button {
+        public TranslateAllFilesButton() {
+            setText(i18n().tr("_Batch AI translation (All Files)"));
+            setTooltip(new Tooltip(i18n().tr("Translate a batch of untranslated entries in all project files with the selected AI model (The batch size is defined in the settings)")));
+            setGraphic(new FontIcon(FluentUiRegularAL.BOT_24));
+            getStyleClass().addAll(Styles.SMALL);
+            setDisable(true);
+            setOnAction(new AIActionEventHandler() {
+                @Override
+                void onPositiveAction(AIModelDescriptor aiModelDescriptor, String description) {
+                    var project = app().currentProject();
+                    if (nonNull(project)) {
+                        var files = project.translations().stream().toList();
+                        processNextFile(files.iterator(), aiModelDescriptor, description);
+                    }
+                }
+            });
+        }
+
+        private void processNextFile(java.util.Iterator<PoFile> iterator, AIModelDescriptor aiModelDescriptor, String description) {
+            if (!iterator.hasNext()) {
+                return;
+            }
+
+            var poFile = iterator.next();
+            app().runtimeState().poFile(poFile);
+
+            if (poFile.status().getValue() == LoadingStatus.LOADED) {
+                translateCurrentFile(aiModelDescriptor, description, iterator);
+            } else {
+                // Load file first - PoLoadController will automatically load it when we set it as current
+                final Subscription[] subscription = new Subscription[1];
+                subscription[0] = poFile.status().subscribe(status -> {
+                    if (status == LoadingStatus.LOADED) {
+                        ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
+                        translateCurrentFile(aiModelDescriptor, description, iterator);
+                    } else if (status == LoadingStatus.ERROR) {
+                        ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
+                        // Skip this file and continue with next
+                        processNextFile(iterator, aiModelDescriptor, description);
+                    }
+                });
+            }
+        }
+
+        private void translateCurrentFile(AIModelDescriptor aiModelDescriptor, String description, java.util.Iterator<PoFile> iterator) {
+            var currentPoFile = app().currentPoFile();
+            if (isNull(currentPoFile) || currentPoFile.status().getValue() != LoadingStatus.LOADED) {
+                // File not ready, skip to next
+                processNextFile(iterator, aiModelDescriptor, description);
+                return;
+            }
+
+            var untranslatedEntries = currentPoFile.entries()
+                    .stream()
+                    .filter(e -> isBlank(e.translatedValue().get()))
+                    .limit(app().persistentSettings().get(IntegerPersistentProperty.BATCH_SIZE))
+                    .toList();
+
+            if (untranslatedEntries.isEmpty()) {
+                // No untranslated entries, move to next file
+                processNextFile(iterator, aiModelDescriptor, description);
+                return;
+            }
+
+            // Use exactly the same code as TranslateButton
+            var request = new TranslationRequest(currentPoFile, untranslatedEntries, aiModelDescriptor, description);
+            eventStudio().broadcast(request);
+            
+            final Subscription[] subscription = new Subscription[1];
+            subscription[0] = request.complete().subscribe((o, n) -> {
+                if (n) {
+                    ofNullable(subscription[0]).ifPresent(Subscription::unsubscribe);
+                    // Move to next file after translation completes
+                    processNextFile(iterator, aiModelDescriptor, description);
+                }
+            });
+        }
     }
 }
