@@ -25,6 +25,7 @@ package ooo.autopo.ai.openai;
 public enum OpenAIPersistentProperty {
     API_KEY,
     MODEL_NAME,
+    BASE_URL,
     TEMPERATURE;
 
     public String key() {
