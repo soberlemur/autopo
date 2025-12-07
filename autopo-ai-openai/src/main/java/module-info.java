@@ -31,6 +31,9 @@ module ooo.autopo.ai.openai {
     requires org.kordamp.ikonli.fluentui;
     requires javafx.controls;
     requires org.apache.commons.lang3;
+    requires java.net.http;
+    requires langchain4j.http.client;
+    requires langchain4j.http.client.jdk;
 
     provides AIModelDescriptor with ooo.autopo.ai.openai.OpenAiModelDescriptor;
 }

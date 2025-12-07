@@ -20,14 +20,9 @@ package ooo.autopo.ai.openai;
  */
 
 import dev.langchain4j.model.openai.OpenAiChatModelName;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import ooo.autopo.model.ui.ApiKeyTextField;
-import ooo.autopo.model.ui.ComboItem;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.persistence.PreferencesRepository;
@@ -59,29 +54,33 @@ public class OpenAISettings extends GridPane {
     public OpenAISettings(PreferencesRepository repo) {
         this.getStyleClass().addAll("ai-tab", "settings-panel");
         add(new Label(i18n().tr("Model:")), 0, 0);
-        var modelCombo = new ComboBox<ComboItem<OpenAiChatModelName>>();
+        var modelCombo = new ComboBox<String>();
         modelCombo.setId("openAiModelCombo");
-        modelCombo.getItems().add(new ComboItem<>(GPT_5, GPT_5.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_5_MINI, GPT_5_MINI.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_5_NANO, GPT_5_NANO.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_4_1, GPT_4_1.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_4_1_MINI, GPT_4_1_MINI.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_4_1_NANO, GPT_4_1_NANO.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_4, GPT_4.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_4_TURBO, GPT_4_TURBO.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_4_32K, GPT_4_32K.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_4_O, GPT_4_O.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_3_5_TURBO, GPT_3_5_TURBO.name()));
-        modelCombo.getItems().add(new ComboItem<>(GPT_3_5_TURBO_16K, GPT_3_5_TURBO_16K.name()));
-        modelCombo.getItems().add(new ComboItem<>(O1, O1.name()));
-        modelCombo.getItems().add(new ComboItem<>(O1_MINI, O1_MINI.name()));
-        modelCombo.getItems().add(new ComboItem<>(O3_MINI, O3_MINI.name()));
+        modelCombo.setEditable(true);
+        modelCombo.getItems().add(GPT_5.name());
+        modelCombo.getItems().add(GPT_5_MINI.name());
+        modelCombo.getItems().add(GPT_5_NANO.name());
+        modelCombo.getItems().add(GPT_4_1.name());
+        modelCombo.getItems().add(GPT_4_1_MINI.name());
+        modelCombo.getItems().add(GPT_4_1_NANO.name());
+        modelCombo.getItems().add(GPT_4.name());
+        modelCombo.getItems().add(GPT_4_TURBO.name());
+        modelCombo.getItems().add(GPT_4_32K.name());
+        modelCombo.getItems().add(GPT_4_O.name());
+        modelCombo.getItems().add(GPT_3_5_TURBO.name());
+        modelCombo.getItems().add(GPT_3_5_TURBO_16K.name());
+        modelCombo.getItems().add(O1.name());
+        modelCombo.getItems().add(O1_MINI.name());
+        modelCombo.getItems().add(O3_MINI.name());
 
         modelCombo.setMaxWidth(Double.POSITIVE_INFINITY);
-        modelCombo.valueProperty().subscribe((o, n) -> repo.saveString(OpenAIPersistentProperty.MODEL_NAME.key(), n.key().name()));
-        ofNullable(repo.getString(OpenAIPersistentProperty.MODEL_NAME.key(), (String) null)).map(OpenAiChatModelName::valueOf)
-                                                                                            .map(m -> new ComboItem<>(m, m.name()))
-                                                                                            .ifPresent(modelCombo::setValue);
+        modelCombo.valueProperty().subscribe((o, n) -> {
+            if (n != null && !n.isEmpty()) {
+                repo.saveString(OpenAIPersistentProperty.MODEL_NAME.key(), n);
+            }
+        });
+        ofNullable(repo.getString(OpenAIPersistentProperty.MODEL_NAME.key(), (String) null))
+                .ifPresent(modelCombo::setValue);
         setFillWidth(modelCombo, true);
         add(modelCombo, 1, 0);
         add(helpIcon(i18n().tr("AI Model to use")), 2, 0);
@@ -104,6 +103,14 @@ public class OpenAISettings extends GridPane {
         add(temperature, 1, 2);
         add(helpIcon(i18n().tr("Higher values make the output more random, lower values make it more deterministic")), 2, 2);
 
+        add(new Label(i18n().tr("Base URL:")), 0, 4);
+        var urlField = new TextField();
+        urlField.setPromptText("https://api.openai.com/v1/");
+        ofNullable(repo.getString(OpenAIPersistentProperty.BASE_URL.key(), (String) null)).ifPresent(urlField::setText);
+        urlField.textProperty().subscribe((o, n) -> repo.saveString(OpenAIPersistentProperty.BASE_URL.key(), n));
+        setFillWidth(urlField, true);
+        add(urlField, 1, 4, 2, 1);
+
         Button clearButton = new Button(i18n().tr("Clear"));
         clearButton.setTooltip(new Tooltip(i18n().tr("Clear OpenAI settings")));
         clearButton.setGraphic(FontIcon.of(FluentUiFilledAL.ERASER_24));
@@ -111,8 +118,8 @@ public class OpenAISettings extends GridPane {
             repo.clean();
             apiField.setText("");
             modelCombo.getSelectionModel().clearSelection();
+            urlField.setText("");
         });
         add(clearButton, 0, 3);
-
     }
 }

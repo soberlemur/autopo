@@ -493,6 +493,14 @@ msgid ""
 "batch size is defined in the settings)"
 msgstr ""
 
+msgid "_Batch AI translation (All Files)"
+msgstr ""
+
+msgid ""
+"Translate a batch of untranslated entries in all project files with the "
+"selected AI model (The batch size is defined in the settings)"
+msgstr ""
+
 msgid "Exit"
 msgstr ""
 
