@@ -42,6 +42,7 @@ import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_32K;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_TURBO;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_5;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_5_1;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_5_MINI;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_5_NANO;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.O1;
@@ -61,6 +62,7 @@ public class OpenAISettings extends GridPane {
         add(new Label(i18n().tr("Model:")), 0, 0);
         var modelCombo = new ComboBox<ComboItem<OpenAiChatModelName>>();
         modelCombo.setId("openAiModelCombo");
+        modelCombo.getItems().add(new ComboItem<>(GPT_5_1, GPT_5_1.name()));
         modelCombo.getItems().add(new ComboItem<>(GPT_5, GPT_5.name()));
         modelCombo.getItems().add(new ComboItem<>(GPT_5_MINI, GPT_5_MINI.name()));
         modelCombo.getItems().add(new ComboItem<>(GPT_5_NANO, GPT_5_NANO.name()));
