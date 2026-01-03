@@ -48,6 +48,7 @@ import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_5_NANO;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.O1;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.O1_MINI;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.O3_MINI;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.O4_MINI;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.ui.Views.helpIcon;
@@ -75,9 +76,10 @@ public class OpenAISettings extends GridPane {
         modelCombo.getItems().add(new ComboItem<>(GPT_4_O, GPT_4_O.name()));
         modelCombo.getItems().add(new ComboItem<>(GPT_3_5_TURBO, GPT_3_5_TURBO.name()));
         modelCombo.getItems().add(new ComboItem<>(GPT_3_5_TURBO_16K, GPT_3_5_TURBO_16K.name()));
+        modelCombo.getItems().add(new ComboItem<>(O4_MINI, O4_MINI.name()));
+        modelCombo.getItems().add(new ComboItem<>(O3_MINI, O3_MINI.name()));
         modelCombo.getItems().add(new ComboItem<>(O1, O1.name()));
         modelCombo.getItems().add(new ComboItem<>(O1_MINI, O1_MINI.name()));
-        modelCombo.getItems().add(new ComboItem<>(O3_MINI, O3_MINI.name()));
 
         modelCombo.setMaxWidth(Double.POSITIVE_INFINITY);
         modelCombo.valueProperty().subscribe((o, n) -> repo.saveString(OpenAIPersistentProperty.MODEL_NAME.key(), n.key().name()));
