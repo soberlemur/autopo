@@ -4,7 +4,7 @@
     <groupId>ooo.autopo</groupId>
     <artifactId>autopo-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.8</version>
+    <version>1.0.9-SNAPSHOT</version>
     <name>Autopo</name>
     <description>Automate your translations with AI and flush your Po struggles away!</description>
     <url>https://autopo.ooo</url>
