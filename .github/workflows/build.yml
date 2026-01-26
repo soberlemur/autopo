@@ -23,12 +23,16 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get update && sudo apt-get install -y gettext xvfb
 
-      - name: Build with Maven
+      - name: Build with Maven Ubuntu
         if: matrix.os == 'ubuntu-latest'
         run: xvfb-run mvn -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw --batch-mode --update-snapshots verify
 
       - name: Install gettext on macOS
         if: matrix.os == 'macos-latest'
+        run: brew install gettext
+
+      - name: Install gettext on macOS intel
+        if: matrix.os == 'macos-15-intel'
         run: brew install gettext
 
       - name: Install scoop on Windows
