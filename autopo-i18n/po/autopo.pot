@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Copyright 2025 by Sober Lemur S.r.l. (info@soberlemur.com)
+# Copyright (C) YEAR Copyright 2026 by Sober Lemur S.r.l. (info@soberlemur.com)
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: info@soberlemur.com\n"
-"POT-Creation-Date: 2025-04-11 10:22+0200\n"
+"POT-Creation-Date: 2026-02-24 15:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,12 +121,6 @@ msgstr ""
 msgid "Trying to guess locale from file content with AI"
 msgstr ""
 
-msgid "Trying to guess locale from '{}'"
-msgstr ""
-
-msgid "Invalid locale: {}"
-msgstr ""
-
 #, java-format
 msgid "Total token used {0}"
 msgstr ""
@@ -193,6 +187,12 @@ msgid "Inconsistent exclamation mark between original and translation"
 msgstr ""
 
 msgid "Suspicious quotes inconsistency between original and translation"
+msgstr ""
+
+msgid "Trying to guess locale from '{}'"
+msgstr ""
+
+msgid "Invalid locale: {}"
 msgstr ""
 
 msgid "Nord dark"
@@ -493,6 +493,9 @@ msgid ""
 "batch size is defined in the settings)"
 msgstr ""
 
+msgid "There are no untranslated entries"
+msgstr ""
+
 msgid "Exit"
 msgstr ""
 
@@ -563,9 +566,6 @@ msgid "Bug and feature requests"
 msgstr ""
 
 msgid "Fork me on GitHub"
-msgstr ""
-
-msgid "Donate"
 msgstr ""
 
 msgid "Open application logs"

@@ -35,6 +35,8 @@ import ooo.autopo.app.context.IntegerPersistentProperty;
 import ooo.autopo.model.LoadingStatus;
 import ooo.autopo.model.ai.AIModelDescriptor;
 import ooo.autopo.model.ai.TranslationRequest;
+import ooo.autopo.model.notification.AddNotificationRequest;
+import ooo.autopo.model.notification.NotificationType;
 import ooo.autopo.model.po.PoFile;
 import ooo.autopo.model.po.PoSaveRequest;
 import ooo.autopo.model.po.PoUpdateRequest;
@@ -178,15 +180,17 @@ public class TranslationsTableToolbar extends HBox {
             setOnAction(new AIActionEventHandler() {
                 @Override
                 void onPositiveAction(AIModelDescriptor aiModelDescriptor, String description) {
-                    eventStudio().broadcast(new TranslationRequest(app().currentPoFile(),
-                                                                   app().currentPoFile()
-                                                                        .entries()
-                                                                        .stream()
-                                                                        .filter(e -> isBlank(e.translatedValue().get()))
-                                                                        .limit(app().persistentSettings().get(IntegerPersistentProperty.BATCH_SIZE))
-                                                                        .toList(),
-                                                                   aiModelDescriptor,
-                                                                   description));
+                    var entries = app().currentPoFile()
+                                       .entries()
+                                       .stream()
+                                       .filter(e -> isBlank(e.translatedValue().get()))
+                                       .limit(app().persistentSettings().get(IntegerPersistentProperty.BATCH_SIZE))
+                                       .toList();
+                    if (!entries.isEmpty()) {
+                        eventStudio().broadcast(new TranslationRequest(app().currentPoFile(), entries, aiModelDescriptor, description));
+                    } else {
+                        eventStudio().broadcast(new AddNotificationRequest(NotificationType.WARN, i18n().tr("There are no untranslated entries")));
+                    }
                 }
             });
         }
