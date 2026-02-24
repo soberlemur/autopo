@@ -45,12 +45,14 @@ public class AnthropicAISettings extends GridPane {
         add(new Label(i18n().tr("Model:")), 0, 0);
         var modelCombo = new ComboBox<ComboItem<String>>();
         modelCombo.setId("anthropicAiModelCombo");
+        modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-6", "Claude Sonnet 4.6"));
         modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-5", "Claude Sonnet 4.5"));
+        modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-0", "Claude Sonnet 4"));
         modelCombo.getItems().add(new ComboItem<>("claude-haiku-4-5", "Claude Haiku 4.5"));
+        modelCombo.getItems().add(new ComboItem<>("claude-opus-4-6", "Claude Opus 4.6"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-5", "Claude Opus 4.5"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-1", "Claude Opus 4.1"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-0", "Claude Opus 4"));
-        modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-0", "Claude Sonnet 4"));
         modelCombo.getItems().add(new ComboItem<>("claude-3-7-sonnet-latest", "Claude Sonnet 3.7"));
         modelCombo.getItems().add(new ComboItem<>("claude-3-5-sonnet-latest", "Claude Sonnet 3.5"));
         modelCombo.getItems().add(new ComboItem<>("claude-3-5-haiku-latest", "Claude Haiku 3.5"));
