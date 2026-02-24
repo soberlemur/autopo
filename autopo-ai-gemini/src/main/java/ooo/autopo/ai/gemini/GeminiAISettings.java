@@ -52,8 +52,6 @@ public class GeminiAISettings extends GridPane {
         modelCombo.getItems().add(new ComboItem<>("gemini-2.5-flash-lite", "Gemini 2.5 Flash Lite"));
         modelCombo.getItems().add(new ComboItem<>("gemini-2.0-flash", "Gemini 2.0 Flash"));
         modelCombo.getItems().add(new ComboItem<>("gemini-2.0-flash-lite", "Gemini 2.0 Flash Lite"));
-        modelCombo.getItems().add(new ComboItem<>("gemini-1.5-flash", "Gemini 1.5 Flash"));
-        modelCombo.getItems().add(new ComboItem<>("gemini-1.5-pro", "Gemini 1.5 Pro"));
 
         modelCombo.setMaxWidth(Double.POSITIVE_INFINITY);
         modelCombo.valueProperty().subscribe((o, n) -> repo.saveString(GeminiAIPersistentProperty.MODEL_NAME.key(), n.key()));
