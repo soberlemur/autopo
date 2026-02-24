@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ooo.autopo</groupId>
     <artifactId>autopo-parent</artifactId>
@@ -12,7 +13,7 @@
     <parent>
         <groupId>com.soberlemur</groupId>
         <artifactId>soberlemur-parent</artifactId>
-        <version>1.0.13</version>
+        <version>1.0.14</version>
     </parent>
 
     <licenses>
@@ -60,7 +61,7 @@
         <validatorfx.version>0.6.3</validatorfx.version>
         <atlantafx.version>2.1.0</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
-        <langchain.version>1.10.0</langchain.version>
+        <langchain.version>1.11.0</langchain.version>
     </properties>
 
     <modules>
