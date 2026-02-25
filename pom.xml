@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ooo.autopo</groupId>
     <artifactId>autopo-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.0.9</version>
     <name>Autopo</name>
     <description>Automate your translations with AI and flush your Po struggles away!</description>
     <url>https://autopo.ooo</url>
@@ -33,7 +32,7 @@
         <connection>scm:git:git@github.com:soberlemur/autopo.git</connection>
         <developerConnection>scm:git:git@github.com:soberlemur/autopo.git</developerConnection>
         <url>scm:git:git@github.com:soberlemur/autopo.git</url>
-        <tag>v1.0.8</tag>
+        <tag>v1.0.9</tag>
     </scm>
 
     <developers>
