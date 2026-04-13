@@ -58,7 +58,7 @@ jobs:
           PDFSAM_GPG_FINGERPRINT: ${{ secrets.GPG_SUB_FINGERPRINT }}
         run: mvn clean install -DskipTests -Drelease --batch-mode
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
           files: |
