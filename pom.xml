@@ -13,7 +13,7 @@
     <parent>
         <groupId>com.soberlemur</groupId>
         <artifactId>soberlemur-parent</artifactId>
-        <version>1.0.15</version>
+        <version>1.0.17</version>
     </parent>
 
     <licenses>
@@ -61,7 +61,7 @@
         <validatorfx.version>0.6.3</validatorfx.version>
         <atlantafx.version>2.1.0</atlantafx.version>
         <junit.pioneer.version>2.3.0</junit.pioneer.version>
-        <langchain.version>1.11.0</langchain.version>
+        <langchain.version>1.13.0</langchain.version>
     </properties>
 
     <modules>
