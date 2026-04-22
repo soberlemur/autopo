@@ -26,7 +26,7 @@ import ooo.autopo.model.ai.AIModelDescriptor;
 import org.pdfsam.persistence.PreferencesRepository;
 import org.tinylog.Logger;
 
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_3_5_HAIKU_20241022;
+import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_OPUS_4_6;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -82,7 +82,7 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
             }
             return AnthropicChatModel.builder()
                     .apiKey(repo.getString(AnthropicAIPersistentProperty.API_KEY.key(), ""))
-                    .modelName(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_3_5_HAIKU_20241022.name()))
+                    .modelName(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_OPUS_4_6.name()))
                     .temperature(temperature)
                     .logRequests(true)
                     .logResponses(true)
