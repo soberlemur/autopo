@@ -19,6 +19,7 @@ package ooo.autopo.ai.ollama;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -26,7 +27,6 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import ooo.autopo.model.ui.ComboItem;
 import org.kordamp.ikonli.fluentui.FluentUiFilledAL;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pdfsam.persistence.PreferencesRepository;
@@ -34,6 +34,8 @@ import org.pdfsam.persistence.PreferencesRepository;
 import static java.util.Optional.ofNullable;
 import static ooo.autopo.i18n.I18nContext.i18n;
 import static ooo.autopo.model.ui.Views.helpIcon;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Andrea Vacondio
@@ -43,19 +45,30 @@ public class OllamaAISettings extends GridPane {
     public OllamaAISettings(PreferencesRepository repo) {
         this.getStyleClass().addAll("ai-tab", "settings-panel");
         add(new Label(i18n().tr("Model:")), 0, 0);
-        var modelCombo = new ComboBox<ComboItem<String>>();
+        var modelCombo = new ComboBox<String>();
+        modelCombo.setEditable(true);
         modelCombo.setId("ollamaAiModelCombo");
-        modelCombo.getItems().add(new ComboItem<>("llama3.3", "Llama 3.3"));
-        modelCombo.getItems().add(new ComboItem<>("llama3.2", "Llama 3.2"));
-        modelCombo.getItems().add(new ComboItem<>("llama3.2:1b", "Llama 3.2 1B"));
-        modelCombo.getItems().add(new ComboItem<>("llama3.1", "Llama 3.1"));
-        modelCombo.getItems().add(new ComboItem<>("mistral", "Mistral"));
-
+        modelCombo.getItems().addAll("llama3.3", "llama3.2", "llama3.2:1b", "llama3.1", "mistral");
         modelCombo.setMaxWidth(Double.POSITIVE_INFINITY);
-        modelCombo.valueProperty().subscribe((o, n) -> repo.saveString(OllamaAIPersistentProperty.MODEL_NAME.key(), n.key()));
-        ofNullable(repo.getString(OllamaAIPersistentProperty.MODEL_NAME.key(), (String) null))
-                .map(m -> new ComboItem<>(m, ""))
-                .ifPresent(modelCombo::setValue);
+        modelCombo.valueProperty().subscribe((o, n) -> {
+            if (isNotBlank(n)) {
+                repo.saveString(OllamaAIPersistentProperty.MODEL_NAME.key(), n);
+            } else if (isNotBlank(o)) {
+                Platform.runLater(() -> modelCombo.setValue(o));
+            }
+        });
+        modelCombo.getEditor().focusedProperty().subscribe((o, focused) -> {
+            if (!focused) {
+                var text = modelCombo.getEditor().getText();
+                if (isBlank(text)) {
+                    var currentValue = modelCombo.getValue();
+                    if (isNotBlank(currentValue)) {
+                        modelCombo.getEditor().setText(currentValue);
+                    }
+                }
+            }
+        });
+        ofNullable(repo.getString(OllamaAIPersistentProperty.MODEL_NAME.key(), (String) null)).ifPresent(modelCombo::setValue);
         setFillWidth(modelCombo, true);
         add(modelCombo, 1, 0);
         add(helpIcon(i18n().tr("AI Model to use")), 2, 0);
@@ -86,6 +99,7 @@ public class OllamaAISettings extends GridPane {
             repo.clean();
             urlField.setText("");
             modelCombo.getSelectionModel().clearSelection();
+            modelCombo.getEditor().clear();
         });
         add(clearButton, 0, 3);
 
