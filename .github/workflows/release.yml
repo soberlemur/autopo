@@ -68,6 +68,6 @@ jobs:
             autopo-app/target/*.zip \
             autopo-app/target/*.tar.gz \
             autopo-app/target/*.zip.asc \
-            autopo-app/*.tar.gz.asc  
+            autopo-app/target/*.tar.gz.asc  
 
 
