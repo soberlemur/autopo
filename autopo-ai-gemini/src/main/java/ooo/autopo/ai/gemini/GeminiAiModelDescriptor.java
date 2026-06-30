@@ -22,10 +22,13 @@ package ooo.autopo.ai.gemini;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ResponseFormat;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
+import dev.langchain4j.service.output.JsonSchemas;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.TranslationAssessment;
 import org.pdfsam.persistence.PreferencesRepository;
 
+import static dev.langchain4j.model.chat.request.ResponseFormatType.JSON;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -53,17 +56,19 @@ public class GeminiAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel translationModel() {
         if (isUsable()) {
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return GoogleAiGeminiChatModel.builder()
+            var builder = GoogleAiGeminiChatModel.builder()
                     .apiKey(repo.getString(GeminiAIPersistentProperty.API_KEY.key(), ""))
-                    .temperature(temperature)
                     .logRequestsAndResponses(true)
-                    .modelName(repo.getString(GeminiAIPersistentProperty.MODEL_NAME.key(), "gemini-2.0-flash"))
-                    .build();
+                    .modelName(repo.getString(GeminiAIPersistentProperty.MODEL_NAME.key(), "gemini-3.5-flash"));
+            if (repo.getBoolean(GeminiAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
         }
         return null;
     }
@@ -71,18 +76,21 @@ public class GeminiAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel validationModel() {
         if (isUsable()) {
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return GoogleAiGeminiChatModel.builder()
+            var responseFormat = ResponseFormat.builder().type(JSON).jsonSchema(JsonSchemas.jsonSchemaFrom(TranslationAssessment.class).get()).build();
+            var builder = GoogleAiGeminiChatModel.builder()
                     .apiKey(repo.getString(GeminiAIPersistentProperty.API_KEY.key(), ""))
-                    .temperature(temperature)
-                    .responseFormat(ResponseFormat.JSON)
+                    .responseFormat(responseFormat)
                     .logRequestsAndResponses(true)
-                    .modelName(repo.getString(GeminiAIPersistentProperty.MODEL_NAME.key(), "gemini-2.0-flash"))
-                    .build();
+                    .modelName(repo.getString(GeminiAIPersistentProperty.MODEL_NAME.key(), "gemini-3.5-flash"));
+            if (repo.getBoolean(GeminiAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
         }
         return null;
     }

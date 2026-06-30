@@ -24,6 +24,7 @@ module ooo.autopo.ai.gemini {
     requires ooo.autopo.model;
     requires langchain4j.core;
     requires langchain4j.google.ai.gemini;
+    requires langchain4j;
     requires ooo.autopo.i18n;
     requires org.pdfsam.persistence;
     requires org.tinylog.api;

@@ -20,6 +20,7 @@ package ooo.autopo.ai.gemini;
  */
 
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -47,9 +48,10 @@ public class GeminiAISettings extends GridPane {
         modelCombo.setId("geminiAiModelCombo");
         modelCombo.getItems().add(new ComboItem<>("gemini-pro-latest", "Gemini Pro Latest"));
         modelCombo.getItems().add(new ComboItem<>("gemini-flash-latest", "Gemini Flash Latest"));
+        modelCombo.getItems().add(new ComboItem<>("gemini-3.5-flash", "Gemini 3.5 Flash"));
         modelCombo.getItems().add(new ComboItem<>("gemini-3.1-pro-preview", "Gemini 3.1 Pro preview"));
         modelCombo.getItems().add(new ComboItem<>("gemini-3-flash-preview", "Gemini 3 Flash preview"));
-        modelCombo.getItems().add(new ComboItem<>("gemini-3.1-flash-lite-preview", "Gemini 3.1 Flash preview"));
+        modelCombo.getItems().add(new ComboItem<>("gemini-3.1-flash-lite", "Gemini 3.1 Flash"));
         modelCombo.getItems().add(new ComboItem<>("gemini-2.5-pro", "Gemini 2.5 Pro"));
         modelCombo.getItems().add(new ComboItem<>("gemini-2.5-flash", "Gemini 2.5 Flash"));
         modelCombo.getItems().add(new ComboItem<>("gemini-2.5-flash-lite", "Gemini 2.5 Flash Lite"));
@@ -72,14 +74,19 @@ public class GeminiAISettings extends GridPane {
         setFillWidth(apiField, true);
         add(apiField, 1, 1, 2, 1);
 
-        add(new Label(i18n().tr("Temperature:")), 0, 2);
+        var enableTemperature = new CheckBox(i18n().tr("Enable temperature:"));
+        enableTemperature.selectedProperty().subscribe((o, n) -> repo.saveBoolean(GeminiAIPersistentProperty.ENABLE_TEMPERATURE.key(), n));
+        add(enableTemperature, 0, 2);
         var temperature = new Spinner<Double>(0.0, 2.0, 0.2, 0.1);
         temperature.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         var temperatureValue = repo.getInt(GeminiAIPersistentProperty.TEMPERATURE.key(), -1);
         if (temperatureValue >= 0) {
             temperature.getValueFactory().setValue(Math.round(temperatureValue / 10.0 * 10) / 10.0);
         }
+        temperature.disableProperty().bind(enableTemperature.selectedProperty().not());
         temperature.valueProperty().subscribe((o, n) -> repo.saveInt(GeminiAIPersistentProperty.TEMPERATURE.key(), (int) (n * 10)));
+        enableTemperature.setSelected(repo.getBoolean(GeminiAIPersistentProperty.ENABLE_TEMPERATURE.key(), false));
+
         add(temperature, 1, 2);
         add(helpIcon(i18n().tr("Higher values make the output more random, lower values make it more deterministic")), 2, 2);
 
@@ -89,6 +96,7 @@ public class GeminiAISettings extends GridPane {
         clearButton.setOnAction(e -> {
             repo.clean();
             apiField.setText("");
+            enableTemperature.setSelected(false);
             modelCombo.getSelectionModel().clearSelection();
         });
         add(clearButton, 0, 3);
