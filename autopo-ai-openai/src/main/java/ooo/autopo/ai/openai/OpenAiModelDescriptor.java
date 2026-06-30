@@ -75,15 +75,18 @@ public class OpenAiModelDescriptor implements AIModelDescriptor {
     }
 
     private OpenAiChatModel.OpenAiChatModelBuilder builder() {
-        var temperature = 0.2d;
-        var temperatureIntValue = repo.getInt(OpenAIPersistentProperty.TEMPERATURE.key(), -1);
-        if (temperatureIntValue >= 0) {
-            temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-        }
-        return OpenAiChatModel.builder()
+        var builder = OpenAiChatModel.builder()
                 .baseUrl(defaultIfBlank(repo.getString(OpenAIPersistentProperty.BASE_URL.key(), DEFAULT_OPENAI_URL), DEFAULT_OPENAI_URL))
-                .apiKey(repo.getString(OpenAIPersistentProperty.API_KEY.key(), ""))
-                .temperature(temperature);
+                .apiKey(repo.getString(OpenAIPersistentProperty.API_KEY.key(), ""));
+        if (repo.getBoolean(OpenAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+            var temperature = 0.2d;
+            var temperatureIntValue = repo.getInt(OpenAIPersistentProperty.TEMPERATURE.key(), -1);
+            if (temperatureIntValue >= 0) {
+                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+            }
+            builder.temperature(temperature);
+        }
+        return builder;
     }
 
     @Override

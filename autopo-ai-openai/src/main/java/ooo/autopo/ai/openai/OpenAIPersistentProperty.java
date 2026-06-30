@@ -26,7 +26,8 @@ public enum OpenAIPersistentProperty {
     API_KEY,
     BASE_URL,
     MODEL_NAME,
-    TEMPERATURE;
+    TEMPERATURE,
+    ENABLE_TEMPERATURE;
 
     public String key() {
         return this.name().toLowerCase();
