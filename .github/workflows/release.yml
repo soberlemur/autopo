@@ -59,15 +59,13 @@ jobs:
           PDFSAM_GPG_FINGERPRINT: ${{ secrets.GPG_SUB_FINGERPRINT }}
         run: mvn clean install -DskipTests -Drelease --batch-mode
       - name: Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ github.ref_name }}
-        run: |
-          gh release create "$TAG_NAME" \
-            --draft \
-            autopo-app/target/*.zip \
-            autopo-app/target/*.tar.gz \
-            autopo-app/target/*.zip.asc \
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3
+        with:
+          draft: true
+          files: |
+            autopo-app/target/*.zip
+            autopo-app/target/*.tar.gz
+            autopo-app/target/*.zip.asc
             autopo-app/target/*.tar.gz.asc  
 
 
