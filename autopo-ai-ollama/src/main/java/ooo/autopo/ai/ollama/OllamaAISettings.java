@@ -21,6 +21,7 @@ package ooo.autopo.ai.ollama;
 
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -81,14 +82,19 @@ public class OllamaAISettings extends GridPane {
         setFillWidth(urlField, true);
         add(urlField, 1, 1, 2, 1);
 
-        add(new Label(i18n().tr("Temperature:")), 0, 2);
+        var enableTemperature = new CheckBox(i18n().tr("Enable temperature:"));
+        enableTemperature.selectedProperty().subscribe((o, n) -> repo.saveBoolean(OllamaAIPersistentProperty.ENABLE_TEMPERATURE.key(), n));
+        add(enableTemperature, 0, 2);
         var temperature = new Spinner<Double>(0.0, 2.0, 0.2, 0.1);
         temperature.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         var temperatureValue = repo.getInt(OllamaAIPersistentProperty.TEMPERATURE.key(), -1);
         if (temperatureValue >= 0) {
             temperature.getValueFactory().setValue(Math.round(temperatureValue / 10.0 * 10) / 10.0);
         }
+        temperature.disableProperty().bind(enableTemperature.selectedProperty().not());
         temperature.valueProperty().subscribe((o, n) -> repo.saveInt(OllamaAIPersistentProperty.TEMPERATURE.key(), (int) (n * 10)));
+        enableTemperature.setSelected(repo.getBoolean(OllamaAIPersistentProperty.ENABLE_TEMPERATURE.key(), false));
+
         add(temperature, 1, 2);
         add(helpIcon(i18n().tr("Higher values make the output more random, lower values make it more deterministic")), 2, 2);
 
@@ -98,6 +104,7 @@ public class OllamaAISettings extends GridPane {
         clearButton.setOnAction(e -> {
             repo.clean();
             urlField.setText("");
+            enableTemperature.setSelected(false);
             modelCombo.getSelectionModel().clearSelection();
             modelCombo.getEditor().clear();
         });

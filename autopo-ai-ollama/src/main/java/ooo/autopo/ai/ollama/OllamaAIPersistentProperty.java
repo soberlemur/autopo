@@ -25,7 +25,8 @@ package ooo.autopo.ai.ollama;
 public enum OllamaAIPersistentProperty {
     BASE_URL,
     MODEL_NAME,
-    TEMPERATURE;
+    TEMPERATURE,
+    ENABLE_TEMPERATURE;
 
     public String key() {
         return this.name().toLowerCase();

@@ -20,12 +20,15 @@ package ooo.autopo.ai.ollama;
  */
 
 import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.request.ResponseFormat;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.service.output.JsonSchemas;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.TranslationAssessment;
 import org.pdfsam.persistence.PreferencesRepository;
 
-import static dev.langchain4j.model.chat.request.ResponseFormat.JSON;
+import static dev.langchain4j.model.chat.request.ResponseFormatType.JSON;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -53,18 +56,20 @@ public class OllamaAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel translationModel() {
         if (isUsable()) {
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(OllamaAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return OllamaChatModel.builder()
+            var builder = OllamaChatModel.builder()
                     .baseUrl(repo.getString(OllamaAIPersistentProperty.BASE_URL.key(), ""))
                     .modelName(repo.getString(OllamaAIPersistentProperty.MODEL_NAME.key(), "llama3.2"))
                     .logRequests(true)
-                    .logResponses(true)
-                    .temperature(temperature)
-                    .build();
+                    .logResponses(true);
+            if (repo.getBoolean(OllamaAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(OllamaAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
         }
         return null;
     }
@@ -72,19 +77,22 @@ public class OllamaAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel validationModel() {
         if (isUsable()) {
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(OllamaAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return OllamaChatModel.builder()
+            var responseFormat = ResponseFormat.builder().type(JSON).jsonSchema(JsonSchemas.jsonSchemaFrom(TranslationAssessment.class).get()).build();
+            var builder = OllamaChatModel.builder()
                     .baseUrl(repo.getString(OllamaAIPersistentProperty.BASE_URL.key(), ""))
                     .modelName(repo.getString(OllamaAIPersistentProperty.MODEL_NAME.key(), "llama3.2"))
-                    .responseFormat(JSON)
+                    .responseFormat(responseFormat)
                     .logRequests(true)
-                    .logResponses(true)
-                    .temperature(temperature)
-                    .build();
+                    .logResponses(true);
+            if (repo.getBoolean(OllamaAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(OllamaAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
         }
         return null;
     }

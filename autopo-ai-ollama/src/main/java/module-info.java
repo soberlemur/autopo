@@ -24,6 +24,7 @@ module ooo.autopo.ai.ollama {
     requires ooo.autopo.model;
     requires langchain4j.core;
     requires langchain4j.ollama;
+    requires langchain4j;
     requires ooo.autopo.i18n;
     requires org.pdfsam.persistence;
     requires org.tinylog.api;
