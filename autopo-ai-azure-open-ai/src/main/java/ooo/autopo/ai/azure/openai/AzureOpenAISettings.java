@@ -21,6 +21,7 @@ package ooo.autopo.ai.azure.openai;
 
 import dev.langchain4j.model.azure.AzureOpenAiChatModelName;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -75,14 +76,19 @@ public class AzureOpenAISettings extends GridPane {
         setFillWidth(apiField, true);
         add(apiField, 1, 1, 2, 1);
 
-        add(new Label(i18n().tr("Temperature:")), 0, 2);
+        var enableTemperature = new CheckBox(i18n().tr("Enable temperature:"));
+        enableTemperature.selectedProperty().subscribe((o, n) -> repo.saveBoolean(AzureOpenAIPersistentProperty.ENABLE_TEMPERATURE.key(), n));
+        add(enableTemperature, 0, 2);
         var temperature = new Spinner<Double>(0.0, 2.0, 0.2, 0.1);
         temperature.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         var temperatureValue = repo.getInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), -1);
         if (temperatureValue >= 0) {
             temperature.getValueFactory().setValue(Math.round(temperatureValue / 10.0 * 10) / 10.0);
         }
+        temperature.disableProperty().bind(enableTemperature.selectedProperty().not());
         temperature.valueProperty().subscribe((o, n) -> repo.saveInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), (int) (n * 10)));
+        enableTemperature.setSelected(repo.getBoolean(AzureOpenAIPersistentProperty.ENABLE_TEMPERATURE.key(), false));
+
         add(temperature, 1, 2);
         add(helpIcon(i18n().tr("Higher values make the output more random, lower values make it more deterministic")), 2, 2);
 
@@ -92,6 +98,7 @@ public class AzureOpenAISettings extends GridPane {
         clearButton.setOnAction(e -> {
             repo.clean();
             apiField.setText("");
+            enableTemperature.setSelected(false);
             modelCombo.getSelectionModel().clearSelection();
         });
         add(clearButton, 0, 3);

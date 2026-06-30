@@ -54,17 +54,19 @@ public class AzureOpenAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel translationModel() {
         if (isUsable()) {
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return AzureOpenAiChatModel.builder()
+            var builder = AzureOpenAiChatModel.builder()
                     .apiKey(repo.getString(AzureOpenAIPersistentProperty.API_KEY.key(), ""))
-                    .temperature(temperature)
                     .logRequestsAndResponses(true)
-                    .deploymentName(AzureOpenAiChatModelName.valueOf(repo.getString(AzureOpenAIPersistentProperty.MODEL_NAME.key(), GPT_4.name())).modelName())
-                    .build();
+                    .deploymentName(AzureOpenAiChatModelName.valueOf(repo.getString(AzureOpenAIPersistentProperty.MODEL_NAME.key(), GPT_4.name())).modelName());
+            if (repo.getBoolean(AzureOpenAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
         }
         return null;
     }
@@ -72,18 +74,20 @@ public class AzureOpenAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel validationModel() {
         if (isUsable()) {
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return AzureOpenAiChatModel.builder()
+            var builder = AzureOpenAiChatModel.builder()
                     .apiKey(repo.getString(AzureOpenAIPersistentProperty.API_KEY.key(), ""))
-                    .temperature(temperature)
                     .strictJsonSchema(true)
                     .logRequestsAndResponses(true)
-                    .deploymentName(AzureOpenAiChatModelName.valueOf(repo.getString(AzureOpenAIPersistentProperty.MODEL_NAME.key(), GPT_4.name())).modelName())
-                    .build();
+                    .deploymentName(AzureOpenAiChatModelName.valueOf(repo.getString(AzureOpenAIPersistentProperty.MODEL_NAME.key(), GPT_4.name())).modelName());
+            if (repo.getBoolean(AzureOpenAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(AzureOpenAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
         }
         return null;
     }
