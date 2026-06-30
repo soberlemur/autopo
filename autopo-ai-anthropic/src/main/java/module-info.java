@@ -31,6 +31,7 @@ module ooo.autopo.ai.anthropic {
     requires org.kordamp.ikonli.fluentui;
     requires org.apache.commons.lang3;
     requires atlantafx.base;
+    requires langchain4j;
 
     provides AIModelDescriptor with ooo.autopo.ai.anthropic.AnthropicAiModelDescriptor;
 }

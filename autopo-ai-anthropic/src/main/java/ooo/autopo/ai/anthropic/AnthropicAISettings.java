@@ -20,6 +20,7 @@ package ooo.autopo.ai.anthropic;
  */
 
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -45,19 +46,16 @@ public class AnthropicAISettings extends GridPane {
         add(new Label(i18n().tr("Model:")), 0, 0);
         var modelCombo = new ComboBox<ComboItem<String>>();
         modelCombo.setId("anthropicAiModelCombo");
-        modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-7", "Claude Sonnet 4.7"));
         modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-6", "Claude Sonnet 4.6"));
         modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-5", "Claude Sonnet 4.5"));
         modelCombo.getItems().add(new ComboItem<>("claude-sonnet-4-0", "Claude Sonnet 4"));
         modelCombo.getItems().add(new ComboItem<>("claude-haiku-4-5", "Claude Haiku 4.5"));
+        modelCombo.getItems().add(new ComboItem<>("claude-opus-4-8", "Claude Opus 4.8"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-7", "Claude Opus 4.7"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-6", "Claude Opus 4.6"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-5", "Claude Opus 4.5"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-1", "Claude Opus 4.1"));
         modelCombo.getItems().add(new ComboItem<>("claude-opus-4-0", "Claude Opus 4"));
-        modelCombo.getItems().add(new ComboItem<>("claude-3-7-sonnet-latest", "Claude Sonnet 3.7"));
-        modelCombo.getItems().add(new ComboItem<>("claude-3-5-sonnet-latest", "Claude Sonnet 3.5"));
-        modelCombo.getItems().add(new ComboItem<>("claude-3-5-haiku-latest", "Claude Haiku 3.5"));
 
         modelCombo.setMaxWidth(Double.POSITIVE_INFINITY);
         modelCombo.valueProperty().subscribe((o, n) -> repo.saveString(AnthropicAIPersistentProperty.MODEL_NAME.key(), n.key()));
@@ -74,14 +72,19 @@ public class AnthropicAISettings extends GridPane {
         setFillWidth(apiField, true);
         add(apiField, 1, 1, 2, 1);
 
-        add(new Label(i18n().tr("Temperature:")), 0, 2);
+        var enableTemperature = new CheckBox(i18n().tr("Enable temperature:"));
+        enableTemperature.selectedProperty().subscribe((o, n) -> repo.saveBoolean(AnthropicAIPersistentProperty.ENABLE_TEMPERATURE.key(), n));
+        add(enableTemperature, 0, 2);
         var temperature = new Spinner<Double>(0.0, 2.0, 0.2, 0.1);
         temperature.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         var temperatureValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
         if (temperatureValue >= 0) {
             temperature.getValueFactory().setValue(Math.round(temperatureValue / 10.0 * 10) / 10.0);
         }
+        temperature.disableProperty().bind(enableTemperature.selectedProperty().not());
         temperature.valueProperty().subscribe((o, n) -> repo.saveInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), (int) (n * 10)));
+        enableTemperature.setSelected(repo.getBoolean(AnthropicAIPersistentProperty.ENABLE_TEMPERATURE.key(), false));
+
         add(temperature, 1, 2);
         add(helpIcon(i18n().tr("Higher values make the output more random, lower values make it more deterministic")), 2, 2);
 
@@ -91,6 +94,7 @@ public class AnthropicAISettings extends GridPane {
         clearButton.setOnAction(e -> {
             repo.clean();
             apiField.setText("");
+            enableTemperature.setSelected(false);
             modelCombo.getSelectionModel().clearSelection();
         });
         add(clearButton, 0, 3);

@@ -25,7 +25,8 @@ package ooo.autopo.ai.anthropic;
 public enum AnthropicAIPersistentProperty {
     API_KEY,
     MODEL_NAME,
-    TEMPERATURE;
+    TEMPERATURE,
+    ENABLE_TEMPERATURE;
 
     public String key() {
         return this.name().toLowerCase();

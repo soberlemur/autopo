@@ -21,12 +21,15 @@ package ooo.autopo.ai.anthropic;
 
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
 import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.request.ResponseFormat;
+import dev.langchain4j.service.output.JsonSchemas;
 import javafx.scene.layout.Pane;
 import ooo.autopo.model.ai.AIModelDescriptor;
+import ooo.autopo.model.ai.TranslationAssessment;
 import org.pdfsam.persistence.PreferencesRepository;
-import org.tinylog.Logger;
 
 import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_OPUS_4_6;
+import static dev.langchain4j.model.chat.request.ResponseFormatType.JSON;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -54,18 +57,20 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel translationModel() {
         if (isUsable()) {
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return AnthropicChatModel.builder()
+            var builder = AnthropicChatModel.builder()
                     .apiKey(repo.getString(AnthropicAIPersistentProperty.API_KEY.key(), ""))
-                    .modelName(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), "claude-3-7-sonnet-latest"))
-                    .temperature(temperature)
+                    .modelName(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_OPUS_4_6.name()))
                     .logRequests(true)
-                    .logResponses(true)
-                    .build();
+                    .logResponses(true);
+            if (repo.getBoolean(AnthropicAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
 
         }
         return null;
@@ -74,19 +79,23 @@ public class AnthropicAiModelDescriptor implements AIModelDescriptor {
     @Override
     public ChatModel validationModel() {
         if (isUsable()) {
-            Logger.warn("JSON mode not yet implemented for Anthropic AI");
-            var temperature = 0.2d;
-            var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
-            if (temperatureIntValue >= 0) {
-                temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
-            }
-            return AnthropicChatModel.builder()
+            ResponseFormat responseFormat = ResponseFormat.builder().type(JSON).jsonSchema(JsonSchemas.jsonSchemaFrom(TranslationAssessment.class).get())
+                    .build();
+            var builder = AnthropicChatModel.builder()
                     .apiKey(repo.getString(AnthropicAIPersistentProperty.API_KEY.key(), ""))
                     .modelName(repo.getString(AnthropicAIPersistentProperty.MODEL_NAME.key(), CLAUDE_OPUS_4_6.name()))
-                    .temperature(temperature)
+                    .responseFormat(responseFormat)
                     .logRequests(true)
-                    .logResponses(true)
-                    .build();
+                    .logResponses(true);
+            if (repo.getBoolean(AnthropicAIPersistentProperty.ENABLE_TEMPERATURE.key(), false)) {
+                var temperature = 0.2d;
+                var temperatureIntValue = repo.getInt(AnthropicAIPersistentProperty.TEMPERATURE.key(), -1);
+                if (temperatureIntValue >= 0) {
+                    temperature = Math.round(temperatureIntValue / 10.0 * 10) / 10.0;
+                }
+                builder.temperature(temperature);
+            }
+            return builder.build();
 
         }
         return null;
