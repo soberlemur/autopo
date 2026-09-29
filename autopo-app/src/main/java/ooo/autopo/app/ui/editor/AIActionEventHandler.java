@@ -54,8 +54,7 @@ abstract class AIActionEventHandler implements EventHandler<ActionEvent> {
             if (model.isPresent()) {
                 onPositiveAction(model.get(), description);
             } else {
-                eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("Unable to find a usable translation AI model")));
-
+                eventStudio().broadcast(new AddNotificationRequest(NotificationType.ERROR, i18n().tr("Unable to find a usable AI model")));
             }
         }
     }
