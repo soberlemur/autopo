@@ -86,3 +86,4 @@ local.properties
 .DS_Store
 .idea/
 CLAUDE.md
+.claude
